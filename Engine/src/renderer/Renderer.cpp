@@ -12,7 +12,7 @@ std::vector<SkinnedGameObject*> m_skinned_entities;
 std::vector<GameObject*> m_entities, m_lights;
 
 Camera* m_camera;
-//DebugMenu* debugMenu;
+DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
 
@@ -28,7 +28,7 @@ void Renderer::init_render(GLFWwindow* window)
 	uiShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.frag.glsl");
 
 	manager = new UIManager(uiShaderProgram, 1920, 1080);
-	//debugMenu = new DebugMenu(window);
+	debugMenu = new DebugMenu(window);
 }
 
 void Renderer::render(std::vector<SkinnedGameObject*> skinned_entities, std::vector<GameObject*> entities, std::vector<GameObject*> lights, Camera* camera, SkyBox* skybox)
@@ -135,15 +135,63 @@ void Renderer::draw_static(Shader* shader, Model* model, glm::vec3 pos, glm::vec
 	model->draw(*shaderProgram);
 }
 
-//void Renderer::create_menu(float deltaTime)
-//{
-//	debugMenu->create_menu(m_entities, m_camera, deltaTime);
-//}
-//
-//void Renderer::create_menu(float deltaTime, int roll)
-//{
-//	debugMenu->create_menu(m_entities, m_camera, deltaTime, roll);
-//}
+void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
+{
+	const GLfloat vertices[] = {
+		minAABB.x, minAABB.y, minAABB.z,
+		minAABB.x, minAABB.y, maxAABB.z,
+		minAABB.x, maxAABB.y, minAABB.z,
+		minAABB.x, maxAABB.y, maxAABB.z,
+		maxAABB.x, minAABB.y, minAABB.z,
+		maxAABB.x, minAABB.y, maxAABB.z,
+		maxAABB.x, maxAABB.y, minAABB.z,
+		maxAABB.x, maxAABB.y,maxAABB.z
+	};
+
+	const GLuint indices[] = {
+		0, 1, 1, 3, 3, 2, 2, 0,
+		4, 5, 5, 7, 7, 6, 6, 4,
+		0, 4, 1, 5, 2, 6, 3, 7
+	};
+
+	unsigned int VAO, VBO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+
+	glBindVertexArray(VAO);
+	glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+}
+
+// This is for the debug menu, not part of game rendering.
+
+void Renderer::create_menu(float deltaTime)
+{
+	debugMenu->create_menu(m_entities, m_camera, deltaTime);
+}
+
+void Renderer::create_menu(float deltaTime, int roll)
+{
+	debugMenu->create_menu(m_entities, m_camera, deltaTime, roll);
+}
 
 void Renderer::select_entity(float xpos, float ypos)
 {
@@ -201,48 +249,3 @@ void Renderer::deselect_index()
 	selectedIndex = -1;
 }
 
-void Renderer::draw_aabb(const glm::vec3& minAABB,const glm::vec3& maxAABB)
-{
-	const GLfloat vertices[] = {
-		minAABB.x, minAABB.y, minAABB.z, 
-		minAABB.x, minAABB.y, maxAABB.z, 
-		minAABB.x, maxAABB.y, minAABB.z, 
-		minAABB.x, maxAABB.y, maxAABB.z, 
-		maxAABB.x, minAABB.y, minAABB.z, 
-		maxAABB.x, minAABB.y, maxAABB.z, 
-		maxAABB.x, maxAABB.y, minAABB.z, 
-		maxAABB.x, maxAABB.y,maxAABB.z  
-	};
-
-	const GLuint indices[] = {
-		0, 1, 1, 3, 3, 2, 2, 0,
-		4, 5, 5, 7, 7, 6, 6, 4,
-		0, 4, 1, 5, 2, 6, 3, 7
-	};
-
-	unsigned int VAO, VBO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-
-	glBindVertexArray(VAO);
-	glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-}

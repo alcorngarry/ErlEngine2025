@@ -5,15 +5,14 @@
 #include"maps/BoardMap.h"
 #include"maps/PongMap.h"
 #include"common/AssetManager.h"
-//editor
-//#include"SaveCommand.h"
-//#include"MoveCameraBackwardCommand.h"
-//#include"MoveCameraForwardCommand.h"
-//#include"MoveCameraLeftCommand.h"
-//#include"MoveCameraRightCommand.h"
-//#include"SelectEntityCommand.h"
-//#include"AddRemoveEntityCommand.h"
-//#include"MoveEntityCommand.h"
+#include"commands/SaveCommand.h"
+#include"commands/MoveCameraBackwardCommand.h"
+#include"commands/MoveCameraForwardCommand.h"
+#include"commands/MoveCameraLeftCommand.h"
+#include"commands/MoveCameraRightCommand.h"
+#include"commands/SelectEntityCommand.h"
+#include"commands/AddRemoveEntityCommand.h"
+#include"commands/MoveEntityCommand.h"
 
 enum GameState {
 	GAME_ACTIVE,

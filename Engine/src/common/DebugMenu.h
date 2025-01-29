@@ -1,13 +1,12 @@
-#pragma once
-#ifndef DEBUGMENU_H
-#include <glm/gtc/type_ptr.hpp>
-#include<imgui.h>
-#include<imgui_impl_glfw.h>
-#include<imgui_impl_opengl3.h>
+#ifndef DEBUG_MENU_H
+#define DEBUG_MENU_H
+#include<glm/gtc/type_ptr.hpp>
+#include<imgui/imgui.h>
+#include<imgui/imgui_impl_glfw.h>
+#include<imgui/imgui_impl_opengl3.h>
 #include<string>
 #include<vector>
-
-#include"Renderer.h"
+#include"renderer/Renderer.h"
 
 class DebugMenu
 {
@@ -21,4 +20,4 @@ class DebugMenu
 };
 
 
-#endif // !DEBUGMENU_H
+#endif // !DEBUG_MENU_H

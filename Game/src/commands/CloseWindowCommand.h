@@ -1,7 +1,7 @@
 #ifndef CLOSE_WINDOW_COMMAND_H
 #define CLOSE_WINDOW_COMMAND_H
-#include "Command.h"
-#include <GLFW/glfw3.h>
+#include"input/Command.h"
+#include<GLFW/glfw3.h>
 
 class CloseWindowCommand : public Command {
 public:

@@ -19,33 +19,34 @@ void Game::init()
 
 void Game::update(float deltaTime)
 { 
-	
+	InputManager::set_key_binding(GLFW_KEY_W, new MoveCameraForwardCommand(Maps[level]->camera, deltaTime));
+	InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraLeftCommand(Maps[level]->camera, deltaTime));
+	InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraBackwardCommand(Maps[level]->camera, deltaTime));
+	InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraRightCommand(Maps[level]->camera, deltaTime));
+
+	Maps[level]->camera->setCameraFront(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
+
+
 	if (State == DEBUG_MENU)
 	{
 		Maps[level]->state = Map::DEBUG;
-
-		/*InputManager::set_key_binding(GLFW_KEY_W, new MoveCameraForwardCommand(Maps[level]->camera, deltaTime));
-		InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraLeftCommand(Maps[level]->camera, deltaTime));
-		InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraBackwardCommand(Maps[level]->camera, deltaTime));
-		InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraRightCommand(Maps[level]->camera, deltaTime));
 		
 		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(InputManager::get_xpos(), InputManager::get_ypos(), false));
 		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(0.0f, 0.0f, true));
 		InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
-		InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(Maps[level], false));*/
+		InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(Maps[level], false));
 
 
 		if (Renderer::get_selected_index() != -1)
 		{
-			/*InputManager::set_key_binding(GLFW_KEY_LEFT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, 3.0f));
+			InputManager::set_key_binding(GLFW_KEY_LEFT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_RIGHT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_UP, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_DOWN, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_J, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, 3.0f));
-			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));*/
+			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));
 		}
 		else {
-			Maps[level]->camera->setCameraFront(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
 		}
 	}
 	else {
@@ -68,8 +69,8 @@ void Game::set_debug_controls(float deltaTime)
 void Game::render(float deltaTime)
 {
 	Maps[level]->draw(deltaTime);
-	//if (State == DEBUG_MENU)
-	//{
-	//	Renderer::create_menu(deltaTime);
-	//}
+	if (State == DEBUG_MENU)
+	{
+		Renderer::create_menu(deltaTime);
+	}
 } 

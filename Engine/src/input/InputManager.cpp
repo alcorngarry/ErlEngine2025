@@ -10,9 +10,9 @@ int windowHeight = 1080;
 
 double xpos, ypos = 0.0f;
 bool firstMouse = true;
-float lastX = 1920 / 2.0f;
-float lastY = 1080 / 2.0f;
-float yaw = -90.0f, pitch = 0.0f;
+double lastX = 1920 / 2.0f;
+double lastY = 1080 / 2.0f;
+double yaw = -90.0f, pitch = 0.0f;
 
 void InputManager::init(GLFWwindow* window) {
     m_window = window;
@@ -109,12 +109,12 @@ void InputManager::update_cursor()
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // Inverted Y-axis
+    double xoffset = xpos - lastX;
+    double yoffset = lastY - ypos; // Inverted Y-axis
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.1f;
+    double sensitivity = 0.1f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
@@ -125,33 +125,33 @@ void InputManager::update_cursor()
     if (pitch < -89.0f) pitch = -89.0f;
 }
 
-float InputManager::get_xpos()
+double InputManager::get_xpos()
 {
     return xpos;
 }
 
-float InputManager::get_last_xpos()
+double InputManager::get_last_xpos()
 {
     return lastX;
 }
 
-float InputManager::get_ypos()
+double InputManager::get_ypos()
 {
     return ypos;
 }
 
-float InputManager::get_last_ypos()
+double InputManager::get_last_ypos()
 {
     return lastY;
 }
 
-float InputManager::get_yaw()
+double InputManager::get_yaw()
 {
     return yaw;
 }
 
 
-float InputManager::get_pitch()
+double InputManager::get_pitch()
 {
     return pitch;
 }

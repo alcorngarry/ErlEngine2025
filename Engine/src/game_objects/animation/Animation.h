@@ -21,14 +21,14 @@ class Animation
 
 		Bone* find_bone(const std::string& name);
 
-		float get_ticks_per_second() const;
-		float get_duration() const;
+		double get_ticks_per_second() const;
+		double get_duration() const;
 		const AssimpNodeData& get_root_node();
 		const std::map<std::string, BoneInfo>& get_bone_id_map();
 		glm::mat4 get_global_inverse() const;
 
 	private:
-		float m_Duration;
+		double m_Duration;
 		int m_TicksPerSecond;
 		std::vector<Bone> m_Bones;
 		AssimpNodeData m_RootNode;

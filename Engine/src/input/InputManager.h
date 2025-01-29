@@ -45,11 +45,11 @@ namespace InputManager {
     void set_mouse_binding(int key, Command* command);
     void set_gamepad_binding(int key, Command* command);
 
-    float get_xpos();
-    float get_last_xpos();
-    float get_ypos();
-    float get_last_ypos();
-    float get_yaw();
-    float get_pitch();
+    double get_xpos();
+    double get_last_xpos();
+    double get_ypos();
+    double get_last_ypos();
+    double get_yaw();
+    double get_pitch();
 };
 #endif // !INPUT_MANAGER_H

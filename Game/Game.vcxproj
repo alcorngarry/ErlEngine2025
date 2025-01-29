@@ -25,6 +25,23 @@
     <Text Include="res\maps\test_map_2.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
+    <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraBackwardCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraForwardCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraLeftCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraRightCommand.cpp" />
+    <ClCompile Include="src\commands\MoveEntityCommand.cpp" />
+    <ClCompile Include="src\commands\SaveCommand.cpp" />
+    <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
+    <ClCompile Include="src\commands\ToggleMenuCommand.cpp" />
+    <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\maps\BoardMap.cpp" />
     <ClCompile Include="src\game_objects\CharacterController.cpp" />
     <ClCompile Include="src\commands\MoveDownCommand.cpp" />
@@ -38,6 +55,26 @@
     <ClCompile Include="src\maps\PongMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
+    <ClInclude Include="src\commands\CloseWindowCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraBackwardCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraForwardCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraLeftCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraRightCommand.h" />
+    <ClInclude Include="src\commands\MoveEntityCommand.h" />
+    <ClInclude Include="src\commands\OpenMenuCommand.h" />
+    <ClInclude Include="src\commands\SaveCommand.h" />
+    <ClInclude Include="src\commands\SelectEntityCommand.h" />
+    <ClInclude Include="src\commands\ToggleMenuCommand.h" />
+    <ClInclude Include="src\imgui\imconfig.h" />
+    <ClInclude Include="src\imgui\imgui.h" />
+    <ClInclude Include="src\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\imgui\imgui_internal.h" />
+    <ClInclude Include="src\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\imgui\imstb_truetype.h" />
     <ClInclude Include="src\maps\BoardMap.h" />
     <ClInclude Include="src\game_objects\CharacterController.h" />
     <ClInclude Include="src\commands\MoveDownCommand.h" />
@@ -136,7 +173,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(ProjectDir)src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\src;$(SolutionDir)Editor\src;$(ProjectDir)src;C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +189,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(ProjectDir)src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\src;$(SolutionDir)Editor\src;$(ProjectDir)src;C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -168,7 +205,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(ProjectDir)src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\src;$(SolutionDir)Editor\src;$(ProjectDir)src;C:\Dev\third-party-dependencies\include;$(SolutionDir)Editor\src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -184,7 +221,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(ProjectDir)src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\src;$(SolutionDir)Editor\src;$(ProjectDir)src;C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

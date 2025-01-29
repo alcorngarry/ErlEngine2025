@@ -46,12 +46,12 @@ Bone* Animation::find_bone(const std::string & name)
 	else return &(*iter);
 }
 
-float Animation::get_ticks_per_second() const
+double Animation::get_ticks_per_second() const
 {
 	return m_TicksPerSecond;
 }
 
-float Animation::get_duration() const
+double Animation::get_duration() const
 {
 	return m_Duration;
 }

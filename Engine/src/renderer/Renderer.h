@@ -12,6 +12,7 @@
 #include"common/UIManager.h"
 #include"common/AssetManager.h"
 #include"common/UIElement.h"
+#include"common/DebugMenu.h"
 
 namespace Renderer {
 	struct Erl3DRenderItem {
@@ -22,8 +23,8 @@ namespace Renderer {
 	void init_render(GLFWwindow* window);
 	void render(std::vector<SkinnedGameObject*> skinned_entities,std::vector<GameObject*> entities, std::vector<GameObject*> lights, Camera* camera, SkyBox* skybox);
 
-	//void create_menu(float deltaTime);
-	//void create_menu(float deltaTime, int roll);
+	void create_menu(float deltaTime);
+	void create_menu(float deltaTime, int roll);
 	void deselect_index();
 	int get_selected_index();
 	void select_entity(float xpos, float ypos);

@@ -1,5 +1,7 @@
 #include"Engine.h"
 #include"Game.h"
+#include"commands/ToggleMenuCommand.h"
+#include"commands/CloseWindowCommand.h"
 
 int main(int argc, char** argv)
 {
@@ -9,6 +11,10 @@ int main(int argc, char** argv)
 
 	Game* game = new Game(window);
 	game->init();
+
+	InputManager::set_key_binding(GLFW_KEY_F9, new SaveCommand(game->Maps[game->level]));
+	InputManager::set_key_binding(GLFW_KEY_M, new ToggleMenuCommand(game));
+	InputManager::set_key_binding(GLFW_KEY_ESCAPE, new CloseWindowCommand(window));
 
 	while (!glfwWindowShouldClose(window))
 	{

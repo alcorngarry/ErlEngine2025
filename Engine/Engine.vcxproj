@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\third-party-dependencies\include\stb_image\stb_image.h" />
+    <ClInclude Include="src\common\DebugMenu.h" />
     <ClInclude Include="src\common\SkyBox.h" />
     <ClInclude Include="src\game_objects\animation\Animation.h" />
     <ClInclude Include="src\game_objects\animation\Animator.h" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\third-party-dependencies\include\glad\glad.c" />
     <ClCompile Include="..\..\..\..\third-party-dependencies\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\common\DebugMenu.cpp" />
     <ClCompile Include="src\common\Skybox.cpp" />
     <ClCompile Include="src\game_objects\animation\Animation.cpp" />
     <ClCompile Include="src\game_objects\animation\Animator.cpp" />
@@ -184,7 +186,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\vendor;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\vendor;C:\Dev\third-party-dependencies\imgui;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

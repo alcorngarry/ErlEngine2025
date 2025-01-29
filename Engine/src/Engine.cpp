@@ -35,11 +35,6 @@ GLFWwindow* Engine::start()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	return window;
-	
-	//need some kind of editor class...eventually
-	//InputManager::set_key_binding(GLFW_KEY_F9, new SaveCommand(game->Maps[game->level]));
-	//InputManager::set_key_binding(GLFW_KEY_M, new ToggleMenuCommand(game));
-	//InputManager::set_key_binding(GLFW_KEY_ESCAPE, new CloseWindowCommand(window));
 }
 
 void Engine::shut_down(GLFWwindow* window)

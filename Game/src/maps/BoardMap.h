@@ -21,10 +21,11 @@ class BoardMap : public Map {
 		void update(float deltaTime) override;
 		void draw(float deltaTime) override;
 	private:
-		unsigned int currentPlayer = 0;
+		int currentPlayer = 0;
 		void load_skinned_objects() override;
 		void set_controls(float deltaTime) override;
 		void process_board_space(unsigned int boardId);
+		void display_cards();
 };
 
 #endif // !BOARD_MAP_H

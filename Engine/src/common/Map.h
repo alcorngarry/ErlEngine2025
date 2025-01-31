@@ -10,8 +10,6 @@
 #include"AssetManager.h"
 #include"input/InputManager.h"
 
-//woah remove mechanics to map implementations...later too much work.
-
 class Map 
 {
 	public:
@@ -32,9 +30,7 @@ class Map
 		std::vector<GameObject*> entities;
 		std::vector<GameObject*> lights;
 		std::vector<GameObject*> boardSpaces;
-		//std::vector<Player*> players;
 		std::vector<SkinnedGameObject*> skinned_entities;
-		SkyBox* skybox;
 		Camera* camera;
 
 		Map(std::string mapName);

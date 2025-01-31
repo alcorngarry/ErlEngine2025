@@ -11,5 +11,4 @@ void AddRemoveEntityCommand::execute()
 	else {
 		map->remove_model(Renderer::get_selected_index());
 	}
-	
 }

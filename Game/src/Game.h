@@ -4,6 +4,7 @@
 #include"common/Map.h"
 #include"maps/BoardMap.h"
 #include"maps/PongMap.h"
+#include"maps/CountingSheep.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
 #include"commands/MoveCameraBackwardCommand.h"

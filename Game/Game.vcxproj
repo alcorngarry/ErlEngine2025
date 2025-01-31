@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\maps\back_up_map.txt" />
+    <Text Include="res\maps\counting_sheep.txt" />
     <Text Include="res\maps\standardized_map_save.txt" />
     <Text Include="res\maps\test_map_1.txt" />
     <Text Include="res\maps\test_map_2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
+    <ClCompile Include="src\commands\AddSubtractCountCommand.cpp" />
     <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
     <ClCompile Include="src\commands\MoveCameraBackwardCommand.cpp" />
     <ClCompile Include="src\commands\MoveCameraForwardCommand.cpp" />
@@ -52,10 +54,12 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\game_objects\Player.cpp" />
+    <ClCompile Include="src\maps\CountingSheep.cpp" />
     <ClCompile Include="src\maps\PongMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
+    <ClInclude Include="src\commands\AddSubtractCountCommand.h" />
     <ClInclude Include="src\commands\CloseWindowCommand.h" />
     <ClInclude Include="src\commands\MoveCameraBackwardCommand.h" />
     <ClInclude Include="src\commands\MoveCameraForwardCommand.h" />
@@ -84,6 +88,7 @@
     <ClInclude Include="src\commands\SelectCardRightCommand.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\game_objects\Player.h" />
+    <ClInclude Include="src\maps\CountingSheep.h" />
     <ClInclude Include="src\maps\PongMap.h" />
   </ItemGroup>
   <ItemGroup>

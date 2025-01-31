@@ -19,6 +19,7 @@
     <Text Include="res\maps\standardized_map_save.txt" />
     <Text Include="res\maps\test_map_1.txt" />
     <Text Include="res\maps\test_map_2.txt" />
+    <Text Include="res\maps\counting_sheep.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\maps\BoardMap.cpp">
@@ -103,6 +104,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maps\CountingSheep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\AddSubtractCountCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,6 +202,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\imgui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maps\CountingSheep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\AddSubtractCountCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

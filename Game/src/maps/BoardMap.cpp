@@ -54,29 +54,23 @@ void BoardMap::update(float deltaTime)
 			players[currentPlayer]->state = ACTIVE;
 		}
 	}
+	display_cards();
 }
 
 void BoardMap::draw(float deltaTime)
 {
-	//replace entities, with players
-	Renderer::render(skinned_entities, entities, lights, camera, skybox);
+	Renderer::render(camera);
 }
 
 //remove delta time after fixing animation call structure
 void BoardMap::set_controls(float deltaTime)
 {
-	for (Player* player : players)
-	{
-		if (player->state == ACTIVE)
-		{
-			//rework gamepad binding to bind player to gamepad.
-			/*InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_UP, new MoveUpCommand(players[currentPlayer], deltaTime));
-			InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, new MoveDownCommand(players[currentPlayer], deltaTime));*/
-			InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new SelectCardLeftCommand(players[currentPlayer]));
-			InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, new SelectCardRightCommand(players[currentPlayer]));
-			InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_A, new SelectCardCommand(players[currentPlayer]));
-		}
-	}
+	//rework gamepad binding to bind player to gamepad.
+	/*InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_UP, new MoveUpCommand(players[currentPlayer], deltaTime));
+	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, new MoveDownCommand(players[currentPlayer], deltaTime));*/
+	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new SelectCardLeftCommand(players[currentPlayer]));
+	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, new SelectCardRightCommand(players[currentPlayer]));
+	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_A, new SelectCardCommand(players[currentPlayer]));
 }
 
 void BoardMap::load_skinned_objects()
@@ -85,14 +79,15 @@ void BoardMap::load_skinned_objects()
 	glm::vec3 startingPosition = get_board_objects()[0]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
 	for (int i = 0; i < 1; i++)
 	{
-		skinned_entities.push_back(new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls));
-		players.push_back(new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls));
-
+		Player* player = new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls);
+		players.push_back(player);
+		Renderer::add_skinned_render_object(player);
 		players[i]->init_deck();
 
-		if (i == currentPlayer)
+		if (i == 0)
 		{
 			players[i]->state = ACTIVE;
+			players[currentPlayer] = players[i];
 		}
 	}
 }
@@ -106,18 +101,32 @@ void BoardMap::process_board_space(unsigned int boardId)
 			break;
 		case 1:
 			players[currentPlayer]->add_groats(3);
-			std::cout << "added 3 groats to player: " << currentPlayer << ", total groats = " << players[currentPlayer]->groats << std::endl;
+			std::cout << "added 3 groats to player: " << players[currentPlayer]->id << ", total groats = " << players[currentPlayer]->groats << std::endl;
 			break;
 		case 2:
 			players[currentPlayer]->add_groats(6);
-			std::cout << "added 6 groats to player: " << currentPlayer << ", total groats = " << players[currentPlayer]->groats << std::endl;
+			std::cout << "added 6 groats to player: " << players[currentPlayer]->id  << ", total groats = " << players[currentPlayer]->groats << std::endl;
 			break;
 		case 3:
 			players[currentPlayer]->remove_groats(3);
-			std::cout << "removed 3 groats to player: " << currentPlayer << ", total groats = " << players[currentPlayer]->groats << std::endl;
+			std::cout << "removed 3 groats to player: " << players[currentPlayer]->id << ", total groats = " << players[currentPlayer]->groats << std::endl;
 			break;
 		default: 
 			std::cout << "error processing space" << std::endl;
+	}
+}
+
+void BoardMap::display_cards()
+{
+	//logic can be fixed.
+	if (players[currentPlayer]->inMotion) {
+		unsigned int card[1] = { players[currentPlayer]->get_cards()[players[currentPlayer]->get_selected_card_index()] };
+
+		UIManager::load_elements(card, 6);
+		
+	}
+	else {
+		UIManager::load_elements(players[currentPlayer]->get_cards(), players[currentPlayer]->get_selected_card_index());
 	}
 }
 

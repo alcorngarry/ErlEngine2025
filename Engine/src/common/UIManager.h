@@ -8,19 +8,10 @@
 #include"UIElement.h"
 #include"AssetManager.h"
 
-class UIManager {
-public:
-    UIManager(Shader* shader, int screenWidth, int screenHeight);
-    ~UIManager();
-
+namespace UIManager {
+    void init(int screenWidth, int screenHeight);
     void load_elements(unsigned int* cards, unsigned int card);
     void draw();
-private:
-    Shader* shader;
-    int screenWidth, screenHeight;
-    glm::mat4 projection;
-    std::vector<UIElement*> uiElements;
-    
     void load_defaults();
     void set_screen_res(int width, int height);
     void center(std::vector<UIElement*> elements);

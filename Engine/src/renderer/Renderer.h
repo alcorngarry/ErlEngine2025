@@ -21,8 +21,13 @@ namespace Renderer {
 	};
 
 	void init_render(GLFWwindow* window);
-	void render(std::vector<SkinnedGameObject*> skinned_entities,std::vector<GameObject*> entities, std::vector<GameObject*> lights, Camera* camera, SkyBox* skybox);
+	void render(Camera* camera);
 
+	void add_sky_box(SkyBox* skybox);
+	void add_render_object(GameObject* gameObject);
+	void add_light_render_object(GameObject* gameObject);
+	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
+	
 	void create_menu(float deltaTime);
 	void create_menu(float deltaTime, int roll);
 	void deselect_index();

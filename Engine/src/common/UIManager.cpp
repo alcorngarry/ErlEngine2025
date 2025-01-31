@@ -1,20 +1,18 @@
 #include "UIManager.h"
+
+Shader* shader;
+int screenWidth, screenHeight;
+glm::mat4 m_projection;
+std::vector<UIElement*> uiElements;
  
-UIManager::UIManager(Shader* shader, int screenWidth, int screenHeight)
-    : shader(shader), screenWidth(screenWidth), screenHeight(screenHeight) 
+void UIManager::init(int screenWidth, int screenHeight)
 {
+    shader = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.frag.glsl");
     uiElements.clear();
     set_screen_res(screenWidth, screenHeight);
     load_defaults();
 }
 
-UIManager::~UIManager() 
-{
-    for (auto& element : uiElements) {
-        delete element;
-    }
-    uiElements.clear();
-}
 
 void UIManager::load_defaults() 
 {
@@ -40,7 +38,7 @@ void UIManager::set_screen_res(int width, int height)
 {
     screenWidth = width;
     screenHeight = height;
-    projection = glm::ortho(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, -1.0f, 1.0f);
+    m_projection = glm::ortho(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, -1.0f, 1.0f);
 }
 
 //will probably need to be decoupled.
@@ -71,7 +69,7 @@ void UIManager::draw()
 {
     for (UIElement* element : uiElements)
     {
-        element->draw(shader, projection);
+        element->draw(shader, m_projection);
     }
 }
 

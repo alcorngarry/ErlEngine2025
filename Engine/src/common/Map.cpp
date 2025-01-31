@@ -78,16 +78,22 @@ void Map::load()
 		if (id == 1)
 		{
 			//set Id to 10 right now to avoid collisions with board space Idds
-			this->lights.push_back(new GameObject(10, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ)));
+			GameObject* light = new GameObject(10, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
+			lights.push_back(light);
+			Renderer::add_light_render_object(light);
 		}
 		//if board space
 		else if (id == 4)
 		{
-			entities.push_back(new GameObject(boardSpaceId, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ)));
+			GameObject* boardSpace = new GameObject(boardSpaceId, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
+			entities.push_back(boardSpace);
+			Renderer::add_render_object(boardSpace);
 		}
 		else
 		{
-			entities.push_back(new GameObject(11, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ)));
+			GameObject* entity = new GameObject(11, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
+			entities.push_back(entity);
+			Renderer::add_render_object(entity);
 		} 
 	} 
 	readMap.close();
@@ -95,22 +101,19 @@ void Map::load()
 	load_skinned_objects();
 	load_skybox();
 }
+
 void Map::load_skinned_objects()
 {
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	skinned_entities.push_back(new SkinnedGameObject(i,(char*)"animation_path", AssetManager::get_model(0), glm::vec3(0.0f) * 5.0f + glm::vec3(0, 3, 0), glm::vec3(2.0f), glm::vec3(0.0f)));
-	//}
 }
 
 void Map::load_skybox()
 {
-	skybox = AssetManager::get_sky_box();
+	Renderer::add_sky_box(AssetManager::get_sky_box());
 }
 
 void Map::draw(float deltaTime)
 {
-	Renderer::render(skinned_entities, entities, lights, camera, skybox);
+	Renderer::render(camera);
 }
 
 void Map::duplicate_model(int selectedIndex)

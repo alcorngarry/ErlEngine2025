@@ -1,17 +1,16 @@
 #include"Renderer.h"
 
-UIManager* manager;
 Shader* shaderProgram;
 Shader* lightShaderProgram;
 Shader* skinnedShaderProgram;
 Shader* pickingShaderProgram;
 Shader* cubemapShaderProgram;
-Shader* uiShaderProgram;
 
 std::vector<SkinnedGameObject*> m_skinned_entities;
 std::vector<GameObject*> m_entities, m_lights;
-
 Camera* m_camera;
+SkyBox* m_skybox;
+
 DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
@@ -25,76 +24,70 @@ void Renderer::init_render(GLFWwindow* window)
 	skinnedShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.frag.glsl");
 	pickingShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.frag.glsl");
 	cubemapShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.frag.glsl");
-	uiShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.frag.glsl");
-
-	manager = new UIManager(uiShaderProgram, 1920, 1080);
 	debugMenu = new DebugMenu(window);
 }
 
-void Renderer::render(std::vector<SkinnedGameObject*> skinned_entities, std::vector<GameObject*> entities, std::vector<GameObject*> lights, Camera* camera, SkyBox* skybox)
+void Renderer::add_sky_box(SkyBox* skybox)
 {
-	//m_skinned_entities = skinned_entities;
-	m_entities = entities;
-	m_lights = lights;
-	m_camera = camera;
+	m_skybox = skybox;
+}
 
+void Renderer::add_render_object(GameObject* gameObject)
+{
+	m_entities.push_back(gameObject);
+}
+
+void Renderer::add_light_render_object(GameObject* gameObject)
+{
+	m_lights.push_back(gameObject);
+}
+
+void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
+{
+	m_skinned_entities.push_back(skinnedGameObject);
+}
+
+void Renderer::render(Camera* camera)
+{
+	m_camera = camera;
 	view = camera->get_view_matrix();
 	projection = camera->get_projection_matrix();
 
 	//draw first for environment mapping
 	cubemapShaderProgram->use();
 	cubemapShaderProgram->setInt("skybox", 0);
-	cubemapShaderProgram->setMat4("view", glm::mat4(glm::mat3(m_camera->get_view_matrix())));
+	cubemapShaderProgram->setMat4("view", glm::mat4(glm::mat3(camera->get_view_matrix())));
 	cubemapShaderProgram->setMat4("projection", projection);
-	skybox->draw();
+	m_skybox->draw();
 
 	skinnedShaderProgram->use();
-	skinnedShaderProgram->setVec3("lightPos", lights[0]->Position);
+	skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
 	skinnedShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 	skinnedShaderProgram->setInt("skybox", 0);
 	
-	for (SkinnedGameObject* skinned_entity : skinned_entities)
+	for (SkinnedGameObject* skinned_entity : m_skinned_entities)
 	{
 		draw_aabb(skinned_entity->GameModel->getMinAABB(), skinned_entity->GameModel->getMaxAABB());
 		Renderer::draw_skinned(skinned_entity->GameModel, skinned_entity->Position, skinned_entity->Size, skinned_entity->Rotation, skinned_entity->transforms);
-
-		//if (skinned_entity->state == ACTIVE)
-		//{
-		//	manager->load_elements(skinned_entity->get_cards(), skinned_entity->get_selected_card_index());
-		//}
 	}
 
 	shaderProgram->use();
-	shaderProgram->setVec3("lightPos", lights[0]->Position);
+	shaderProgram->setVec3("lightPos", m_lights[0]->Position);
 	shaderProgram->setVec3("lightColor", glm::vec3(1.0f));
-	for (int i = 0; i < entities.size(); i++)
+
+	for (int i = 0; i < m_entities.size(); i++)
 	{
 		shaderProgram->setBool("selected", i == Renderer::get_selected_index());
-		shaderProgram->setInt("objectId", entities[i]->id);
-		Renderer::draw_static(shaderProgram, entities[i]->GameModel, entities[i]->Position, entities[i]->Size, entities[i]->Rotation);
+		shaderProgram->setInt("objectId", m_entities[i]->id);
+		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->Position, m_entities[i]->Size, m_entities[i]->Rotation);
 	}
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
-	for (GameObject* light : lights)
+	for (GameObject* light : m_lights)
 	{
 		Renderer::draw_static(lightShaderProgram, light->GameModel, light->Position, light->Size, light->Rotation);
 	}
-
-	//this logic might need to be moved out and add setting the render items in the game logic. GOOD NOTE FOLLOW UP
-	//for (Player* player : players)
-	//{
-	//	if (player->state == ACTIVE)
-	//	{
-	//		if (player->inMotion) {
-	//			unsigned int card[1] = { player->get_cards()[player->get_selected_card_index()] };
-
-	//			manager->load_elements(card, 6);
-	//			manager->draw();
-	//		}
-	//		manager->draw();
-	//	}
-	//}
 }
 
 void Renderer::draw_skinned(Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, std::vector<glm::mat4>* transform)

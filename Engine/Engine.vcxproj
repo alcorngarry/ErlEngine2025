@@ -36,6 +36,7 @@
     <ClInclude Include="src\common\Map.h" />
     <ClInclude Include="src\game_objects\Mesh.h" />
     <ClInclude Include="src\game_objects\Model.h" />
+    <ClInclude Include="src\math\ErlMath.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\common\UIElement.h" />
@@ -58,6 +59,7 @@
     <ClCompile Include="src\common\Map.cpp" />
     <ClCompile Include="src\game_objects\Mesh.cpp" />
     <ClCompile Include="src\game_objects\Model.cpp" />
+    <ClCompile Include="src\math\ErlMath.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\common\UIElement.cpp" />
     <ClCompile Include="src\common\UIManager.cpp" />

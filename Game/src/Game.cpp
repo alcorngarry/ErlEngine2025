@@ -12,9 +12,11 @@ void Game::init()
 {
 	AssetManager::load();
 	Maps.push_back(new BoardMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_1"));
-	//Maps.push_back(new PongMap("../res/maps/test_map_2"));
-	level = 0;
+	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_2"));
+	Maps.push_back(new CountingSheep("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/counting_sheep"));
+	level = 2;
 	Maps[level]->load();
+	Maps[level]->set_controls(0.0f);
 }
 
 void Game::update(float deltaTime)
@@ -23,9 +25,6 @@ void Game::update(float deltaTime)
 	InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraLeftCommand(Maps[level]->camera, deltaTime));
 	InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraBackwardCommand(Maps[level]->camera, deltaTime));
 	InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraRightCommand(Maps[level]->camera, deltaTime));
-
-	Maps[level]->camera->setCameraFront(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
-
 
 	if (State == DEBUG_MENU)
 	{
@@ -45,8 +44,11 @@ void Game::update(float deltaTime)
 			InputManager::set_key_binding(GLFW_KEY_DOWN, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_J, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));
+
+
 		}
 		else {
+			Maps[level]->camera->setCameraFront(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
 		}
 	}
 	else {
@@ -69,6 +71,7 @@ void Game::set_debug_controls(float deltaTime)
 void Game::render(float deltaTime)
 {
 	Maps[level]->draw(deltaTime);
+	UIManager::draw();
 	if (State == DEBUG_MENU)
 	{
 		Renderer::create_menu(deltaTime);

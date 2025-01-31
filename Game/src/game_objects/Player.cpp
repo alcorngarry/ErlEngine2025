@@ -21,7 +21,6 @@ void Player::move_player(std::vector<GameObject*> boardSpaces)
 			//A + (B -A)(t - t0)/deltaT
 			glm::vec3 objectPos = boardSpaces[boardPosition]->Position;
 			glm::vec3 direction = (boardSpaces[nextPos]->Position - boardSpaces[boardPosition]->Position);
-			glm::mat4 test = glm::mat4(1.0f);
 			glm::vec3 currPos = objectPos + direction * ((float)glfwGetTime() - startTime) / delta;
 			
 			Rotation = glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
@@ -31,7 +30,6 @@ void Player::move_player(std::vector<GameObject*> boardSpaces)
 			boardPosition = nextPos;
 			startTime = (float)glfwGetTime();
 
-			//figure rotation lol
 			Position = boardSpaces[boardPosition]->Position + buffer;
 		}
 	}
@@ -55,8 +53,8 @@ void Player::move_player(std::vector<GameObject*> boardSpaces)
 
 void Player::update(float deltaTime)
 {
-	//transforms = mator->get_final_bone_matrices();
-	//mator->update_animation(deltaTime);
+	transforms = mator->get_final_bone_matrices();
+	mator->update_animation(deltaTime);
 }
 
 unsigned int Player::get_board_position()
@@ -82,11 +80,7 @@ void Player::init_deck()
 
 unsigned int Player::draw_card()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis(1, 13);
-
-	return dis(gen);
+	return ErlMath::generate_random(1, 13);
 }
 
 unsigned int* Player::get_cards()

@@ -1,36 +1,27 @@
 #include "UIManager.h"
 
 Shader* shader;
-int screenWidth, screenHeight;
+Shader* text_shader;
+
 glm::mat4 m_projection;
 std::vector<UIElement*> uiElements;
+std::vector<TextElement*> textElements;
+
+int screenWidth, screenHeight;
+
  
 void UIManager::init(int screenWidth, int screenHeight)
 {
     shader = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.frag.glsl");
+    text_shader = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/text.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/text.frag.glsl");
     uiElements.clear();
     set_screen_res(screenWidth, screenHeight);
     load_defaults();
+    UIText::init();
 }
-
 
 void UIManager::load_defaults() 
 {
-    std::cout << "Loading default assets..." << std::endl;
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c01.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c02.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c03.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c04.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c05.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c06.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c07.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c08.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c09.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c10.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c11.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c12.png")));
-    //uiElements.push_back(new UIElement(AssetManager::load_texture("C:/Dev/assets/cards/c13.png")));
-
     center(uiElements);
 }
 
@@ -61,8 +52,19 @@ void UIManager::load_elements(unsigned int* cards, unsigned int selectedCard)
             uiElements.back()->toggle_select();
         }
     }
-    
+
     center(uiElements);
+}
+
+void UIManager::add_text_element(std::string text, float x, float y)
+{
+    textElements.push_back(new TextElement{ text, glm::vec2(x, y)});
+}
+
+
+TextElement* UIManager::get_text_element(int index)
+{
+    return textElements.at(index);
 }
 
 void UIManager::draw() 
@@ -70,6 +72,11 @@ void UIManager::draw()
     for (UIElement* element : uiElements)
     {
         element->draw(shader, m_projection);
+    }
+   
+    for (TextElement* text : textElements)
+    {
+        UIText::draw(text_shader, m_projection, text->text, text->position.x, text->position.y);
     }
 }
 

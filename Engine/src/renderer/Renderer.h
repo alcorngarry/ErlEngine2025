@@ -9,9 +9,9 @@
 #include"game_objects/GameObject.h"
 #include"game_objects/SkinnedGameObject.h"
 #include"common/Camera.h"
-#include"common/UIManager.h"
+#include"ui/UIManager.h"
 #include"common/AssetManager.h"
-#include"common/UIElement.h"
+#include"ui/UIElement.h"
 #include"common/DebugMenu.h"
 
 namespace Renderer {

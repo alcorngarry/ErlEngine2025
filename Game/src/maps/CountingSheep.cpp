@@ -1,7 +1,18 @@
 #include"CountingSheep.h"
 
 int counts[1];
-bool game_end = false;
+int i = 0;
+
+class Restart : public Command {
+public:
+	Restart(float* startTime) {
+		m_startTime = startTime;
+	}
+	void execute() override {
+		*m_startTime = (float)glfwGetTime();
+	}
+	float* m_startTime;
+};
 
 CountingSheep::CountingSheep(std::string mapName) : Map(mapName)
 {
@@ -39,22 +50,19 @@ void CountingSheep::update(float deltaTime)
 				sheep[randSheep]->Position.z -= move;
 			}
 		}
+		UIManager::get_text_element(0)->text = "Count: " + std::to_string(counts[0]);
 	}
 	else 
 	{
-		if (game_end == false)
+		//will keep adding..
+		if (counts[0] == numSheep)
 		{
-			if (counts[0] == numSheep)
-			{
-				std::cout << "Nailed it" << std::endl;
-			}
-			else {
-				std::cout << "actual amount " << numSheep << std::endl;
-			}
-			game_end = true;
+			UIManager::add_text_element("actual amount: " + std::to_string(numSheep) + ", Your guess: " + std::to_string(counts[0]), 1920.0f / 2.0f, 1080.0f / 2.0f);
+		}
+		else {
+			UIManager::add_text_element("actual amount: " + std::to_string(numSheep), 1920.0f /2.0f, 1080.0f / 2.0f);
 		}
 	}
-	
 }
 
 void CountingSheep::load_skinned_objects()
@@ -67,16 +75,20 @@ void CountingSheep::load_skinned_objects()
 		sheep.push_back(shoop);
 		Renderer::add_render_object(shoop);
 	}
+
 	counts[0] = 0;
+	UIManager::add_text_element("text", 0, 0);
 }
 
 void CountingSheep::set_controls(float deltaTime)
 {
 	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_UP, new AddSubtractCountCommand(counts[0], true));
 	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, new AddSubtractCountCommand(counts[0], false));
+	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new Restart(&startTime));
 }
 
 void CountingSheep::draw(float deltaTime)
 {
 	Renderer::render(camera);
+	UIManager::draw();
 }

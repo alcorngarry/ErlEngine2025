@@ -57,10 +57,10 @@
     <ClInclude Include="src\renderer\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\UIElement.h">
+    <ClInclude Include="src\ui\UIElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\UIManager.h">
+    <ClInclude Include="src\ui\UIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\Renderer.h">
@@ -79,6 +79,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\ErlMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\UIText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,10 +122,10 @@
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\UIElement.cpp">
+    <ClCompile Include="src\ui\UIElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\UIManager.cpp">
+    <ClCompile Include="src\ui\UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\common\Skybox.cpp">
@@ -143,6 +146,9 @@
     <ClCompile Include="src\math\ErlMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\UIText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\renderer\shaders\cubemap.frag.glsl" />
@@ -157,5 +163,7 @@
     <None Include="src\renderer\shaders\picking.vert.glsl" />
     <None Include="src\renderer\shaders\skinned.frag.glsl" />
     <None Include="src\renderer\shaders\skinned.vert.glsl" />
+    <None Include="src\renderer\shaders\text.frag.glsl" />
+    <None Include="src\renderer\shaders\text.vert.glsl" />
   </ItemGroup>
 </Project>

@@ -60,6 +60,7 @@ void BoardMap::update(float deltaTime)
 void BoardMap::draw(float deltaTime)
 {
 	Renderer::render(camera);
+	UIManager::draw();
 }
 
 //remove delta time after fixing animation call structure
@@ -88,6 +89,7 @@ void BoardMap::load_skinned_objects()
 		{
 			players[i]->state = ACTIVE;
 			players[currentPlayer] = players[i];
+			UIManager::add_text_element("Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats), 0.0f, 0.0f);
 		}
 	}
 }
@@ -114,6 +116,7 @@ void BoardMap::process_board_space(unsigned int boardId)
 		default: 
 			std::cout << "error processing space" << std::endl;
 	}
+	UIManager::get_text_element(currentPlayer)->text = "Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats);
 }
 
 void BoardMap::display_cards()
@@ -121,9 +124,8 @@ void BoardMap::display_cards()
 	//logic can be fixed.
 	if (players[currentPlayer]->inMotion) {
 		unsigned int card[1] = { players[currentPlayer]->get_cards()[players[currentPlayer]->get_selected_card_index()] };
-
-		UIManager::load_elements(card, 6);
 		
+		UIManager::load_elements(card, 6);
 	}
 	else {
 		UIManager::load_elements(players[currentPlayer]->get_cards(), players[currentPlayer]->get_selected_card_index());

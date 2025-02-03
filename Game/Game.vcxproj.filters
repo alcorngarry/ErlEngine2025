@@ -211,4 +211,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font\Antonio-Bold.ttf" />
+  </ItemGroup>
 </Project>

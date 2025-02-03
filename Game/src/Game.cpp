@@ -14,7 +14,7 @@ void Game::init()
 	Maps.push_back(new BoardMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_1"));
 	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_2"));
 	Maps.push_back(new CountingSheep("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/counting_sheep"));
-	level = 2;
+	level = 0;
 	Maps[level]->load();
 	Maps[level]->set_controls(0.0f);
 }
@@ -71,7 +71,6 @@ void Game::set_debug_controls(float deltaTime)
 void Game::render(float deltaTime)
 {
 	Maps[level]->draw(deltaTime);
-	UIManager::draw();
 	if (State == DEBUG_MENU)
 	{
 		Renderer::create_menu(deltaTime);

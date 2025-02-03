@@ -39,8 +39,9 @@
     <ClInclude Include="src\math\ErlMath.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
-    <ClInclude Include="src\common\UIElement.h" />
-    <ClInclude Include="src\common\UIManager.h" />
+    <ClInclude Include="src\ui\UIElement.h" />
+    <ClInclude Include="src\ui\UIManager.h" />
+    <ClInclude Include="src\ui\UIText.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\third-party-dependencies\include\glad\glad.c" />
@@ -61,8 +62,9 @@
     <ClCompile Include="src\game_objects\Model.cpp" />
     <ClCompile Include="src\math\ErlMath.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
-    <ClCompile Include="src\common\UIElement.cpp" />
-    <ClCompile Include="src\common\UIManager.cpp" />
+    <ClCompile Include="src\ui\UIElement.cpp" />
+    <ClCompile Include="src\ui\UIManager.cpp" />
+    <ClCompile Include="src\ui\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\renderer\shaders\cubemap.frag.glsl" />
@@ -77,6 +79,8 @@
     <None Include="src\renderer\shaders\picking.vert.glsl" />
     <None Include="src\renderer\shaders\skinned.frag.glsl" />
     <None Include="src\renderer\shaders\skinned.vert.glsl" />
+    <None Include="src\renderer\shaders\text.frag.glsl" />
+    <None Include="src\renderer\shaders\text.vert.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

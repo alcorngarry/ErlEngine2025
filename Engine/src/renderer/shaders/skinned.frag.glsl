@@ -14,8 +14,8 @@ uniform samplerCube skybox;
 
 void main()
 {
-    float ambientStrength = 0.2;
-    float specularStrength = 1.0;
+    float ambientStrength = 0.01;
+    float specularStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
 
     vec3 viewDir = normalize(viewPos - FragPos);

@@ -37,6 +37,7 @@
     <ClCompile Include="src\commands\SaveCommand.cpp" />
     <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
     <ClCompile Include="src\commands\ToggleMenuCommand.cpp" />
+    <ClCompile Include="src\game_objects\BoardSpace.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="src\commands\SaveCommand.h" />
     <ClInclude Include="src\commands\SelectEntityCommand.h" />
     <ClInclude Include="src\commands\ToggleMenuCommand.h" />
+    <ClInclude Include="src\game_objects\BoardSpace.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />
     <ClInclude Include="src\imgui\imgui_impl_glfw.h" />
@@ -98,6 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font\Antonio-Bold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\maps\map.json" />
+    <None Include="res\maps\test_map_1.esf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

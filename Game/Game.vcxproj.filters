@@ -112,6 +112,9 @@
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_objects\BoardSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\maps\BoardMap.h">
@@ -210,8 +213,15 @@
     <ClInclude Include="src\commands\AddSubtractCountCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\game_objects\BoardSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font\Antonio-Bold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\maps\map.json" />
+    <None Include="res\maps\test_map_1.esf" />
   </ItemGroup>
 </Project>

@@ -78,12 +78,12 @@ void Renderer::render(Camera* camera)
 	for (int i = 0; i < m_entities.size(); i++)
 	{
 		shaderProgram->setBool("selected", i == Renderer::get_selected_index());
-		shaderProgram->setInt("objectId", m_entities[i]->id);
+		//shaderProgram->setInt("objectId", m_entities[i]->id);
 		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->Position, m_entities[i]->Size, m_entities[i]->Rotation);
 	}
 
 	lightShaderProgram->use();
-	lightShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
+	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
 	for (GameObject* light : m_lights)
 	{
 		Renderer::draw_static(lightShaderProgram, light->GameModel, light->Position, light->Size, light->Rotation);

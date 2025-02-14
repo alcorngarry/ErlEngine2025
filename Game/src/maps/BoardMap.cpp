@@ -139,7 +139,7 @@ std::vector<GameObject*> BoardMap::get_board_objects()
 
 	for (GameObject* entity : entities)
 	{
-		if (entity->id == 0 || entity->id == 1 || entity->id == 2 || entity->id == 3)
+		if (entity->id == 4)
 		{
 			output.push_back(entity);
 		}

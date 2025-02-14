@@ -17,7 +17,6 @@ DebugMenu::DebugMenu(GLFWwindow* glfwWindow)
 
 DebugMenu::~DebugMenu()
 {
-	//delete pickingRenderer;
 }
 
 void DebugMenu::create_menu(std::vector<GameObject*> entities, Camera* camera, float deltaTime, int roll)

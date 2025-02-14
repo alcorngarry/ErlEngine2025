@@ -1,0 +1,17 @@
+models: [{assetId: 2, position: 122,0,-17, scale: 2,1,2, rotation: 0,0,0},
+{assetId: 4, position: 74.0398,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 110.04,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 146.04,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 180.04,0,12.8602, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 180.04,0,-25.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 180.04,0,-58.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 180.04,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 150.04,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 115.04,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 74.0398,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 74.0398,0,-58.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 74.0398,0,-24.1398, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 4, position: 74.0398,0,14.8602, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 8, position: 120,0,0, scale: 1,1,1, rotation: 0,0,0},
+{assetId: 10, position: 111,110,0, scale: 1,1,1, rotation: 0,0,0}]
+lights: [{assetId: 1, position: 5,100,0, scale: 1,1,1, rotation: 0,0,0}]

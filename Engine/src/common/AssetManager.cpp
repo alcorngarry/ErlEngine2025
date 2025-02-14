@@ -55,12 +55,15 @@ void AssetManager::load()
 {
 	assetMap[0] = new Model((char*)"C:/Dev/assets/knight/knight_skinned_0/knight_impl1.dae");
 	assetMap[1] = new Model((char*)"C:/Dev/assets/cube/cube.glb");
-	assetMap[2] = new Model((char*)"C:/Dev/assets/plane/plane.obj");
+	assetMap[2] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/grass_plane.obj");
 	assetMap[3] = new Model((char*)"C:/Dev/assets/die.obj");
-	assetMap[4] = new Model((char*)"C:/Dev/assets/step_platform/step_platform.obj");
+	assetMap[4] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_platform.obj");
 	assetMap[5] = new Model((char*)"C:/Dev/assets/ball/ball.obj");
 	assetMap[6] = new Model((char*)"C:/Dev/assets/goal.obj");
 	assetMap[7] = new Model((char*)"C:/Dev/assets/GameCube - Mario Party 7 - Sheep/Sheep/sheep.fbx");
+	assetMap[8] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal.obj");
+	assetMap[9] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal_map.obj");
+	assetMap[10] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/saucer.obj");
 
 	load_sky_box();
 

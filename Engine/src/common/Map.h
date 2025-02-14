@@ -50,6 +50,7 @@ class Map
 		virtual void load_skinned_objects();
 	private:
 		void load_skybox();
+		GameObject* read_asset();
 };
 
 #endif // !MAP_H

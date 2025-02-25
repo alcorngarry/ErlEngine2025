@@ -43,6 +43,7 @@ namespace InputManager {
     void update_cursor();
     void set_key_binding(int key, Command* command);
     void set_mouse_binding(int key, Command* command);
+    void remove_mouse_binding(int key);
     void set_gamepad_binding(int key, Command* command);
 
     double get_xpos();

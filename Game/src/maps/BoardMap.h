@@ -24,7 +24,7 @@ class BoardMap : public Map {
 		int currentPlayer = 0;
 		void load_skinned_objects() override;
 		void set_controls(float deltaTime) override;
-		void process_board_space(unsigned int boardId);
+		void process_board_space(uint8_t boardId);
 		void display_cards();
 };
 

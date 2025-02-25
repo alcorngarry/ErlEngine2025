@@ -70,7 +70,11 @@
     <None Include="src\renderer\shaders\cubemap.frag.glsl" />
     <None Include="src\renderer\shaders\cubemap.vert.glsl" />
     <None Include="src\renderer\shaders\default.frag.glsl" />
+    <None Include="src\renderer\shaders\default.gs.glsl" />
     <None Include="src\renderer\shaders\default.vert.glsl" />
+    <None Include="src\renderer\shaders\grass.frag.glsl" />
+    <None Include="src\renderer\shaders\grass.gs.glsl" />
+    <None Include="src\renderer\shaders\grass.vert.glsl" />
     <None Include="src\renderer\shaders\interface.frag.glsl" />
     <None Include="src\renderer\shaders\interface.vert.glsl" />
     <None Include="src\renderer\shaders\light.frag.glsl" />
@@ -153,6 +157,10 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Bin\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgManifestInstall>false</VcpkgManifestInstall>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

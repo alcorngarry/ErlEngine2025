@@ -115,6 +115,9 @@
     <ClCompile Include="src\game_objects\BoardSpace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImGuizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\maps\BoardMap.h">
@@ -214,6 +217,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game_objects\BoardSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImGuizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

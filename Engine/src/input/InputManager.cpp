@@ -93,6 +93,12 @@ void InputManager::set_mouse_binding(int key, Command* command)
     mouseBindings[key] = command;
 }
 
+void InputManager::remove_mouse_binding(int key)
+{
+    mouseBindings.erase(key);
+}
+
+
 void InputManager::set_gamepad_binding(int key, Command* command)
 {
     gamepadBindings[key] = command;

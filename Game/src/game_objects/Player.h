@@ -26,28 +26,27 @@ class Player : public SkinnedGameObject {
 	public:
 		glm::vec3 velocity = glm::vec3(0.0f);
 		State state;
-		int moves = 0;
-		unsigned int groats = 0;
-		unsigned int selectedCardIndex = 0;
+		uint8_t moves = 0;
+		uint8_t groats = 0;
+		uint8_t selectedCardIndex = 0;
 		bool inMotion = false;
 
-		Player(unsigned int playerId, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, PlayerControls controls);
+		Player(uint8_t playerId, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, PlayerControls controls);
 		void move_player(std::vector<GameObject*> boardSpaces);
 		void start_move(float startTime, int moves);
-		unsigned int get_board_position();
+		uint8_t get_board_position();
 		void update(float deltaTime) override;
 		void init_deck();
-		unsigned int* get_cards();
-		unsigned int get_selected_card_index();
-		void add_groats(unsigned int groats);
-		void remove_groats(unsigned int groats);
+		uint8_t* get_cards();
+		uint8_t get_selected_card_index();
+		void add_groats(uint8_t groats);
+		void remove_groats(uint8_t groats);
 	private:
-		int boardPosition = 0;
+		uint8_t boardPosition = 0;
 		float startTime;
-		unsigned int playerId = -1;
-		unsigned int cards[5];
+		uint8_t cards[5];
 		PlayerControls m_controls;
 		void set_controls(PlayerControls controls);
-		unsigned int draw_card();
+		uint8_t draw_card();
 };
 #endif // !PLAYER_H

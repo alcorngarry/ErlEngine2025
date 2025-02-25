@@ -17,8 +17,12 @@ void Mesh::draw(Shader& shader)
     unsigned int normalNr = 1;
     unsigned int heightNr = 1;
        
-    for (unsigned int i = 0; i < textures.size(); i++)
+    for (uint8_t i = 0; i < textures.size(); i++)
     {
+        if (textures[i].id > 255)
+        {
+            std::cout << "TEXTURE LIMIT REACHED!" << std::endl;
+        }
         glActiveTexture(GL_TEXTURE0 + i);
         std::string number;
         std::string name = textures[i].type;

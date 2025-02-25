@@ -165,5 +165,9 @@
     <None Include="src\renderer\shaders\skinned.vert.glsl" />
     <None Include="src\renderer\shaders\text.frag.glsl" />
     <None Include="src\renderer\shaders\text.vert.glsl" />
+    <None Include="src\renderer\shaders\grass.vert.glsl" />
+    <None Include="src\renderer\shaders\grass.gs.glsl" />
+    <None Include="src\renderer\shaders\grass.frag.glsl" />
+    <None Include="src\renderer\shaders\default.gs.glsl" />
   </ItemGroup>
 </Project>

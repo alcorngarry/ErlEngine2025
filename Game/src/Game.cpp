@@ -38,12 +38,13 @@ void Game::update(float deltaTime)
 
 		if (Renderer::get_selected_index() != -1)
 		{
-			InputManager::set_key_binding(GLFW_KEY_LEFT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, 3.0f));
+			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
+			/*InputManager::set_key_binding(GLFW_KEY_LEFT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_RIGHT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_UP, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_DOWN, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_J, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, 3.0f));
-			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));
+			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));*/
 
 
 		}

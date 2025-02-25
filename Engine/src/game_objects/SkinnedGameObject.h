@@ -14,7 +14,7 @@ class SkinnedGameObject : public GameObject {
 		Animator* mator;
 		Animation* mation;
 
-		SkinnedGameObject(unsigned int id, char* animationPath, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
+		SkinnedGameObject(uint8_t id, char* animationPath, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
 		void update(float deltaTime) override;
 };
 #endif // !SKINNED_GAME_OBJECT_H

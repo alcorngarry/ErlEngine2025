@@ -5,6 +5,7 @@ Shader* lightShaderProgram;
 Shader* skinnedShaderProgram;
 Shader* pickingShaderProgram;
 Shader* cubemapShaderProgram;
+Shader* grassShaderProgram;
 
 std::vector<SkinnedGameObject*> m_skinned_entities;
 std::vector<GameObject*> m_entities, m_lights;
@@ -24,6 +25,7 @@ void Renderer::init_render(GLFWwindow* window)
 	skinnedShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.frag.glsl");
 	pickingShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.frag.glsl");
 	cubemapShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.frag.glsl");
+	grassShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.frag.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.gs.glsl");
 	debugMenu = new DebugMenu(window);
 }
 
@@ -55,20 +57,20 @@ void Renderer::render(Camera* camera)
 
 	//draw first for environment mapping
 	cubemapShaderProgram->use();
-	cubemapShaderProgram->setInt("skybox", 0);
-	cubemapShaderProgram->setMat4("view", glm::mat4(glm::mat3(camera->get_view_matrix())));
+	cubemapShaderProgram->setInt("skybox", 1);
+	cubemapShaderProgram->setMat4("view", glm::mat4(glm::mat3(view)));
 	cubemapShaderProgram->setMat4("projection", projection);
 	m_skybox->draw();
 
 	skinnedShaderProgram->use();
 	skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
 	skinnedShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
-	skinnedShaderProgram->setInt("skybox", 0);
+	skinnedShaderProgram->setInt("skybox", 1);
 	
 	for (SkinnedGameObject* skinned_entity : m_skinned_entities)
 	{
 		draw_aabb(skinned_entity->GameModel->getMinAABB(), skinned_entity->GameModel->getMaxAABB());
-		Renderer::draw_skinned(skinned_entity->GameModel, skinned_entity->Position, skinned_entity->Size, skinned_entity->Rotation, skinned_entity->transforms);
+		Renderer::draw_skinned(skinned_entity->GameModel, skinned_entity->ModelMatrix, skinned_entity->transforms);
 	}
 
 	shaderProgram->use();
@@ -79,18 +81,60 @@ void Renderer::render(Camera* camera)
 	{
 		shaderProgram->setBool("selected", i == Renderer::get_selected_index());
 		//shaderProgram->setInt("objectId", m_entities[i]->id);
-		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->Position, m_entities[i]->Size, m_entities[i]->Rotation);
+		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
 	}
+
+	render_grass(glm::vec3(0.0f), camera);
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
 	for (GameObject* light : m_lights)
 	{
-		Renderer::draw_static(lightShaderProgram, light->GameModel, light->Position, light->Size, light->Rotation);
+		Renderer::draw_static(lightShaderProgram, light->GameModel, light->ModelMatrix);
 	}
 }
 
-void Renderer::draw_skinned(Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, std::vector<glm::mat4>* transform)
+void Renderer::render_grass(glm::vec3 pos, Camera* camera)
+{
+	grassShaderProgram->use();
+	grassShaderProgram->setMat4("VP", camera->get_projection_matrix() * camera->get_view_matrix());
+	grassShaderProgram->setVec3("cameraPos", camera->getCameraPos());
+
+	glm::vec3 points[10000];
+	int k = 0;
+
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 100; j++)
+		{
+			points[k] = glm::vec3(i * 5, 0.0f, j * 5);
+			k++;
+		}
+	}
+
+	unsigned int VAO, VBO;
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, AssetManager::get_grass());
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points[0], GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);  
+
+	glDrawArrays(GL_POINTS, 0, 10000);
+
+	glDisableVertexAttribArray(0);
+}
+
+void Renderer::draw_skinned(Model* model, glm::mat4 modelMatrix, std::vector<glm::mat4>* transform)
 {
 	skinnedShaderProgram->setMat4("view", view);
 	skinnedShaderProgram->setMat4("projection", projection);
@@ -100,31 +144,15 @@ void Renderer::draw_skinned(Model* model, glm::vec3 pos, glm::vec3 size, glm::ve
 		skinnedShaderProgram->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transform->at(i));
 	}
 
-	glm::mat4 modelMat = glm::translate(glm::mat4(1.0f), pos);
-
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	modelMat = glm::scale(modelMat, size);
-
-	skinnedShaderProgram->setMat4("model", modelMat);
-
+	skinnedShaderProgram->setMat4("model", modelMatrix);
 	model->draw(*skinnedShaderProgram);
 }
 
-void Renderer::draw_static(Shader* shader, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation)
+void Renderer::draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix)
 {
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
-
-	glm::mat4 modelMat = glm::translate(glm::mat4(1.0f), pos);
-	
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	modelMat = glm::rotate(modelMat, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	modelMat = glm::scale(modelMat, size);
-
-	shader->setMat4("model", modelMat);
+	shader->setMat4("model", modelMatrix);
 	model->draw(*shaderProgram);
 }
 
@@ -175,7 +203,6 @@ void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
 }
 
 // This is for the debug menu, not part of game rendering.
-
 void Renderer::create_menu(float deltaTime)
 {
 	debugMenu->create_menu(m_entities, m_camera, deltaTime);
@@ -203,7 +230,7 @@ void Renderer::select_entity(float xpos, float ypos)
 		int b = (i & 0x00FF0000) >> 16;
 
 		pickingShaderProgram->setVec4("PickingColor", glm::vec4((float)r / 255.0, (float)g / 255.0, (float)b / 255.0, 1.0f));
-		Renderer::draw_static(pickingShaderProgram, m_entities[i]->GameModel, m_entities[i]->Position, m_entities[i]->Size, m_entities[i]->Rotation);
+		Renderer::draw_static(pickingShaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
 		glGetError();
 	}
 

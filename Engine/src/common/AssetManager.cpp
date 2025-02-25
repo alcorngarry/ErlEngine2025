@@ -1,8 +1,9 @@
 #include"AssetManager.h"
 
-std::map<unsigned int, Model*> assetMap;
+std::map<uint8_t, Model*> assetMap;
 SkyBox* skyBox;
 unsigned int cardTextures[13];
+unsigned int grassId;
 
 void load_sky_box()
 {
@@ -18,13 +19,20 @@ void load_sky_box()
 	skyBox = new SkyBox(faces);
 }
 
-unsigned int load_texture(const char* filePath) {
+unsigned int load_texture(const char* filePath, bool isMipMapped, bool isFlipped) {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(0);
+	if (isFlipped)
+	{
+		stbi_set_flip_vertically_on_load(0);
+	}
+	else {
+		stbi_set_flip_vertically_on_load(1);
+	}
+	
 	unsigned char* data = stbi_load(filePath, &width, &height, &nrChannels, 0);
 
 	if (data) {
@@ -36,7 +44,10 @@ unsigned int load_texture(const char* filePath) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		}
 		//mipmap requires power of two sizing that's why there was an issue, look into mipmapping
-		//glGenerateMipmap(GL_TEXTURE_2D);
+		if (isMipMapped)
+		{
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 
 		std::cout << "Loaded texture: " << filePath << std::endl;
 	}
@@ -49,6 +60,11 @@ unsigned int load_texture(const char* filePath) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	return textureID;
+}
+
+unsigned int AssetManager::get_grass()
+{
+	return grassId;
 }
 
 void AssetManager::load()
@@ -67,22 +83,23 @@ void AssetManager::load()
 
 	load_sky_box();
 
-	cardTextures[0] = load_texture("C:/Dev/assets/cards/c01.png");
-	cardTextures[1] = load_texture("C:/Dev/assets/cards/c02.png");
-	cardTextures[2] = load_texture("C:/Dev/assets/cards/c03.png");
-	cardTextures[3] = load_texture("C:/Dev/assets/cards/c04.png");
-	cardTextures[4] = load_texture("C:/Dev/assets/cards/c05.png");
-	cardTextures[5] = load_texture("C:/Dev/assets/cards/c06.png");
-	cardTextures[6] = load_texture("C:/Dev/assets/cards/c07.png");
-	cardTextures[7] = load_texture("C:/Dev/assets/cards/c08.png");
-	cardTextures[8] = load_texture("C:/Dev/assets/cards/c09.png");
-	cardTextures[9] = load_texture("C:/Dev/assets/cards/c10.png");
-	cardTextures[10] = load_texture("C:/Dev/assets/cards/c11.png");
-	cardTextures[11] = load_texture("C:/Dev/assets/cards/c12.png");
-	cardTextures[12] = load_texture("C:/Dev/assets/cards/c13.png");
+	cardTextures[0] = load_texture("C:/Dev/assets/cards/c01.png", false, true);
+	cardTextures[1] = load_texture("C:/Dev/assets/cards/c02.png", false, true);
+	cardTextures[2] = load_texture("C:/Dev/assets/cards/c03.png", false, true);
+	cardTextures[3] = load_texture("C:/Dev/assets/cards/c04.png", false, true);
+	cardTextures[4] = load_texture("C:/Dev/assets/cards/c05.png", false, true);
+	cardTextures[5] = load_texture("C:/Dev/assets/cards/c06.png", false, true);
+	cardTextures[6] = load_texture("C:/Dev/assets/cards/c07.png", false, true);
+	cardTextures[7] = load_texture("C:/Dev/assets/cards/c08.png", false, true);
+	cardTextures[8] = load_texture("C:/Dev/assets/cards/c09.png", false, true);
+	cardTextures[9] = load_texture("C:/Dev/assets/cards/c10.png", false, true);
+	cardTextures[10] = load_texture("C:/Dev/assets/cards/c11.png", false, true);
+	cardTextures[11] = load_texture("C:/Dev/assets/cards/c12.png", false, true);
+	cardTextures[12] = load_texture("C:/Dev/assets/cards/c13.png", false, true);
+	grassId = load_texture("C:/Dev/assets/party_game/Billboard_grass/Billboard_grass/sprites/n_grass_diff_0_40.png", true, false);
 }
 
-Model* AssetManager::get_model(unsigned int id)
+Model* AssetManager::get_model(uint8_t id)
 {
 	return assetMap[id];
 }
@@ -92,7 +109,7 @@ SkyBox* AssetManager::get_sky_box()
 	return skyBox;
 }
 
-unsigned int AssetManager::get_card(unsigned int card)
+uint8_t AssetManager::get_card(uint8_t card)
 {
 	return cardTextures[card];
 }

@@ -94,7 +94,7 @@ void BoardMap::load_skinned_objects()
 	}
 }
 
-void BoardMap::process_board_space(unsigned int boardId)
+void BoardMap::process_board_space(uint8_t boardId)
 {
 	switch (boardId)
 	{
@@ -123,7 +123,7 @@ void BoardMap::display_cards()
 {
 	//logic can be fixed.
 	if (players[currentPlayer]->inMotion) {
-		unsigned int card[1] = { players[currentPlayer]->get_cards()[players[currentPlayer]->get_selected_card_index()] };
+		uint8_t card[1] = { players[currentPlayer]->get_cards()[players[currentPlayer]->get_selected_card_index()] };
 		
 		UIManager::load_elements(card, 6);
 	}

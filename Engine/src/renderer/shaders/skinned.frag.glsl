@@ -7,14 +7,15 @@ in vec3 FragPos;
 out vec4 FragColor;
 
 uniform sampler2D texture_diffuse1;
+uniform samplerCube skybox;
+
 uniform vec3 lightPos;
 uniform vec3 lightColor;
 uniform vec3 viewPos;
-uniform samplerCube skybox;
 
 void main()
 {
-    float ambientStrength = 0.01;
+    float ambientStrength = 0.1;
     float specularStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
 

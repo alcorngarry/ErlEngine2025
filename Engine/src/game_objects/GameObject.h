@@ -7,24 +7,18 @@
 class GameObject {
 	public:
 		glm::vec3 Position,Size,Rotation;
-
-		unsigned int id;
+		glm::mat4 ModelMatrix;
 		Model* GameModel;
-		GameObject(unsigned int id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
-		GameObject();
+		uint8_t id;
+		
+		GameObject(uint8_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
+		
 		virtual void update(float deltaTime);
 		glm::vec3 get_aabb_min() const;
 		glm::vec3 get_aabb_max() const;
-
-		glm::vec3 get_position() const;
-		glm::vec3 get_size() const;
-		glm::vec3 get_rotation() const;
-		void set_position(glm::vec3 pos);
-		void set_size(glm::vec3 size);
-		void set_rotation(glm::vec3 rotation);
-
 	private:
 		glm::vec3 local_to_world(const glm::vec3& localPos) const;
+		void set_model_matrix(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 };
 
 #endif // !GAME_OBJECT_H

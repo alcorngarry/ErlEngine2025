@@ -10,5 +10,4 @@ void SelectEntityCommand::execute() {
 	else {
 		Renderer::select_entity(xpos, ypos);
 	}
-	
 }

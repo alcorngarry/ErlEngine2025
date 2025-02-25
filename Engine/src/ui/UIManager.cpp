@@ -33,7 +33,7 @@ void UIManager::set_screen_res(int width, int height)
 }
 
 //will probably need to be decoupled.
-void UIManager::load_elements(unsigned int* cards, unsigned int selectedCard)
+void UIManager::load_elements(uint8_t* cards, uint8_t selectedCard)
 {
     int size = 0;
     uiElements.clear();

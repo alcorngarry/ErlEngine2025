@@ -38,6 +38,7 @@
     <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
     <ClCompile Include="src\commands\ToggleMenuCommand.cpp" />
     <ClCompile Include="src\game_objects\BoardSpace.cpp" />
+    <ClCompile Include="src\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="src\commands\SelectEntityCommand.h" />
     <ClInclude Include="src\commands\ToggleMenuCommand.h" />
     <ClInclude Include="src\game_objects\BoardSpace.h" />
+    <ClInclude Include="src\ImGuizmo.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />
     <ClInclude Include="src\imgui\imgui_impl_glfw.h" />
@@ -224,7 +226,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

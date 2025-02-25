@@ -1,6 +1,6 @@
 #include"Player.h"
 
-Player::Player(unsigned int playerId, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, PlayerControls controls) : SkinnedGameObject(playerId, (char*)"C:/Dev/assets/knight/knight_skinned_0/knight_impl1.dae", characterModel, pos, size, rotation)
+Player::Player(uint8_t playerId, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, PlayerControls controls) : SkinnedGameObject(playerId, (char*)"C:/Dev/assets/knight/knight_skinned_0/knight_impl1.dae", characterModel, pos, size, rotation)
 { 
 	this->m_controls = controls;
 	state = INACTIVE;
@@ -8,7 +8,7 @@ Player::Player(unsigned int playerId, Model* characterModel, glm::vec3 pos, glm:
 
 void Player::move_player(std::vector<GameObject*> boardSpaces)
 {		
-	int nextPos = boardPosition == boardSpaces.size() - 1 ? 0 : boardPosition + 1;
+	uint8_t nextPos = boardPosition == boardSpaces.size() - 1 ? 0 : boardPosition + 1;
 	float delta = 1.0f;
 
 	glm::vec3 buffer(0.0f, 1.0f, 0.0f);
@@ -57,7 +57,7 @@ void Player::update(float deltaTime)
 	mator->update_animation(deltaTime);
 }
 
-unsigned int Player::get_board_position()
+uint8_t Player::get_board_position()
 {
 	return boardPosition;
 }
@@ -78,27 +78,27 @@ void Player::init_deck()
 	}
 }
 
-unsigned int Player::draw_card()
+uint8_t Player::draw_card()
 {
 	return ErlMath::generate_random(1, 13);
 }
 
-unsigned int* Player::get_cards()
+uint8_t* Player::get_cards()
 {
 	return cards;
 }
 
-unsigned int Player::get_selected_card_index()
+uint8_t Player::get_selected_card_index()
 {
 	return selectedCardIndex;
 }
 
-void Player::add_groats(unsigned int groats)
+void Player::add_groats(uint8_t groats)
 {
 	this->groats += groats;
 }
 
-void Player::remove_groats(unsigned int groats)
+void Player::remove_groats(uint8_t groats)
 {
 	if (this->groats >= groats)
 	{

@@ -57,7 +57,7 @@ void Map::load()
 {
 	readMap.open(fileName + ".esf");
 	std::string line;
-	int id, boardSpaceId;
+	uint8_t id, boardSpaceId;
 
 	char peek = 'B';
 
@@ -149,7 +149,7 @@ GameObject* Map::read_asset()
 {
 	std::string line;
 	getline(readMap, line, ':');
-	unsigned int assetId;
+	uint8_t assetId;
 	float x, y, z;
 	glm::vec3 position, scale, rotation;
 

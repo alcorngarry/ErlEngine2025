@@ -6,32 +6,32 @@ Camera::Camera()
 	setCameraToLookAtOrigin();
 }
 
-glm::vec3 Camera::getCameraPos()
+glm::vec3 Camera::get_camera_pos()
 {
 	return cameraPos;
 }
 
-void Camera::setCameraPos(glm::vec3 pos)
+void Camera::set_camera_pos(glm::vec3 pos)
 {
 	cameraPos = pos;
 }
 
-glm::vec3 Camera::getCameraFront()
+glm::vec3 Camera::get_camera_front()
 {
 	return cameraFront;
 }
 
-void Camera::setCameraFront(glm::vec3 front)
+void Camera::set_camera_front(glm::vec3 front)
 {
 	cameraFront = front;
 }
 
-glm::vec3 Camera::getCameraUp()
+glm::vec3 Camera::get_camera_up()
 {
 	return cameraUp;
 }
 
-void Camera::setCameraUp(glm::vec3 up)
+void Camera::set_camera_up(glm::vec3 up)
 {
 	cameraUp = up;
 }
@@ -43,7 +43,7 @@ void Camera::setCameraToLookAtOrigin() {
 
 glm::mat4 Camera::get_view_matrix()
 {
-	return glm::lookAt(getCameraPos(), getCameraPos() + getCameraFront(), getCameraUp());
+	return glm::lookAt(get_camera_pos(), get_camera_pos() + get_camera_front(), get_camera_up());
 	
 }
 

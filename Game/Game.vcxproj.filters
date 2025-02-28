@@ -55,16 +55,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\commands\MoveCameraBackwardCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\MoveCameraForwardCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\MoveCameraLeftCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\MoveCameraRightCommand.cpp">
+    <ClCompile Include="src\commands\MoveCameraCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\commands\MoveEntityCommand.cpp">
@@ -150,16 +141,7 @@
     <ClInclude Include="src\commands\SelectCardRightCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\commands\MoveCameraBackwardCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\MoveCameraForwardCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\MoveCameraLeftCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\MoveCameraRightCommand.h">
+    <ClInclude Include="src\commands\MoveCameraCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\commands\MoveEntityCommand.h">
@@ -229,5 +211,6 @@
   <ItemGroup>
     <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
+    <None Include="res\maps\mini_game_1.esf" />
   </ItemGroup>
 </Project>

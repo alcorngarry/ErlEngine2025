@@ -104,6 +104,12 @@ Model* AssetManager::get_model(uint8_t id)
 	return assetMap[id];
 }
 
+uint16_t AssetManager::get_num_loaded_assets()
+{
+	//update this with map
+	return 11;
+}
+
 SkyBox* AssetManager::get_sky_box()
 {
 	return skyBox;

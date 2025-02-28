@@ -47,7 +47,7 @@ class Map
 		std::ifstream readMap;
 		std::string fileName;
 		//probably rename and fix.
-		virtual void load_skinned_objects();
+		virtual void load_skinned_objects() = 0;
 	private:
 		void load_skybox();
 		GameObject* read_asset();

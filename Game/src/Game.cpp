@@ -1,6 +1,6 @@
 #include"Game.h"
 
-Game::Game(GLFWwindow* window) : State(GAME_ACTIVE)
+Game::Game() : State(GAME_ACTIVE)
 {
 }
 
@@ -14,6 +14,7 @@ void Game::init()
 	Maps.push_back(new BoardMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_1"));
 	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_2"));
 	Maps.push_back(new CountingSheep("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/counting_sheep"));
+	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/mini_game_1"));
 	level = 0;
 	Maps[level]->load();
 	Maps[level]->set_controls(0.0f);
@@ -21,10 +22,10 @@ void Game::init()
 
 void Game::update(float deltaTime)
 { 
-	InputManager::set_key_binding(GLFW_KEY_W, new MoveCameraForwardCommand(Maps[level]->camera, deltaTime));
-	InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraLeftCommand(Maps[level]->camera, deltaTime));
-	InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraBackwardCommand(Maps[level]->camera, deltaTime));
-	InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraRightCommand(Maps[level]->camera, deltaTime));
+	InputManager::set_key_binding(GLFW_KEY_W, new MoveCameraCommand(Maps[level]->camera, deltaTime, 0));
+	InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraCommand(Maps[level]->camera, deltaTime, 2));
+	InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraCommand(Maps[level]->camera, deltaTime, 1));
+	InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraCommand(Maps[level]->camera, deltaTime, 3));
 
 	if (State == DEBUG_MENU)
 	{
@@ -34,6 +35,10 @@ void Game::update(float deltaTime)
 		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(0.0f, 0.0f, true));
 		InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
 		InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(Maps[level], false));
+
+		//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new MoveCameraCommand(Maps[level]->camera, deltaTime, 4));
+		//Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
+
 
 
 		if (Renderer::get_selected_index() != -1)
@@ -49,7 +54,7 @@ void Game::update(float deltaTime)
 
 		}
 		else {
-			Maps[level]->camera->setCameraFront(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
+			Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
 		}
 	}
 	else {

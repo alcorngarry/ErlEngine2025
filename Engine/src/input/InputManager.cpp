@@ -83,6 +83,11 @@ void InputManager::update() {
     }
 }
 
+bool InputManager::is_mouse_button_pressed()
+{
+    return glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+}
+
 void InputManager::set_key_binding(int key, Command* command)
 {
     keyBindings[key] = command;
@@ -97,7 +102,6 @@ void InputManager::remove_mouse_binding(int key)
 {
     mouseBindings.erase(key);
 }
-
 
 void InputManager::set_gamepad_binding(int key, Command* command)
 {
@@ -155,7 +159,6 @@ double InputManager::get_yaw()
 {
     return yaw;
 }
-
 
 double InputManager::get_pitch()
 {

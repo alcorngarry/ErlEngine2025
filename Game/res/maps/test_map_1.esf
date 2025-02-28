@@ -1,5 +1,4 @@
-models: [{assetId: 2, position: 122,0,-17, scale: 2,1,2, rotation: 0,0,0},
-{assetId: 4, position: 74.0398,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
+models: [{assetId: 4, position: 74.0398,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
 {assetId: 4, position: 110.04,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
 {assetId: 4, position: 146.04,0,50.8602, scale: 1,1,1, rotation: 0,0,0},
 {assetId: 4, position: 180.04,0,12.8602, scale: 1,1,1, rotation: 0,0,0},
@@ -13,5 +12,10 @@ models: [{assetId: 2, position: 122,0,-17, scale: 2,1,2, rotation: 0,0,0},
 {assetId: 4, position: 74.0398,0,-24.1398, scale: 1,1,1, rotation: 0,0,0},
 {assetId: 4, position: 74.0398,0,14.8602, scale: 1,1,1, rotation: 0,0,0},
 {assetId: 8, position: 120,0,0, scale: 1,1,1, rotation: 0,0,0},
-{assetId: 10, position: 111,110,0, scale: 1,1,1, rotation: 0,0,0}]
+{assetId: 10, position: 111,352.87,0, scale: 1,1,1, rotation: 0,-0,0},
+{assetId: 2, position: -390.854,-0.297111,-17, scale: 4.45315,1,4.2188, rotation: 0,-0,-89.9667},
+{assetId: 2, position: 122,0,-17, scale: 4.45319,1,4.2188, rotation: 0,-0,0},
+{assetId: 1, position: -31.9888,21.0666,0, scale: 29.2633,22.3309,51.3656, rotation: 0,-0,0},
+{assetId: 1, position: 260.593,21.0666,0, scale: 29.2633,22.3309,51.3656, rotation: 0,-0,0},
+{assetId: 1, position: 260.593,21.0666,0, scale: 29.2633,22.3309,51.3656, rotation: 0,-0,0}]
 lights: [{assetId: 1, position: 5,100,0, scale: 1,1,1, rotation: 0,0,0}]

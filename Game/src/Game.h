@@ -7,10 +7,7 @@
 #include"maps/CountingSheep.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
-#include"commands/MoveCameraBackwardCommand.h"
-#include"commands/MoveCameraForwardCommand.h"
-#include"commands/MoveCameraLeftCommand.h"
-#include"commands/MoveCameraRightCommand.h"
+#include"commands/MoveCameraCommand.h"
 #include"commands/SelectEntityCommand.h"
 #include"commands/AddRemoveEntityCommand.h"
 #include"commands/MoveEntityCommand.h"
@@ -26,7 +23,7 @@ class Game {
 		GameState State;
 		short level;
 
-		Game(GLFWwindow* window);
+		Game();
 		~Game();
 
 		void init();

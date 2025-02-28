@@ -25,6 +25,8 @@ namespace Renderer {
 
 	void add_sky_box(SkyBox* skybox);
 	void add_render_object(GameObject* gameObject);
+	void remove_render_object(int index);
+	std::vector<GameObject*> get_rendered_entities();
 	void add_light_render_object(GameObject* gameObject);
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	

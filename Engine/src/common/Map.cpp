@@ -8,6 +8,9 @@ Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
 
 void Map::save()
 {
+	//probably fix this in the future, and add lights and skins
+	entities = Renderer::get_rendered_entities();
+
 	writeMap = std::ofstream{ fileName + ".esf" };
 	
 	writeMap << "models: [";
@@ -190,10 +193,6 @@ GameObject* Map::read_asset()
 	return new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation);
 }
 
-void Map::load_skinned_objects()
-{
-}
-
 void Map::load_skybox()
 {
 	Renderer::add_sky_box(AssetManager::get_sky_box());
@@ -206,10 +205,13 @@ void Map::draw(float deltaTime)
 
 void Map::duplicate_model(int selectedIndex)
 {
-	entities.push_back(new GameObject(*entities[selectedIndex]));
+	GameObject* model = new GameObject(*entities[selectedIndex]);
+	entities.push_back(model);
+	Renderer::add_render_object(model);
 }
 
 void Map::remove_model(int selectedIndex)
 {
 	entities.erase(entities.begin() + selectedIndex);
+	Renderer::remove_render_object(selectedIndex);
 }

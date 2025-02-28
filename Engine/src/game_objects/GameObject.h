@@ -9,9 +9,9 @@ class GameObject {
 		glm::vec3 Position,Size,Rotation;
 		glm::mat4 ModelMatrix;
 		Model* GameModel;
-		uint8_t id;
+		uint16_t id;
 		
-		GameObject(uint8_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
+		GameObject(uint16_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation);
 		
 		virtual void update(float deltaTime);
 		glm::vec3 get_aabb_min() const;

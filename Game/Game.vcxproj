@@ -29,10 +29,7 @@
     <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp" />
     <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
-    <ClCompile Include="src\commands\MoveCameraBackwardCommand.cpp" />
-    <ClCompile Include="src\commands\MoveCameraForwardCommand.cpp" />
-    <ClCompile Include="src\commands\MoveCameraLeftCommand.cpp" />
-    <ClCompile Include="src\commands\MoveCameraRightCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraCommand.cpp" />
     <ClCompile Include="src\commands\MoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\SaveCommand.cpp" />
     <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
@@ -63,10 +60,7 @@
     <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
     <ClInclude Include="src\commands\AddSubtractCountCommand.h" />
     <ClInclude Include="src\commands\CloseWindowCommand.h" />
-    <ClInclude Include="src\commands\MoveCameraBackwardCommand.h" />
-    <ClInclude Include="src\commands\MoveCameraForwardCommand.h" />
-    <ClInclude Include="src\commands\MoveCameraLeftCommand.h" />
-    <ClInclude Include="src\commands\MoveCameraRightCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraCommand.h" />
     <ClInclude Include="src\commands\MoveEntityCommand.h" />
     <ClInclude Include="src\commands\OpenMenuCommand.h" />
     <ClInclude Include="src\commands\SaveCommand.h" />
@@ -106,6 +100,7 @@
   <ItemGroup>
     <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
+    <None Include="res\maps\mini_game_1.esf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

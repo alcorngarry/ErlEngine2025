@@ -17,8 +17,9 @@ class DebugMenu
 		DebugMenu();
 
 		~DebugMenu();
-		void create_menu(std::vector<GameObject*> entities, Camera* camera, float deltaTime, int roll = -1);
-
+		void create_menu(std::vector<GameObject*>& entities, Camera* camera, float deltaTime, int roll = -1);
+		void draw_entity_hierarchy(std::vector<GameObject*>& entities);
+		void create_new_map();
 		void shut_down();
 };
 

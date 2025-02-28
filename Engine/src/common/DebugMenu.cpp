@@ -20,7 +20,7 @@ DebugMenu::~DebugMenu()
 {
 }
 
-void DebugMenu::create_menu(std::vector<GameObject*> entities, Camera* camera, float deltaTime, int roll)
+void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, float deltaTime, int roll)
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -32,10 +32,18 @@ void DebugMenu::create_menu(std::vector<GameObject*> entities, Camera* camera, f
 	char const* fpsChar = fps.c_str();
 
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(600, 0), ImGuiCond_Always);
 
 	ImGui::Begin("Debug Menu");
+
+	if (ImGui::Button("New Map"))
+	{
+		create_new_map();
+	}
+
 	ImGui::Text(fpsChar);
+
+	draw_entity_hierarchy(entities);
 
 	int selectedIndex = Renderer::get_selected_index();
 	if (selectedIndex != -1)
@@ -67,38 +75,55 @@ void DebugMenu::create_menu(std::vector<GameObject*> entities, Camera* camera, f
 		ImGui::Text("X: %.2f", mousePos.x);
 		ImGui::Text("Y: %.2f", mousePos.y);
 
-		
-
 		glm::mat4 modelMatrix = entity->ModelMatrix;
 		glm::mat4 view = camera->get_view_matrix();
 		glm::mat4 projection = camera->get_projection_matrix();
 
-		// Set up the gizmo for manipulation
 		ImGuizmo::SetRect(0.0f, 0.0f, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
 		ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection),
 			ImGuizmo::TRANSLATE | ImGuizmo::ROTATE | ImGuizmo::SCALE,
 			ImGuizmo::LOCAL, glm::value_ptr(modelMatrix));
 
 		if (ImGuizmo::IsUsing()) {
-			// Update entity's transformation if gizmo is used
 
-			//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, nullptr);
 			entity->ModelMatrix = modelMatrix;
-			//entity->Position = glm::vec3(modelMatrix[3]);
-		}
-		else {
-			//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(InputManager::get_xpos(), InputManager::get_ypos(), false));
+			
+			glm::vec3 position, scale, rotation;
+			ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(modelMatrix), glm::value_ptr(position), glm::value_ptr(rotation), glm::value_ptr(scale));
+			entity->Position = position;
+			entity->Rotation = rotation;
+			entity->Size = scale;
 		}
 	}
 
 	ImGui::Text("Camera Position:");
-	ImGui::Text("X: %.2f", camera->getCameraPos().x);
-	ImGui::Text("Y: %.2f", camera->getCameraPos().y);
-	ImGui::Text("Z: %.2f", camera->getCameraPos().z);
+	ImGui::Text("X: %.2f", camera->get_camera_pos().x);
+	ImGui::Text("Y: %.2f", camera->get_camera_pos().y);
+	ImGui::Text("Z: %.2f", camera->get_camera_pos().z);
 
 	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void DebugMenu::draw_entity_hierarchy(std::vector<GameObject*>& entities)
+{
+	if (ImGui::CollapsingHeader("Entity Hierarchy"))
+	{
+		for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++)
+		{
+			if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str()))
+			{
+				GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f));
+				entities.push_back(entity);
+				Renderer::add_render_object(entity);
+			}
+		}
+	}
+}
+
+void DebugMenu::create_new_map()
+{
 }
 
 void DebugMenu::shut_down()

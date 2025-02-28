@@ -11,5 +11,6 @@ namespace AssetManager {
 	SkyBox* get_sky_box();
 	uint8_t get_card(uint8_t card);
 	unsigned int get_grass();
+	uint16_t get_num_loaded_assets();
 };
 #endif // !ASSET_MANAGER_H

@@ -1,5 +1,8 @@
 #include"Renderer.h"
 
+std::vector<SkinnedGameObject*> m_skinned_entities;
+std::vector<GameObject*> m_entities, m_lights;
+
 Shader* shaderProgram;
 Shader* lightShaderProgram;
 Shader* skinnedShaderProgram;
@@ -7,15 +10,11 @@ Shader* pickingShaderProgram;
 Shader* cubemapShaderProgram;
 Shader* grassShaderProgram;
 
-std::vector<SkinnedGameObject*> m_skinned_entities;
-std::vector<GameObject*> m_entities, m_lights;
 Camera* m_camera;
 SkyBox* m_skybox;
-
 DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
-
 int selectedIndex = -1;
 
 void Renderer::init_render(GLFWwindow* window)
@@ -37,6 +36,17 @@ void Renderer::add_sky_box(SkyBox* skybox)
 void Renderer::add_render_object(GameObject* gameObject)
 {
 	m_entities.push_back(gameObject);
+}
+
+void Renderer::remove_render_object(int index)
+{
+	m_entities.erase(m_entities.begin() + index);
+	selectedIndex = -1;
+}
+
+std::vector<GameObject*> Renderer::get_rendered_entities()
+{
+	return m_entities;
 }
 
 void Renderer::add_light_render_object(GameObject* gameObject)
@@ -62,8 +72,15 @@ void Renderer::render(Camera* camera)
 	cubemapShaderProgram->setMat4("projection", projection);
 	m_skybox->draw();
 
+	
 	skinnedShaderProgram->use();
-	skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
+	if (!m_lights.empty())
+	{
+		skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
+	}
+	else {
+		skinnedShaderProgram->setVec3("lightPos", glm::vec3(0.0f));
+	}
 	skinnedShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 	skinnedShaderProgram->setInt("skybox", 1);
 	
@@ -74,7 +91,13 @@ void Renderer::render(Camera* camera)
 	}
 
 	shaderProgram->use();
-	shaderProgram->setVec3("lightPos", m_lights[0]->Position);
+	if (!m_lights.empty())
+	{
+		shaderProgram->setVec3("lightPos", m_lights[0]->Position);
+	}
+	else {
+		shaderProgram->setVec3("lightPos", glm::vec3(0.0f));
+	}
 	shaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 
 	for (int i = 0; i < m_entities.size(); i++)
@@ -84,7 +107,7 @@ void Renderer::render(Camera* camera)
 		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
 	}
 
-	render_grass(glm::vec3(0.0f), camera);
+	//render_grass(glm::vec3(0.0f), camera);
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
@@ -98,7 +121,7 @@ void Renderer::render_grass(glm::vec3 pos, Camera* camera)
 {
 	grassShaderProgram->use();
 	grassShaderProgram->setMat4("VP", camera->get_projection_matrix() * camera->get_view_matrix());
-	grassShaderProgram->setVec3("cameraPos", camera->getCameraPos());
+	grassShaderProgram->setVec3("cameraPos", camera->get_camera_pos());
 
 	glm::vec3 points[10000];
 	int k = 0;

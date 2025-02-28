@@ -5,16 +5,16 @@ int ballIndex = -1;
 
 PongMap::PongMap(std::string mapName) : Map(mapName)
 {
-	camera->setCameraPos(glm::vec3(-100, 100, 0));
+	//camera->setCameraPos(glm::vec3(-100, 100, 0));
 }
 
 void PongMap::update(float deltaTime)
 {
 	//if (state == MENU_CLOSED)
 	//{
-		camera->setCameraPos(glm::vec3(-100, 100, 0));
-		camera->setCameraFront(glm::normalize(glm::vec3(0.0f) - camera->getCameraPos())); 
-		camera->setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	//	camera->setCameraPos(glm::vec3(-100, 100, 0));
+	//	camera->setCameraFront(glm::normalize(glm::vec3(0.0f) - camera->getCameraPos())); 
+	//	camera->setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	//}
 	
 	if (abs(entities[ballIndex]->Position.z) > 50.0f)

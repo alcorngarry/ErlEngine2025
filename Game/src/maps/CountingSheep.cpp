@@ -16,8 +16,8 @@ public:
 
 CountingSheep::CountingSheep(std::string mapName) : Map(mapName)
 {
-	camera->setCameraPos(glm::vec3(130.0f, 170.0f, 270.0f));
-	camera->setCameraFront(glm::vec3(120.0f, 0.0f, 0.0f) - camera->getCameraPos());
+	camera->set_camera_pos(glm::vec3(130.0f, 170.0f, 270.0f));
+	camera->set_camera_front(glm::vec3(120.0f, 0.0f, 0.0f) - camera->get_camera_pos());
 	startTime = (float)glfwGetTime();
 }
 

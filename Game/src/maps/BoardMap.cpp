@@ -34,18 +34,18 @@ void BoardMap::update(float deltaTime)
 			float heightAbove = 30.0f;
 			glm::vec3 cameraOffset = (playerDirection * -distanceBehind) + glm::vec3(0.0f, heightAbove, 0.0f);
 
-			camera->setCameraPos(players[currentPlayer]->Position + cameraOffset);
+			camera->set_camera_pos(players[currentPlayer]->Position + cameraOffset);
 			players[currentPlayer]->update(deltaTime);
 			players[currentPlayer]->move_player(get_board_objects());
 			players[currentPlayer]->state = INACTIVE;
 		}
 		else {
-			//camera->setCameraPos(players[currentPlayer]->Position + glm::vec3(-80.0f, 30.0f, 0.0f));
-			glm::vec3 direction = players[currentPlayer]->Position - camera->getCameraPos();
+			//camera->set_camera_pos(players[currentPlayer]->Position + glm::vec3(-80.0f, 30.0f, 0.0f));
+			glm::vec3 direction = players[currentPlayer]->Position - camera->get_camera_pos();
 			players[currentPlayer]->Rotation = -1.0f * glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
 		}
 
-		camera->setCameraFront(players[currentPlayer]->Position - camera->getCameraPos());
+		camera->set_camera_front(players[currentPlayer]->Position - camera->get_camera_pos());
 
 		if (players[currentPlayer]->state == INACTIVE && !players[currentPlayer]->inMotion)
 		{

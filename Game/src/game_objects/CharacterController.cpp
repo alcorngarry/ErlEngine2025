@@ -25,6 +25,6 @@ void CharacterController::proccessInput(GLFWwindow* window, Camera& camera, glm:
 		objectPos.x += sin(rotationY) * axes[1] * 0.1f;
 		objectPos.z += cos(rotationY) * axes[1] * 0.1f;
 
-		camera.setCameraPos(glm::vec3(objectPos.x + camX, cos(rotationX) * 20, objectPos.z + camZ));
+		camera.set_camera_pos(glm::vec3(objectPos.x + camX, cos(rotationX) * 20, objectPos.z + camZ));
 	}
 }

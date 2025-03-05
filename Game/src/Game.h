@@ -29,7 +29,6 @@ class Game {
 		void init();
 		void update(float deltaTime);
 		void render(float deltaTime);
-		void set_debug_controls(float deltaTime);
 	private:
 		
 };	

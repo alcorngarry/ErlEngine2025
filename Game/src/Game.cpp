@@ -39,8 +39,6 @@ void Game::update(float deltaTime)
 		//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new MoveCameraCommand(Maps[level]->camera, deltaTime, 4));
 		//Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
 
-
-
 		if (Renderer::get_selected_index() != -1)
 		{
 			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
@@ -50,8 +48,6 @@ void Game::update(float deltaTime)
 			InputManager::set_key_binding(GLFW_KEY_DOWN, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, -3.0f));
 			InputManager::set_key_binding(GLFW_KEY_J, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, 3.0f));
 			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));*/
-
-
 		}
 		else {
 			Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
@@ -70,13 +66,10 @@ void Game::update(float deltaTime)
 	Maps[level]->update(deltaTime);
 }
 
-void Game::set_debug_controls(float deltaTime)
-{
-}
-
 void Game::render(float deltaTime)
 {
 	Maps[level]->draw(deltaTime);
+
 	if (State == DEBUG_MENU)
 	{
 		Renderer::create_menu(deltaTime);

@@ -16,9 +16,10 @@ class GameObject {
 		virtual void update(float deltaTime);
 		glm::vec3 get_aabb_min() const;
 		glm::vec3 get_aabb_max() const;
+	protected:
+		void set_model_matrix(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 	private:
 		glm::vec3 local_to_world(const glm::vec3& localPos) const;
-		void set_model_matrix(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 };
 
 #endif // !GAME_OBJECT_H

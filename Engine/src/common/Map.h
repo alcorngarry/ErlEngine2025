@@ -29,16 +29,15 @@ class Map
 		State state;
 		std::vector<GameObject*> entities;
 		std::vector<GameObject*> lights;
-		std::vector<GameObject*> boardSpaces;
 		std::vector<SkinnedGameObject*> skinned_entities;
 		Camera* camera;
 
 		Map(std::string mapName);
 		void save();
-		void load();
+		virtual void load();
 		virtual void draw(float deltaTime);
-		virtual void set_controls(float deltaTime) = 0; //interface method signature
-		virtual void update(float deltaTime) = 0; //interface method signature
+		virtual void set_controls(float deltaTime) = 0;
+		virtual void update(float deltaTime) = 0;
 		//move to editor class
 		void duplicate_model(int selectedIndex);
 		void remove_model(int selectedIndex);

@@ -4,6 +4,7 @@
 #include<GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
+#include<game_objects/BoardSpace.h>
 #include"math/ErlMath.h"
 #include"game_objects/SkinnedGameObject.h"
 #include"game_objects/animation/Animation.h"
@@ -19,22 +20,25 @@ struct PlayerControls {
 
 enum State {
 	ACTIVE,
+	IN_MOTION,
+	TURN_COMPLETE,
 	INACTIVE
 };
 
 class Player : public SkinnedGameObject {
 	public:
-		glm::vec3 velocity = glm::vec3(0.0f);
+		BoardSpace* currSpace;
 		State state;
+
+		glm::vec3 velocity = glm::vec3(0.0f);
+		uint8_t travelDistance = 0;
 		uint8_t moves = 0;
 		uint8_t groats = 0;
 		uint8_t selectedCardIndex = 0;
-		bool inMotion = false;
+		float startTime;
 
 		Player(uint8_t playerId, Model* characterModel, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, PlayerControls controls);
-		void move_player(std::vector<GameObject*> boardSpaces);
-		void start_move(float startTime, int moves);
-		uint8_t get_board_position();
+		void move_player();
 		void update(float deltaTime) override;
 		void init_deck();
 		uint8_t* get_cards();
@@ -42,8 +46,6 @@ class Player : public SkinnedGameObject {
 		void add_groats(uint8_t groats);
 		void remove_groats(uint8_t groats);
 	private:
-		uint8_t boardPosition = 0;
-		float startTime;
 		uint8_t cards[5];
 		PlayerControls m_controls;
 		void set_controls(PlayerControls controls);

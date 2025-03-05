@@ -143,8 +143,6 @@ void Map::load()
 		//} 
 	} 
 	readMap.close();
-
-	load_skinned_objects();
 	load_skybox();
 }
 

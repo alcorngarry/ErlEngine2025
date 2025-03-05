@@ -31,11 +31,11 @@ namespace Renderer {
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	
 	void create_menu(float deltaTime);
-	void create_menu(float deltaTime, int roll);
 	void deselect_index();
 	int get_selected_index();
 	void select_entity(float xpos, float ypos);
-	//private
+
+
 	void draw_aabb(const glm::vec3& minAABB,const glm::vec3& maxAABB);
 	void draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix);
 	void draw_skinned(Model* model, glm::mat4 modelMatrix, std::vector<glm::mat4>* transform);

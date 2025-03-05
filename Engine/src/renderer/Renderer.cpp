@@ -231,11 +231,6 @@ void Renderer::create_menu(float deltaTime)
 	debugMenu->create_menu(m_entities, m_camera, deltaTime);
 }
 
-void Renderer::create_menu(float deltaTime, int roll)
-{
-	debugMenu->create_menu(m_entities, m_camera, deltaTime, roll);
-}
-
 void Renderer::select_entity(float xpos, float ypos)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

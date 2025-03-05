@@ -2,58 +2,12 @@
 
 BoardMap::BoardMap(std::string mapName) : Map(mapName)
 {
-	//think about it, set states for player turns.
-	//each player has a deck, implement deck logic -- mostly complete, needs more cards, and finite amount...maybe
-	//add types of spaces -- in progress
-	//add controller controls
-	//add item select system -- in progress
-	//need ui for items -- in progress
-
-	// part deux
-	// fix camera follow system -- in progress
-	// fix player orientation when traversing the map --fixed
-	// add groat ui elements and text
-	// add esc command end program --done
-	// add save command, if it doesn't already exist --save needs tweaking. the save file gets corrupt.
 }
 
 void BoardMap::update(float deltaTime)
 {
 	set_controls(deltaTime);
-
-	// Update the camera's position
-	// tan = a/h, h is what we want.
-	// a over tan gives u h
-	if (state == DEFAULT)
-	{
-		if (players[currentPlayer]->inMotion)
-		{
-			float playerYRotation = glm::radians(players[currentPlayer]->Rotation.y);
-			glm::vec3 playerDirection = glm::vec3(sin(playerYRotation), 0.0f, cos(playerYRotation));
-			float distanceBehind = 80.0f;
-			float heightAbove = 30.0f;
-			glm::vec3 cameraOffset = (playerDirection * -distanceBehind) + glm::vec3(0.0f, heightAbove, 0.0f);
-
-			camera->set_camera_pos(players[currentPlayer]->Position + cameraOffset);
-			players[currentPlayer]->update(deltaTime);
-			players[currentPlayer]->move_player(get_board_objects());
-			players[currentPlayer]->state = INACTIVE;
-		}
-		else {
-			//camera->set_camera_pos(players[currentPlayer]->Position + glm::vec3(-80.0f, 30.0f, 0.0f));
-			glm::vec3 direction = players[currentPlayer]->Position - camera->get_camera_pos();
-			players[currentPlayer]->Rotation = -1.0f * glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
-		}
-
-		camera->set_camera_front(players[currentPlayer]->Position - camera->get_camera_pos());
-
-		if (players[currentPlayer]->state == INACTIVE && !players[currentPlayer]->inMotion)
-		{
-			process_board_space(get_board_objects()[players[currentPlayer]->get_board_position()]->id);
-			currentPlayer = currentPlayer == players.size() - 1 ? 0 : currentPlayer += 1;
-			players[currentPlayer]->state = ACTIVE;
-		}
-	}
+	update_camera_position(deltaTime);
 	display_cards();
 }
 
@@ -61,6 +15,13 @@ void BoardMap::draw(float deltaTime)
 {
 	Renderer::render(camera);
 	UIManager::draw();
+}
+
+void BoardMap::load()
+{
+	Map::load();
+	init_board_spaces();
+	load_skinned_objects();
 }
 
 //remove delta time after fixing animation call structure
@@ -76,14 +37,14 @@ void BoardMap::set_controls(float deltaTime)
 
 void BoardMap::load_skinned_objects()
 {
-	//add height buffer for character
-	glm::vec3 startingPosition = get_board_objects()[0]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 startingPosition = boardSpaces[0]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
 	for (int i = 0; i < 1; i++)
 	{
 		Player* player = new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls);
 		players.push_back(player);
 		Renderer::add_skinned_render_object(player);
 		players[i]->init_deck();
+		players[i]->currSpace = boardSpaces[0];
 
 		if (i == 0)
 		{
@@ -121,8 +82,7 @@ void BoardMap::process_board_space(uint8_t boardId)
 
 void BoardMap::display_cards()
 {
-	//logic can be fixed.
-	if (players[currentPlayer]->inMotion) {
+	if (players[currentPlayer]->state == IN_MOTION) {
 		uint8_t card[1] = { players[currentPlayer]->get_cards()[players[currentPlayer]->get_selected_card_index()] };
 		
 		UIManager::load_elements(card, 6);
@@ -132,17 +92,64 @@ void BoardMap::display_cards()
 	}
 }
 
-//todo add indexes to auto fix order of paths
-std::vector<GameObject*> BoardMap::get_board_objects()
+void BoardMap::init_board_spaces()
 {
-	std::vector<GameObject*> output;
-
-	for (GameObject* entity : entities)
+	for (size_t i = 0; i < entities.size(); i++)
 	{
-		if (entity->id == 4)
+		if (entities[i]->id == 4)
 		{
-			output.push_back(entity);
+			boardSpaces.push_back(new BoardSpace(entities[i]));
 		}
 	}
-	return output;
+	
+	for (size_t i = 0; i < boardSpaces.size(); i++)
+	{
+		//adding buffer for character height, may need to be changed
+		boardSpaces[i]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
+		if (i + 1 == boardSpaces.size())
+		{
+			boardSpaces[i]->nextSpace.push_back(boardSpaces[0]);
+		}
+		else 
+		{
+			boardSpaces[i]->nextSpace.push_back(boardSpaces[i + 1]);
+		}
+	}
+}
+
+//this also moves the player, fix
+void BoardMap::update_camera_position(float deltaTime)
+{
+	// Update the camera's position
+	// tan = a/h, h is what we want.
+	// a over tan gives u h
+	if (state == DEFAULT)
+	{
+		if (players[currentPlayer]->state == IN_MOTION)
+		{
+			float playerYRotation = glm::radians(players[currentPlayer]->Rotation.y);
+			glm::vec3 playerDirection = glm::vec3(sin(playerYRotation), 0.0f, cos(playerYRotation));
+			float distanceBehind = 80.0f;
+			float heightAbove = 30.0f;
+			glm::vec3 cameraOffset = (playerDirection * -distanceBehind) + glm::vec3(0.0f, heightAbove, 0.0f);
+
+			camera->set_camera_pos(players[currentPlayer]->Position + cameraOffset);
+			players[currentPlayer]->update(deltaTime);
+			players[currentPlayer]->move_player();
+		}
+		else {
+			glm::vec3 direction = players[currentPlayer]->Position - camera->get_camera_pos();
+			players[currentPlayer]->Rotation = -1.0f * glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
+		}
+
+		camera->set_camera_front(players[currentPlayer]->Position - camera->get_camera_pos());
+
+		if (players[currentPlayer]->state == TURN_COMPLETE)
+		{
+			//process_board_space(players[currentPlayer]->currSpace->spaceType);
+			players[currentPlayer]->state = INACTIVE;
+			currentPlayer = currentPlayer == players.size() - 1 ? 0 : currentPlayer += 1;
+			players[currentPlayer]->state = ACTIVE;
+		}
+	}
 }

@@ -6,67 +6,46 @@ Player::Player(uint8_t playerId, Model* characterModel, glm::vec3 pos, glm::vec3
 	state = INACTIVE;
 }
 
-void Player::move_player(std::vector<GameObject*> boardSpaces)
+void Player::move_player()
 {		
-	uint8_t nextPos = boardPosition == boardSpaces.size() - 1 ? 0 : boardPosition + 1;
 	float delta = 1.0f;
 
-	glm::vec3 buffer(0.0f, 1.0f, 0.0f);
-
-  	if (boardPosition != moves)
+  	if (moves > 0)
 	{
 		if ((float)glfwGetTime() < startTime + delta)
 		{
 			//algorithm to travel distance given start and delta time.
 			//A + (B -A)(t - t0)/deltaT
-			glm::vec3 objectPos = boardSpaces[boardPosition]->Position;
-			glm::vec3 direction = (boardSpaces[nextPos]->Position - boardSpaces[boardPosition]->Position);
+			glm::vec3 objectPos = currSpace->Position;
+			glm::vec3 direction = currSpace->nextSpace[0]->Position - objectPos;
 			glm::vec3 currPos = objectPos + direction * ((float)glfwGetTime() - startTime) / delta;
 			
 			Rotation = glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
-			Position = currPos + buffer;
+			Position = currPos;
 		}
 		else {
-			boardPosition = nextPos;
+			currSpace = currSpace->nextSpace[0];
 			startTime = (float)glfwGetTime();
-
-			Position = boardSpaces[boardPosition]->Position + buffer;
+			Position = currSpace->Position;
+			moves--;
 		}
 	}
 	else {
-		Position = boardSpaces[boardPosition]->Position + buffer;
+		Position = currSpace->Position;
 		mator->reset_animation();
 		transforms = mator->get_final_bone_matrices();
-		inMotion = false;
+		state = TURN_COMPLETE;
 
 		cards[selectedCardIndex] = draw_card();
 		selectedCardIndex = 0; //reset to start on card 1
 	}
-
-	//fix this
-	if (moves >= boardSpaces.size())
-	{
-		moves -= boardSpaces.size();
-		//do an actual implementation;
-	}
+	set_model_matrix(Position, Rotation, Size);
 }
 
 void Player::update(float deltaTime)
 {
 	transforms = mator->get_final_bone_matrices();
 	mator->update_animation(deltaTime);
-}
-
-uint8_t Player::get_board_position()
-{
-	return boardPosition;
-}
-
-void Player::start_move(float startTime, int moves)
-{
-	this->startTime = startTime;
-	// can set total moves if needed here.
-	this->moves = boardPosition + moves;
 }
 
 void Player::init_deck()

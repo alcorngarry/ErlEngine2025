@@ -5,11 +5,12 @@ std::map<int, Command*> mouseBindings;
 std::map<int, Command*> gamepadBindings;
 GLFWwindow* m_window;
 
-int windowWidth = 1920;
-int windowHeight = 1080;
+int windowWidth = -1;
+int windowHeight = -1;
 
 double xpos, ypos = 0.0f;
 bool firstMouse = true;
+//may/maynot be center screen
 double lastX = 1920 / 2.0f;
 double lastY = 1080 / 2.0f;
 double yaw = -90.0f, pitch = 0.0f;

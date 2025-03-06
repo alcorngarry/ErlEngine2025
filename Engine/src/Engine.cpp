@@ -11,7 +11,7 @@ GLFWwindow* Engine::start()
 
 	void get_resolution();
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "test_game", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "knuckle_bones", NULL, NULL);
 
 	if (window == NULL)
 	{

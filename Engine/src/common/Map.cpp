@@ -3,6 +3,7 @@
 Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
 {
 	fileName = mapName;
+	//could be moved elsewhere don't see why at the moment
 	camera = new Camera();
 }
 

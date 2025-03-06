@@ -16,6 +16,7 @@ DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
 int selectedIndex = -1;
+int m_windowWidth, m_windowHeight;
 
 void Renderer::init_render(GLFWwindow* window)
 {
@@ -26,6 +27,7 @@ void Renderer::init_render(GLFWwindow* window)
 	cubemapShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.frag.glsl");
 	grassShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.frag.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.gs.glsl");
 	debugMenu = new DebugMenu(window);
+	glfwGetWindowSize(window, &m_windowWidth, &m_windowHeight);
 }
 
 void Renderer::add_sky_box(SkyBox* skybox)
@@ -62,8 +64,8 @@ void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
 void Renderer::render(Camera* camera)
 {
 	m_camera = camera;
-	view = camera->get_view_matrix();
-	projection = camera->get_projection_matrix();
+	view = m_camera->get_view_matrix();
+	projection = m_camera->get_projection_matrix();
 
 	//draw first for environment mapping
 	cubemapShaderProgram->use();
@@ -259,7 +261,7 @@ void Renderer::select_entity(float xpos, float ypos)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	unsigned char data[4];
-	glReadPixels(xpos, 1080 - ypos - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glReadPixels(xpos, m_windowHeight - ypos - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	int pickedID = data[0] + (data[1] * 256) + (data[2] * 256 * 256);
 
@@ -268,8 +270,8 @@ void Renderer::select_entity(float xpos, float ypos)
 		std::ostringstream oss;
 		oss << "selected mesh id: " << pickedID;
 		std::cout << oss.str() << std::endl;
-
-		selectedIndex = pickedID;
+		
+		if(pickedID < (int)m_entities.size()) selectedIndex = pickedID;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -286,4 +288,3 @@ void Renderer::deselect_index()
 {
 	selectedIndex = -1;
 }
-

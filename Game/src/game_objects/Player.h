@@ -4,7 +4,7 @@
 #include<GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
-#include<game_objects/BoardSpace.h>
+#include<game_objects/board_space/BoardSpace.h>
 #include"math/ErlMath.h"
 #include"game_objects/SkinnedGameObject.h"
 #include"game_objects/animation/Animation.h"

@@ -94,27 +94,27 @@ void BoardMap::display_cards()
 
 void BoardMap::init_board_spaces()
 {
-	for (size_t i = 0; i < entities.size(); i++)
-	{
-		if (entities[i]->id == 4)
-		{
-			boardSpaces.push_back(new BoardSpace(entities[i]));
-		}
-	}
-	
-	for (size_t i = 0; i < boardSpaces.size(); i++)
-	{
-		//adding buffer for character height, may need to be changed
-		boardSpaces[i]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
-		if (i + 1 == boardSpaces.size())
-		{
-			boardSpaces[i]->nextSpace.push_back(boardSpaces[0]);
-		}
-		else 
-		{
-			boardSpaces[i]->nextSpace.push_back(boardSpaces[i + 1]);
-		}
-	}
+	//for (size_t i = 0; i < entities.size(); i++)
+	//{
+	//	if (entities[i]->id == 4)
+	//	{
+	//		boardSpaces.push_back(new BoardSpace(i, entities[i]->GameModel, entities[i]->Position, entities[i]->Size, entities[i]->Rotation));
+	//	}
+	//}
+	//
+	//for (size_t i = 0; i < boardSpaces.size(); i++)
+	//{
+	//	//adding buffer for character height, may need to be changed
+	//	boardSpaces[i]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
+	//	if (i + 1 == boardSpaces.size())
+	//	{
+	//		boardSpaces[i]->nextSpace.push_back(boardSpaces[0]);
+	//	}
+	//	else 
+	//	{
+	//		boardSpaces[i]->nextSpace.push_back(boardSpaces[i + 1]);
+	//	}
+	//}
 }
 
 //this also moves the player, fix
@@ -152,4 +152,119 @@ void BoardMap::update_camera_position(float deltaTime)
 			players[currentPlayer]->state = ACTIVE;
 		}
 	}
+}
+
+void BoardMap::write_board_spaces()
+{
+	writeMap << std::endl;
+	writeMap << "boardSpaces: [";
+	for (int i = 0; i < boardSpaces.size(); i++)
+	{
+		writeMap << "{";
+		writeMap << "uniqueId: " << boardSpaces[i]->id << ", " 
+			<< "spaceType: " << static_cast<int>(boardSpaces[i]->spaceType) << ", "
+			<< "nextSpaces: " << "[" << boardSpaces[i]->nextSpace[0]->id << "], "
+			<< "position: " << boardSpaces[i]->Position.x << "," << boardSpaces[i]->Position.y << "," << boardSpaces[i]->Position.z << ", "
+			<< "scale: " << boardSpaces[i]->Size.x << "," << boardSpaces[i]->Size.y << "," << boardSpaces[i]->Size.z << ", "
+			<< "rotation: " << boardSpaces[i]->Rotation.x << "," << boardSpaces[i]->Rotation.y << "," << boardSpaces[i]->Rotation.z;
+		if (i == boardSpaces.size() - 1)
+		{
+			writeMap << "}";
+		}
+		else {
+			writeMap << "}," << std::endl;
+		}
+	}
+	writeMap << "]";
+}
+
+void BoardMap::read_board_spaces()
+{
+	while (readMap.peek() != ']')
+	{
+		BoardSpace* entity = read_board_space();
+		boardSpaces.push_back(entity);
+		Renderer::add_render_object(entity);
+	}
+}
+
+BoardSpace* BoardMap::read_board_space()
+{
+	std::string line;
+	getline(readMap, line, ':');
+	uint8_t uniqueId, spaceType;
+	float x, y, z;
+	glm::vec3 position, scale, rotation;
+	std::vector<uint8_t> nextSpaceIds;
+
+	//uniqueId
+	getline(readMap, line, ',');
+	uniqueId = std::stof(line);
+
+	//spaceType
+	getline(readMap, line, ':');
+	getline(readMap, line, ',');
+	spaceType = std::stof(line);
+
+	//nextSpaceIds
+	getline(readMap, line, ':');
+	getline(readMap, line, '[');
+
+	if (readMap.peek() != ']')
+	{
+		getline(readMap, line, ',');
+		nextSpaceIds.push_back(std::stof(line));
+	} else {
+		getline(readMap, line, ']');
+		nextSpaceIds.push_back(std::stof(line));
+		getline(readMap, line, ',');
+	}
+	
+
+	getline(readMap, line, ':');
+
+	getline(readMap, line, ',');
+	x = std::stof(line);
+	getline(readMap, line, ',');
+	y = std::stof(line);
+	getline(readMap, line, ',');
+	z = std::stof(line);
+	position = { x, y, z };
+
+	getline(readMap, line, ':');
+
+	getline(readMap, line, ',');
+	x = std::stof(line);
+	getline(readMap, line, ',');
+	y = std::stof(line);
+	getline(readMap, line, ',');
+	z = std::stof(line);
+	scale = { x, y, z };
+
+	getline(readMap, line, ':');
+
+	getline(readMap, line, ',');
+	x = std::stof(line);
+	getline(readMap, line, ',');
+	y = std::stof(line);
+	getline(readMap, line, '}');
+	z = std::stof(line);
+	rotation = { x, y, z };
+
+	BoardSpace* space = new BoardSpace(boardSpaces.size(), AssetManager::get_model(4), position, scale, rotation);
+	space->nextSpaceIds = nextSpaceIds;
+
+	return space;
+}
+
+void BoardMap::save()
+{
+	entities = Renderer::get_rendered_entities();
+	writeMap = std::ofstream{ fileName + ".esf" };
+
+	write_models();
+	write_lights();
+	write_board_spaces();
+
+	writeMap.close();
 }

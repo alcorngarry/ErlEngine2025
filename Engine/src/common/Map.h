@@ -33,8 +33,10 @@ class Map
 		Camera* camera;
 
 		Map(std::string mapName);
-		void save();
+		virtual void save();
 		virtual void load();
+		void read_models();
+		void read_lights();
 		virtual void draw(float deltaTime);
 		virtual void set_controls(float deltaTime) = 0;
 		virtual void update(float deltaTime) = 0;
@@ -47,7 +49,11 @@ class Map
 		std::string fileName;
 		//probably rename and fix.
 		virtual void load_skinned_objects() = 0;
+		void write_models();
+		void write_lights();
+		virtual void read_board_spaces() {};
 	private:
+		std::string line;
 		void load_skybox();
 		GameObject* read_asset();
 };

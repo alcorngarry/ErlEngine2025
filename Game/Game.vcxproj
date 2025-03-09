@@ -34,7 +34,7 @@
     <ClCompile Include="src\commands\SaveCommand.cpp" />
     <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
     <ClCompile Include="src\commands\ToggleMenuCommand.cpp" />
-    <ClCompile Include="src\game_objects\BoardSpace.cpp" />
+    <ClCompile Include="src\game_objects\board_space\BoardSpace.cpp" />
     <ClCompile Include="src\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -66,7 +66,7 @@
     <ClInclude Include="src\commands\SaveCommand.h" />
     <ClInclude Include="src\commands\SelectEntityCommand.h" />
     <ClInclude Include="src\commands\ToggleMenuCommand.h" />
-    <ClInclude Include="src\game_objects\BoardSpace.h" />
+    <ClInclude Include="src\game_objects\board_space\BoardSpace.h" />
     <ClInclude Include="src\ImGuizmo.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />

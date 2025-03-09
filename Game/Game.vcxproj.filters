@@ -103,7 +103,7 @@
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_objects\BoardSpace.cpp">
+    <ClCompile Include="src\game_objects\board_space\BoardSpace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ImGuizmo.cpp">
@@ -198,7 +198,7 @@
     <ClInclude Include="src\commands\AddSubtractCountCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game_objects\BoardSpace.h">
+    <ClInclude Include="src\game_objects\board_space\BoardSpace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGuizmo.h">

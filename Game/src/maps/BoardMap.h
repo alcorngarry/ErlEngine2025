@@ -2,7 +2,7 @@
 #define BOARD_MAP_H
 #include"common/Map.h"
 #include"game_objects/Player.h"
-#include"game_objects/BoardSpace.h"
+#include"game_objects/board_space/BoardSpace.h"
 #include"commands/SelectCardLeftCommand.h"
 #include"commands/SelectCardRightCommand.h"
 #include"commands/SelectCardCommand.h"
@@ -23,6 +23,8 @@ class BoardMap : public Map {
 		void update(float deltaTime) override;
 		void draw(float deltaTime) override;
 		void load() override;
+	protected:
+		void save() override;
 	private:
 		int currentPlayer = 0;
 		void load_skinned_objects() override;
@@ -31,6 +33,9 @@ class BoardMap : public Map {
 		void display_cards();
 		void init_board_spaces();
 		void update_camera_position(float deltaTime);
+		void write_board_spaces();
+		void read_board_spaces() override;
+		BoardSpace* read_board_space();
 };
 
 #endif // !BOARD_MAP_H

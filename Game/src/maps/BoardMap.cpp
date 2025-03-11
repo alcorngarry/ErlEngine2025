@@ -20,7 +20,6 @@ void BoardMap::draw(float deltaTime)
 void BoardMap::load()
 {
 	Map::load();
-	init_board_spaces();
 	load_skinned_objects();
 }
 
@@ -92,31 +91,6 @@ void BoardMap::display_cards()
 	}
 }
 
-void BoardMap::init_board_spaces()
-{
-	//for (size_t i = 0; i < entities.size(); i++)
-	//{
-	//	if (entities[i]->id == 4)
-	//	{
-	//		boardSpaces.push_back(new BoardSpace(i, entities[i]->GameModel, entities[i]->Position, entities[i]->Size, entities[i]->Rotation));
-	//	}
-	//}
-	//
-	//for (size_t i = 0; i < boardSpaces.size(); i++)
-	//{
-	//	//adding buffer for character height, may need to be changed
-	//	boardSpaces[i]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
-	//	if (i + 1 == boardSpaces.size())
-	//	{
-	//		boardSpaces[i]->nextSpace.push_back(boardSpaces[0]);
-	//	}
-	//	else 
-	//	{
-	//		boardSpaces[i]->nextSpace.push_back(boardSpaces[i + 1]);
-	//	}
-	//}
-}
-
 //this also moves the player, fix
 void BoardMap::update_camera_position(float deltaTime)
 {
@@ -186,6 +160,12 @@ void BoardMap::read_board_spaces()
 		boardSpaces.push_back(entity);
 		Renderer::add_render_object(entity);
 	}
+	
+	//slow and dumb.
+	for (BoardSpace* boardSpace : boardSpaces)
+	{
+		boardSpace->nextSpace.push_back(boardSpaces[boardSpace->nextSpaceIds[0]]);
+	}
 }
 
 BoardSpace* BoardMap::read_board_space()
@@ -195,7 +175,7 @@ BoardSpace* BoardMap::read_board_space()
 	uint8_t uniqueId, spaceType;
 	float x, y, z;
 	glm::vec3 position, scale, rotation;
-	std::vector<uint8_t> nextSpaceIds;
+	std::vector<int> nextSpaceIds;
 
 	//uniqueId
 	getline(readMap, line, ',');
@@ -219,7 +199,6 @@ BoardSpace* BoardMap::read_board_space()
 		nextSpaceIds.push_back(std::stof(line));
 		getline(readMap, line, ',');
 	}
-	
 
 	getline(readMap, line, ':');
 

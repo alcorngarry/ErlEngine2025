@@ -31,7 +31,6 @@ class BoardMap : public Map {
 		void set_controls(float deltaTime) override;
 		void process_board_space(uint8_t boardId);
 		void display_cards();
-		void init_board_spaces();
 		void update_camera_position(float deltaTime);
 		void write_board_spaces();
 		void read_board_spaces() override;

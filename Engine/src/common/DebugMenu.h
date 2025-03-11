@@ -9,6 +9,8 @@
 #include<string>
 #include<vector>
 #include"renderer/Renderer.h"
+#include "../../../Game/src/game_objects/board_space/BoardSpace.h"
+
 
 class DebugMenu
 {
@@ -24,6 +26,7 @@ class DebugMenu
 		void draw_mouse_pos();
 		void draw_camera_position(Camera* camera);
 		void create_new_map();
+		void load_board_space_data(std::vector<BoardSpace*> boardSpaces);
 		void shut_down();
 };
 

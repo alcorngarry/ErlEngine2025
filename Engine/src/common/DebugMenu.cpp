@@ -84,6 +84,14 @@ void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
 
     ImGui::Separator();
 
+    // Check if the entity is a BoardSpace
+    if (auto boardSpace = dynamic_cast<BoardSpace*>(entity)) {
+        // Draw BoardSpace-specific properties
+        ImGui::Text("BoardSpace Specific Properties:");
+        ImGui::InputInt("Board ID", &boardSpace->nextSpaceIds[0]); // Example of a BoardSpace-specific variable
+        //ImGui::Checkbox("Is Active", &boardSpace->IsActive); // Another example
+    }
+
     draw_mouse_pos();
 
     glm::mat4 modelMatrix = entity->ModelMatrix;
@@ -122,6 +130,15 @@ void DebugMenu::draw_camera_position(Camera* camera) {
 
 void DebugMenu::create_new_map() 
 {
+}
+
+void DebugMenu::load_board_space_data(std::vector<BoardSpace*> boardSpaces)
+{
+    ImGui::Text("BoardData:");
+    for (BoardSpace* boardSpace : boardSpaces)
+    {
+        ImGui::Text("spaceID", boardSpace->nextSpaceIds[0]);
+    }
 }
 
 void DebugMenu::shut_down() {

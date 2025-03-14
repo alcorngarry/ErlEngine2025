@@ -40,6 +40,7 @@ namespace InputManager {
 
     void init(GLFWwindow* window);
     void update();
+    double get_scroll_value();
     bool is_mouse_button_pressed();
     void update_cursor();
     void set_key_binding(int key, Command* command);

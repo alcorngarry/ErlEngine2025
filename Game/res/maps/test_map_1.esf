@@ -15,7 +15,7 @@ boardSpaces: [{uniqueId: 0, spaceType: 0, nextSpaces: [1], position: 74.0398,0,5
 {uniqueId: 8, spaceType: 0, nextSpaces: [9], position: 115.04,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
 {uniqueId: 9, spaceType: 0, nextSpaces: [10], position: 74.0398,0,-97.1398, scale: 1,1,1, rotation: 0,0,0},
 {uniqueId: 10, spaceType: 0, nextSpaces: [11], position: 74.0398,0,-58.1398, scale: 1,1,1, rotation: 0,0,0},
-{uniqueId: 11, spaceType: 0, nextSpaces: [12], position: 74.0398,0,-24.1398, scale: 1,1,1, rotation: 0,0,0},
+{uniqueId: 11, spaceType: 0, nextSpaces: [14], position: 74.0398,0,-23.8741, scale: 1,1,1, rotation: 0,-0,0},
 {uniqueId: 12, spaceType: 0, nextSpaces: [13], position: -131.568,0,82.275, scale: 1,1,1, rotation: 0,-0,0},
 {uniqueId: 13, spaceType: 0, nextSpaces: [14], position: 74.0398,0,14.8602, scale: 1,1,1, rotation: 0,-0,0},
 {uniqueId: 14, spaceType: 0, nextSpaces: [15], position: 43.356,0,14.8602, scale: 1,1,1, rotation: 0,-0,0},

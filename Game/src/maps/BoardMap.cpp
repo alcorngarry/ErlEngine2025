@@ -1,5 +1,6 @@
 #include"BoardMap.h"
 
+
 BoardMap::BoardMap(std::string mapName) : Map(mapName)
 {
 }
@@ -9,6 +10,11 @@ void BoardMap::update(float deltaTime)
 	set_controls(deltaTime);
 	update_camera_position(deltaTime);
 	display_cards();
+	if (state == MAP_UPDATE)
+	{
+		update_board_space_directions();
+		state = DEFAULT;
+	}
 }
 
 void BoardMap::draw(float deltaTime)
@@ -27,8 +33,6 @@ void BoardMap::load()
 void BoardMap::set_controls(float deltaTime)
 {
 	//rework gamepad binding to bind player to gamepad.
-	/*InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_UP, new MoveUpCommand(players[currentPlayer], deltaTime));
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, new MoveDownCommand(players[currentPlayer], deltaTime));*/
 	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new SelectCardLeftCommand(players[currentPlayer]));
 	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, new SelectCardRightCommand(players[currentPlayer]));
 	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_A, new SelectCardCommand(players[currentPlayer]));
@@ -160,11 +164,20 @@ void BoardMap::read_board_spaces()
 		boardSpaces.push_back(entity);
 		Renderer::add_render_object(entity);
 	}
-	
-	//slow and dumb.
+	update_board_space_directions();
+}
+
+void BoardMap::update_board_space_directions()
+{
 	for (BoardSpace* boardSpace : boardSpaces)
 	{
-		boardSpace->nextSpace.push_back(boardSpaces[boardSpace->nextSpaceIds[0]]);
+		if (!boardSpace->nextSpace.empty())
+		{
+			boardSpace->nextSpace[0] = boardSpaces[boardSpace->nextSpaceIds[0]];
+		}
+		else {
+			boardSpace->nextSpace.push_back(boardSpaces[boardSpace->nextSpaceIds[0]]);
+		}
 	}
 }
 
@@ -240,6 +253,8 @@ void BoardMap::save()
 {
 	entities = Renderer::get_rendered_entities();
 	writeMap = std::ofstream{ fileName + ".esf" };
+
+	entities.resize(entities.size() - boardSpaces.size());
 
 	write_models();
 	write_lights();

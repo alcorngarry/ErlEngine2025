@@ -14,7 +14,8 @@
 
 enum GameState {
 	GAME_ACTIVE,
-	DEBUG_MENU
+	DEBUG_MENU,
+	MAP_UPDATE
 };
 
 class Game {

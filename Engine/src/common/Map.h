@@ -17,7 +17,8 @@ class Map
 
 		enum State {
 			DEFAULT,
-			DEBUG
+			DEBUG,
+			MAP_UPDATE
 		};
 
 		enum LoadState {

@@ -8,6 +8,9 @@ void SelectEntityCommand::execute() {
 		Renderer::deselect_index();
 	}
 	else {
-		Renderer::select_entity(xpos, ypos);
+		if (Renderer::get_selected_index() == -1)
+		{
+			Renderer::select_entity(xpos, ypos);
+		}
 	}
 }

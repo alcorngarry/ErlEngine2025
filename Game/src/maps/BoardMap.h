@@ -34,6 +34,7 @@ class BoardMap : public Map {
 		void update_camera_position(float deltaTime);
 		void write_board_spaces();
 		void read_board_spaces() override;
+		void update_board_space_directions();
 		BoardSpace* read_board_space();
 };
 

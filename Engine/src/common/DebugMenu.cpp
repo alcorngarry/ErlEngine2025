@@ -33,18 +33,38 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
     }
 
     draw_entity_hierarchy(entities);
+    draw_camera_position(camera);
+    //display_board_tiles(entities);
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
         GameObject* entity = entities[selectedIndex];
         draw_entity_properties(entity, camera);
-    }
 
-    draw_camera_position(camera);
+        if (auto boardSpace = dynamic_cast<BoardSpace*>(entity)) {
+            //ImGui::PushID(0);
+            std::string id = "BoardSpace: " + std::to_string((int)boardSpace->id);
+            ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
+            //ImGui::PopID();
+        }
+    }
 
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void DebugMenu::display_board_tiles(std::vector<GameObject*> entities)
+{
+    std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
+    ImGui::Text("BoardSpace Specific Properties:");
+    for (size_t i = 0; i < entities.size(); ++i)
+    {
+        if (auto boardSpace = dynamic_cast<BoardSpace*>(entities[i])) {
+            idToBoardSpaceMap[boardSpace->id] = boardSpace;
+            boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
+        }
+    }
 }
 
 void DebugMenu::display_fps(float deltaTime) {
@@ -83,14 +103,6 @@ void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
     ImGui::InputFloat("Rotation Z", &entity->Rotation.z, 1.0f, 180.0f, "%.1f");
 
     ImGui::Separator();
-
-    // Check if the entity is a BoardSpace
-    if (auto boardSpace = dynamic_cast<BoardSpace*>(entity)) {
-        // Draw BoardSpace-specific properties
-        ImGui::Text("BoardSpace Specific Properties:");
-        ImGui::InputInt("Board ID", &boardSpace->nextSpaceIds[0]); // Example of a BoardSpace-specific variable
-        //ImGui::Checkbox("Is Active", &boardSpace->IsActive); // Another example
-    }
 
     draw_mouse_pos();
 

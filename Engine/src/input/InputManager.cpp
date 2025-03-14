@@ -10,13 +10,20 @@ int windowHeight = -1;
 
 double xpos, ypos = 0.0f;
 bool firstMouse = true;
+bool isMouseDragging = false;
 //may/maynot be center screen
 double lastX = 1920 / 2.0f;
 double lastY = 1080 / 2.0f;
+double scrollY = 0;
+
+double dragXStart = 0.0f, dragYStart = 0.0f, dragXStop = 0.0f, dragYStop = 0.0f;
 double yaw = -90.0f, pitch = 0.0f;
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void InputManager::init(GLFWwindow* window) {
     m_window = window;
+    glfwSetScrollCallback(window, scroll_callback);
 }
 
 void InputManager::update() {
@@ -44,13 +51,26 @@ void InputManager::update() {
     }
 
     for (auto& binding : mouseBindings) {
+        
         int mouseButton = binding.first;
         Command* command = binding.second;
 
         for (int mouseButtonIndex = 0; mouseButtonIndex < 7; ++mouseButtonIndex) {
             if (glfwGetMouseButton(m_window, mouseButton) == GLFW_PRESS) {
+                if (!isMouseDragging && mouseButton == 0) {
+                    isMouseDragging = true;
+                    glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
+                }
                 command->execute();
             }
+            else if (glfwGetMouseButton(m_window, mouseButton) == GLFW_RELEASE) {
+                if (isMouseDragging && mouseButton == 0) {
+                    isMouseDragging = false;
+                    glfwGetCursorPos(m_window, &dragXStop, &dragYStop);
+                    command->execute();
+                }
+            }
+            
         }
     }
 
@@ -82,6 +102,17 @@ void InputManager::update() {
             }
         }
     }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    scrollY = yoffset;
+    mouseBindings[-1]->execute();
+}
+
+double InputManager::get_scroll_value()
+{
+    return scrollY;
 }
 
 bool InputManager::is_mouse_button_pressed()
@@ -138,22 +169,22 @@ void InputManager::update_cursor()
 
 double InputManager::get_xpos()
 {
-    return xpos;
+    return dragXStop;
 }
 
 double InputManager::get_last_xpos()
 {
-    return lastX;
+    return dragXStart;
 }
 
 double InputManager::get_ypos()
 {
-    return ypos;
+    return dragYStop;
 }
 
 double InputManager::get_last_ypos()
 {
-    return lastY;
+    return dragYStart;
 }
 
 double InputManager::get_yaw()

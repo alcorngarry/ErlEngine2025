@@ -15,6 +15,7 @@ void Game::init()
 	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/test_map_2"));
 	Maps.push_back(new CountingSheep("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/counting_sheep"));
 	Maps.push_back(new PongMap("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/mini_game_1"));
+
 	level = 0;
 	Maps[level]->load();
 	Maps[level]->set_controls(0.0f);
@@ -30,8 +31,10 @@ void Game::update(float deltaTime)
 	if (State == DEBUG_MENU)
 	{
 		Maps[level]->state = Map::DEBUG;
-		
-		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(InputManager::get_xpos(), InputManager::get_ypos(), false));
+
+		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new MoveCameraCommand(Maps[level]->camera, deltaTime, 4));
+		InputManager::set_mouse_binding(-1, new MoveCameraCommand(Maps[level]->camera, deltaTime, 5));
+		//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(InputManager::get_xpos(), InputManager::get_ypos(), false));
 		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(0.0f, 0.0f, true));
 		InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
 		InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(Maps[level], false));
@@ -39,19 +42,16 @@ void Game::update(float deltaTime)
 		//InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new MoveCameraCommand(Maps[level]->camera, deltaTime, 4));
 		//Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
 
-		if (Renderer::get_selected_index() != -1)
+		/*if (Renderer::get_selected_index() == -1)
 		{
-			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
-			/*InputManager::set_key_binding(GLFW_KEY_LEFT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, 3.0f));
-			InputManager::set_key_binding(GLFW_KEY_RIGHT, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 0, -3.0f));
-			InputManager::set_key_binding(GLFW_KEY_UP, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, 3.0f));
-			InputManager::set_key_binding(GLFW_KEY_DOWN, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 1, -3.0f));
-			InputManager::set_key_binding(GLFW_KEY_J, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, 3.0f));
-			InputManager::set_key_binding(GLFW_KEY_K, new MoveEntityCommand(Maps[level]->entities[Renderer::get_selected_index()], 2, -3.0f));*/
-		}
-		else {
 			Maps[level]->camera->set_camera_front(glm::normalize(glm::vec3(cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_pitch())), sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch())))));
-		}
+		}*/
+	}
+	else if (State == MAP_UPDATE)
+	{
+		Maps[level]->state = Map::MAP_UPDATE;
+		State = GAME_ACTIVE;
+
 	}
 	else {
 		Maps[level]->state = Map::DEFAULT;

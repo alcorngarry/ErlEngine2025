@@ -69,10 +69,8 @@ void Map::load()
 {
 	readMap.open(fileName + ".esf");
 	char peek = 'B';
-
 	std::cout << "Loading Map: " << fileName << std::endl;
 
-	//make sure this doesn't affect the next space colum
 	while (getline(readMap, line, '['))
 	{
 		if (line == "models: ")
@@ -84,7 +82,6 @@ void Map::load()
 		else if (line == "boardSpaces: ")
 		{
 			read_board_spaces();
-			//getline(readMap, line, '\n');
 		}
 	} 
 

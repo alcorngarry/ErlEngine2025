@@ -16,10 +16,15 @@ struct TextElement {
 namespace UIManager {
     void init(int screenWidth, int screenHeight);
     void load_elements(uint8_t* cards, uint8_t card);
+    int add_text_element(std::string text);
     void draw();
     void load_defaults();
-    void add_text_element(std::string text, float x, float y);
+    void remove_text_element(int index);
     TextElement* get_text_element(int index);
+    void set_text_element_top(int index);
+    void set_text_element_bottom(int index);
+    void set_text_element_left(int index);
+    void set_text_element_right(int index);
     void set_screen_res(int width, int height);
     void center(std::vector<UIElement*> elements);
 };

@@ -2,7 +2,7 @@
 
 std::map<int, Command*> keyBindings;
 std::map<int, Command*> mouseBindings;
-std::map<int, Command*> gamepadBindings;
+std::map<std::vector<int>, Command*> gamepadBindings;
 GLFWwindow* m_window;
 
 int windowWidth = -1;
@@ -57,14 +57,14 @@ void InputManager::update() {
 
         for (int mouseButtonIndex = 0; mouseButtonIndex < 7; ++mouseButtonIndex) {
             if (glfwGetMouseButton(m_window, mouseButton) == GLFW_PRESS) {
-                if (!isMouseDragging && mouseButton == 0) {
+                if (!isMouseDragging && mouseButton == GLFW_MOUSE_BUTTON_MIDDLE) {
                     isMouseDragging = true;
                     glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
                 }
                 command->execute();
             }
             else if (glfwGetMouseButton(m_window, mouseButton) == GLFW_RELEASE) {
-                if (isMouseDragging && mouseButton == 0) {
+                if (isMouseDragging && mouseButton == GLFW_MOUSE_BUTTON_MIDDLE) {
                     isMouseDragging = false;
                     glfwGetCursorPos(m_window, &dragXStop, &dragYStop);
                     command->execute();
@@ -85,8 +85,8 @@ void InputManager::update() {
             if (glfwGetGamepadState(i, &state)) {
                 for (int button = 0; button < GLFW_GAMEPAD_BUTTON_LAST + 1; ++button) {
                     if (state.buttons[button] == GLFW_PRESS && !GamepadButtonsProcessed[button]) {
-                        if (gamepadBindings.find(button) != gamepadBindings.end()) {
-                            gamepadBindings[button]->execute();
+                        if (gamepadBindings.find({ i, button }) != gamepadBindings.end()) {
+                            gamepadBindings[{i, button}]->execute();
                             GamepadButtonsProcessed[button] = true;
                         }
                     }
@@ -135,7 +135,7 @@ void InputManager::remove_mouse_binding(int key)
     mouseBindings.erase(key);
 }
 
-void InputManager::set_gamepad_binding(int key, Command* command)
+void InputManager::set_gamepad_binding(std::vector<int> key, Command* command)
 {
     gamepadBindings[key] = command;
 }

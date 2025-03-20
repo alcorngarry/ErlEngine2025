@@ -1,6 +1,7 @@
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 #include<map>
+#include <vector>
 #include<GLFW/glfw3.h>
 #include"Command.h"
 
@@ -46,7 +47,7 @@ namespace InputManager {
     void set_key_binding(int key, Command* command);
     void set_mouse_binding(int key, Command* command);
     void remove_mouse_binding(int key);
-    void set_gamepad_binding(int key, Command* command);
+    void set_gamepad_binding(std::vector<int> key, Command* command);
 
     double get_xpos();
     double get_last_xpos();

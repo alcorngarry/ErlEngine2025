@@ -57,10 +57,10 @@ void CountingSheep::update(float deltaTime)
 		//will keep adding..
 		if (counts[0] == numSheep)
 		{
-			UIManager::add_text_element("actual amount: " + std::to_string(numSheep) + ", Your guess: " + std::to_string(counts[0]), 1920.0f / 2.0f, 1080.0f / 2.0f);
+			UIManager::add_text_element("actual amount: " + std::to_string(numSheep) + ", Your guess: " + std::to_string(counts[0]));
 		}
 		else {
-			UIManager::add_text_element("actual amount: " + std::to_string(numSheep), 1920.0f /2.0f, 1080.0f / 2.0f);
+			UIManager::add_text_element("actual amount: " + std::to_string(numSheep));
 		}
 	}
 }
@@ -77,14 +77,17 @@ void CountingSheep::load_skinned_objects()
 	}
 
 	counts[0] = 0;
-	UIManager::add_text_element("text", 0, 0);
+	UIManager::add_text_element("text");
 }
 
 void CountingSheep::set_controls(float deltaTime)
 {
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_UP, new AddSubtractCountCommand(counts[0], true));
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, new AddSubtractCountCommand(counts[0], false));
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new Restart(&startTime));
+	for (int i = 0; i < 4; i++)
+	{
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_DPAD_UP }, new AddSubtractCountCommand(counts[0], true));
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_DPAD_DOWN }, new AddSubtractCountCommand(counts[0], false));
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_DPAD_LEFT }, new Restart(&startTime));
+	}
 }
 
 void CountingSheep::draw(float deltaTime)

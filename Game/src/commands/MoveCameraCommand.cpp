@@ -50,7 +50,4 @@ void MoveCameraCommand::execute()
 			break;
 		}
 	}
-
-	SelectEntityCommand a = SelectEntityCommand(InputManager::get_xpos(), InputManager::get_ypos(), false);
-	a.execute();
 }

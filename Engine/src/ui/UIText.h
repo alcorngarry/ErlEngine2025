@@ -13,10 +13,13 @@ struct Character {
     glm::ivec2 Size;
     glm::ivec2 Bearing;
     unsigned int Advance;
+    int pixelWidth;
 };
 
 namespace UIText {
     void init();
+    int get_text_length(std::string text);
+    int get_max_char_height();
     void draw(Shader* shader, glm::mat4 projection, std::string text, float x, float y);
 };
 #endif // !UI_TEXT_H

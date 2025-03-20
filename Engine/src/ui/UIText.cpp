@@ -1,6 +1,7 @@
 #include"UIText.h"
 
 std::map<char, Character> characters;
+int maxHeight = 0;
 
 void UIText::init()
 {
@@ -9,7 +10,6 @@ void UIText::init()
     {
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
     }
-
     FT_Face face;
     if (FT_New_Face(ft, "C:/Dev/opengl_code/Erl/Erl/Game/res/font/Antonio-Bold.ttf", 0, &face)) {
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
@@ -24,6 +24,11 @@ void UIText::init()
             {
                 std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
                 continue;
+            }
+
+            if (c == 'T')
+            {
+                maxHeight = face->glyph->metrics.vertAdvance / 64;
             }
             
             unsigned int texture;
@@ -45,27 +50,46 @@ void UIText::init()
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            
+
             Character character = {
                 texture,
                 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                static_cast<unsigned int>(face->glyph->advance.x)
+                static_cast<unsigned int>(face->glyph->advance.x),
+                face->glyph->metrics.horiAdvance / 64, // 64 to get pixels
             };
             characters.insert(std::pair<char, Character>(c, character));
         }
         glBindTexture(GL_TEXTURE_2D, 0);
+        //texture for each character is a bit much I believe...
     }
+
+    std::cout << "Loaded Font: Antonio-Bold.ttf" << std::endl;
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+}
+
+int UIText::get_text_length(std::string text)
+{
+    unsigned int length = 0;
+
+    for (auto c = text.begin(); c != text.end(); c++) 
+    {
+        Character ch = characters[*c];
+        length += ch.pixelWidth;
+    }
+
+    return length;
+}
+
+int UIText::get_max_char_height()
+{
+    return maxHeight;
 }
 
 void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float x, float y)
 {
     unsigned int VAO, VBO;
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -79,7 +103,7 @@ void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float 
 
     shader->use();
     shader->setMat4("projection", projection);
-    shader->setVec3("textColor", glm::vec3(1.0f, 0.0f, 0.0f));
+    shader->setVec3("textColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
@@ -90,7 +114,7 @@ void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float 
         Character ch = characters[*c];
 
         float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        float ypos = y - ch.Bearing.y * scale;
 
         float w = ch.Size.x * scale;
         float h = ch.Size.y * scale;
@@ -118,5 +142,4 @@ void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float 
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_BLEND);
 }

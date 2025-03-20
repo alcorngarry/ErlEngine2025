@@ -9,7 +9,6 @@ std::vector<TextElement*> textElements;
 
 int screenWidth, screenHeight;
 
- 
 void UIManager::init(int screenWidth, int screenHeight)
 {
     shader = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/interface.frag.glsl");
@@ -56,17 +55,6 @@ void UIManager::load_elements(uint8_t* cards, uint8_t selectedCard)
     center(uiElements);
 }
 
-void UIManager::add_text_element(std::string text, float x, float y)
-{
-    textElements.push_back(new TextElement{ text, glm::vec2(x, y)});
-}
-
-
-TextElement* UIManager::get_text_element(int index)
-{
-    return textElements.at(index);
-}
-
 void UIManager::draw() 
 {
     for (UIElement* element : uiElements)
@@ -101,4 +89,41 @@ void UIManager::center(std::vector<UIElement*> elements)
         //}
         
     }
+}
+
+int UIManager::add_text_element(std::string text)
+{
+    textElements.push_back(new TextElement{ text, glm::vec2(0, 0) });
+    return textElements.size() - 1;
+}
+
+void UIManager::remove_text_element(int index)
+{
+    textElements.erase(textElements.begin() + index);
+}
+
+TextElement* UIManager::get_text_element(int index)
+{
+    return textElements.at(index);
+}
+
+void UIManager::set_text_element_top(int index)
+{
+    textElements[index]->position.y = 0 + UIText::get_max_char_height();
+}
+
+void UIManager::set_text_element_bottom(int index)
+{
+    textElements[index]->position.y = screenHeight - UIText::get_max_char_height();
+
+}
+
+void UIManager::set_text_element_left(int index)
+{
+    textElements[index]->position.x = 0;
+}
+
+void UIManager::set_text_element_right(int index)
+{
+    textElements[index]->position.x = screenWidth - UIText::get_text_length(textElements[index]->text);
 }

@@ -33,15 +33,18 @@ void BoardMap::load()
 void BoardMap::set_controls(float deltaTime)
 {
 	//rework gamepad binding to bind player to gamepad.
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, new SelectCardLeftCommand(players[currentPlayer]));
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, new SelectCardRightCommand(players[currentPlayer]));
-	InputManager::set_gamepad_binding(GLFW_GAMEPAD_BUTTON_A, new SelectCardCommand(players[currentPlayer]));
+	for (int i = 0; i < players.size(); i++)
+	{
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_DPAD_LEFT }, new SelectCardLeftCommand(players[i]));
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_DPAD_RIGHT }, new SelectCardRightCommand(players[i]));
+		InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_A }, new SelectCardCommand(players[i]));
+	}
 }
 
 void BoardMap::load_skinned_objects()
 {
 	glm::vec3 startingPosition = boardSpaces[0]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		Player* player = new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls);
 		players.push_back(player);
@@ -49,11 +52,24 @@ void BoardMap::load_skinned_objects()
 		players[i]->init_deck();
 		players[i]->currSpace = boardSpaces[0];
 
+		int elementId = UIManager::add_text_element("Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats));
+
 		if (i == 0)
 		{
 			players[i]->state = ACTIVE;
 			players[currentPlayer] = players[i];
-			UIManager::add_text_element("Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats), 0.0f, 0.0f);
+			UIManager::set_text_element_top(elementId);
+		}
+		if (i == 1) {
+			UIManager::set_text_element_top(elementId);
+			UIManager::set_text_element_right(elementId);
+		}
+		if (i == 2) {
+			UIManager::set_text_element_bottom(elementId);
+		}
+		if (i == 3) {
+			UIManager::set_text_element_bottom(elementId);
+			UIManager::set_text_element_right(elementId);
 		}
 	}
 }
@@ -126,8 +142,11 @@ void BoardMap::update_camera_position(float deltaTime)
 		{
 			//process_board_space(players[currentPlayer]->currSpace->spaceType);
 			players[currentPlayer]->state = INACTIVE;
+			int previousPlayer = currentPlayer;
 			currentPlayer = currentPlayer == players.size() - 1 ? 0 : currentPlayer += 1;
 			players[currentPlayer]->state = ACTIVE;
+
+			UIManager::get_text_element(previousPlayer)->text = "Player: " + std::to_string(currentPlayer) + " Groats: " + std::to_string(players[currentPlayer]->groats);
 		}
 	}
 }

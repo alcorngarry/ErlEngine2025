@@ -81,6 +81,9 @@
     <None Include="src\renderer\shaders\interface.vert.glsl" />
     <None Include="src\renderer\shaders\light.frag.glsl" />
     <None Include="src\renderer\shaders\light.vert.glsl" />
+    <None Include="src\renderer\shaders\line.frag.glsl" />
+    <None Include="src\renderer\shaders\line.gs.glsl" />
+    <None Include="src\renderer\shaders\line.vert.glsl" />
     <None Include="src\renderer\shaders\picking.frag.glsl" />
     <None Include="src\renderer\shaders\picking.vert.glsl" />
     <None Include="src\renderer\shaders\skinned.frag.glsl" />

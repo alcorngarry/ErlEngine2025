@@ -8,3 +8,8 @@ int ErlMath::generate_random(int minValue, int maxValue)
 
 	return dis(gen);
 }
+
+void ErlMath::print_vector3(glm::vec3 vec)
+{
+	std::cout << vec.x << ", " << vec.y << ", " << vec.z << std::endl;
+}

@@ -9,12 +9,21 @@ Shader* skinnedShaderProgram;
 Shader* pickingShaderProgram;
 Shader* cubemapShaderProgram;
 Shader* grassShaderProgram;
+Shader* lineShaderProgram;
 
 Camera* m_camera;
 SkyBox* m_skybox;
 DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
+glm::vec3 delta(0.0f);
+glm::vec3 out_origin;
+glm::vec3 out_direction = glm::vec3(0.0f, 0.0f, 0.0f);
+
+//move later
+float tMin = 0.0f;
+float tMax = 100000.0f;
+
 int selectedIndex = -1;
 int m_windowWidth, m_windowHeight;
 
@@ -25,6 +34,7 @@ void Renderer::init_render(GLFWwindow* window)
 	skinnedShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/skinned.frag.glsl");
 	pickingShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.frag.glsl");
 	cubemapShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.frag.glsl");
+	lineShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.frag.glsl");
 	grassShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.frag.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.gs.glsl");
 	debugMenu = new DebugMenu(window);
 	glfwGetWindowSize(window, &m_windowWidth, &m_windowHeight);
@@ -88,7 +98,7 @@ void Renderer::render(Camera* camera)
 	
 	for (SkinnedGameObject* skinned_entity : m_skinned_entities)
 	{
-		draw_aabb(skinned_entity->GameModel->getMinAABB(), skinned_entity->GameModel->getMaxAABB());
+		//draw_aabb(skinned_entity->GameModel->getMinAABB(), skinned_entity->GameModel->getMaxAABB());
 		Renderer::draw_skinned(skinned_entity->GameModel, skinned_entity->ModelMatrix, skinned_entity->transforms);
 	}
 
@@ -105,11 +115,11 @@ void Renderer::render(Camera* camera)
 	for (int i = 0; i < m_entities.size(); i++)
 	{
 		shaderProgram->setBool("selected", i == Renderer::get_selected_index());
-		//shaderProgram->setInt("objectId", m_entities[i]->id);
 		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
 	}
 
 	//render_grass(glm::vec3(0.0f), camera);
+	draw_ray(out_direction);
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
@@ -117,6 +127,7 @@ void Renderer::render(Camera* camera)
 	{
 		Renderer::draw_static(lightShaderProgram, light->GameModel, light->ModelMatrix);
 	}
+
 }
 
 void Renderer::render_grass(glm::vec3 pos, Camera* camera)
@@ -227,6 +238,43 @@ void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
 	glDeleteBuffers(1, &EBO);
 }
 
+void Renderer::draw_ray(glm::vec3 ray)
+{
+	if (ray != glm::vec3(0.0f))
+	{
+		lineShaderProgram->use();
+		lineShaderProgram->setMat4("view", view);
+		lineShaderProgram->setMat4("projection", projection);
+
+		glm::vec3 startPoint = out_origin;
+		ray *= 10000.0f;
+		glm::vec3 endPoint = startPoint + ray;
+
+		float vertices[] = {
+			startPoint.x, startPoint.y, startPoint.z,
+			endPoint.x, endPoint.y, endPoint.z,
+		};
+
+		unsigned int VAO, VBO;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_LINES, 0, 2);
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+	}
+}
+
 // This is for the debug menu, not part of game rendering.
 void Renderer::create_menu(float deltaTime)
 {
@@ -279,6 +327,24 @@ void Renderer::select_entity(float xpos, float ypos)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Renderer::cast_ray(int xpos, int ypos) 
+{
+	float NDC_X = ((int)xpos * (2.0f / m_windowWidth)) - 1;
+	float NDC_Y = -((int)ypos * (2.0f / m_windowHeight)) + 1;
+	float near_plane_height = glm::tan(45 / 2.0f) * 0.1f;
+	float aspect_ratio = (float)m_windowWidth / (float)m_windowHeight;
+
+	float X_3D = NDC_X * near_plane_height * aspect_ratio;
+	float Y_3D = NDC_Y * near_plane_height;
+
+	glm::vec3 near_plane_point(X_3D, Y_3D, -0.1f); 
+	near_plane_point = glm::inverse(view) * glm::vec4(near_plane_point, 1.0f);
+	glm::vec3 cam_dir_vec = near_plane_point - m_camera->get_camera_pos();
+
+	out_direction = glm::normalize(cam_dir_vec);
+	out_origin = m_camera->get_camera_pos();
+}
+
 int Renderer::get_selected_index()
 {
 	return selectedIndex;
@@ -287,4 +353,9 @@ int Renderer::get_selected_index()
 void Renderer::deselect_index()
 {
 	selectedIndex = -1;
+}
+
+glm::vec3 Renderer::get_ray_vector()
+{
+	return out_direction;
 }

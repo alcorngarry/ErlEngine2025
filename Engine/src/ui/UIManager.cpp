@@ -57,7 +57,7 @@ void UIManager::load_elements(uint8_t* cards, uint8_t selectedCard)
 
 void UIManager::draw() 
 {
-    for (UIElement* element : uiElements)
+  /*  for (UIElement* element : uiElements)
     {
         element->draw(shader, m_projection);
     }
@@ -65,7 +65,7 @@ void UIManager::draw()
     for (TextElement* text : textElements)
     {
         UIText::draw(text_shader, m_projection, text->text, text->position.x, text->position.y);
-    }
+    }*/
 }
 
 void UIManager::center(std::vector<UIElement*> elements)

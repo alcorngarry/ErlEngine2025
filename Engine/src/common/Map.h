@@ -35,7 +35,7 @@ class Map
 
 		Map(std::string mapName);
 		virtual void save();
-		virtual void load();
+		virtual void load(float windowWidth, float windowHeight);
 		void read_models();
 		void read_lights();
 		virtual void draw(float deltaTime);

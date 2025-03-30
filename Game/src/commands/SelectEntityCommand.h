@@ -2,14 +2,13 @@
 #define SELECT_ENTITY_COMMAND_H
 #include"input/Command.h"
 #include"renderer/Renderer.h"
+#include"input/InputManager.h"
 
 class SelectEntityCommand : public Command {
 public:
-    SelectEntityCommand(float xpos, float ypos, bool isDeselect);
+    SelectEntityCommand(bool isDeselect);
     void execute() override;
-
 private:
-    float xpos, ypos;
     bool isDeselect;
 };
 #endif // !SELECT_ENTITY_COMMAND_H

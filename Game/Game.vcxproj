@@ -53,6 +53,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\game_objects\Player.cpp" />
+    <ClCompile Include="src\maps\Chamber.cpp" />
     <ClCompile Include="src\maps\CountingSheep.cpp" />
     <ClCompile Include="src\maps\PongMap.cpp" />
   </ItemGroup>
@@ -86,6 +87,7 @@
     <ClInclude Include="src\commands\SelectCardRightCommand.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\game_objects\Player.h" />
+    <ClInclude Include="src\maps\Chamber.h" />
     <ClInclude Include="src\maps\CountingSheep.h" />
     <ClInclude Include="src\maps\PongMap.h" />
   </ItemGroup>

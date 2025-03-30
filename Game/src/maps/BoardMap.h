@@ -22,14 +22,13 @@ class BoardMap : public Map {
 		BoardMap(std::string mapName);
 		void update(float deltaTime) override;
 		void draw(float deltaTime) override;
-		void load() override;
+		void load(float windowWidth, float windowHeight) override;
 	protected:
 		void save() override;
 	private:
 		int currentPlayer = 0;
 		void load_skinned_objects() override;
 		void set_controls(float deltaTime) override;
-		void process_board_space(uint8_t boardId);
 		void display_cards();
 		void update_camera_position(float deltaTime);
 		void write_board_spaces();

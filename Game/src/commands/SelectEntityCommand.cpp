@@ -1,6 +1,6 @@
 #include"SelectEntityCommand.h"
 
-SelectEntityCommand::SelectEntityCommand(float xpos, float ypos, bool isDeselect) : xpos(xpos), ypos(ypos), isDeselect(isDeselect) {}
+SelectEntityCommand::SelectEntityCommand(bool isDeselect) : isDeselect(isDeselect) {}
 
 void SelectEntityCommand::execute() {
 	if (isDeselect)
@@ -10,7 +10,8 @@ void SelectEntityCommand::execute() {
 	else {
 		if (Renderer::get_selected_index() == -1)
 		{
-			Renderer::select_entity(xpos, ypos);
+			Renderer::cast_ray(InputManager::get_xpos(), InputManager::get_ypos());
+			Renderer::select_entity(InputManager::get_xpos(), InputManager::get_ypos());
 		}
 	}
 }

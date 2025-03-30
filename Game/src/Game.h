@@ -3,8 +3,7 @@
 #include<glm/glm.hpp>
 #include"common/Map.h"
 #include"maps/BoardMap.h"
-#include"maps/PongMap.h"
-#include"maps/CountingSheep.h"
+#include"maps/Chamber.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
 #include"commands/MoveCameraCommand.h"
@@ -24,14 +23,15 @@ class Game {
 		GameState State;
 		short level;
 
-		Game();
+		Game(float windowWidth, float windowHeight);
 		~Game();
 
 		void init();
+		void update_controls(GameState before, GameState after);
 		void update(float deltaTime);
 		void render(float deltaTime);
-	private:
-		
+	private: 
+		float m_windowWidth, m_windowHeight;
 };	
 
 #endif // !GAME_H

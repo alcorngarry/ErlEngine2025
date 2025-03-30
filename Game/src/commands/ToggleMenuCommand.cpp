@@ -3,5 +3,7 @@
 ToggleMenuCommand::ToggleMenuCommand(Game* game) : game(game) {}
 
 void ToggleMenuCommand::execute() {
-    game->State = (game->State == DEBUG_MENU) ? MAP_UPDATE : DEBUG_MENU;
+    GameState before = game->State;
+    game->State = (before == DEBUG_MENU) ? MAP_UPDATE : DEBUG_MENU;
+    game->update_controls(before, game->State);
 }

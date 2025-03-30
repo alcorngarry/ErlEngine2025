@@ -23,9 +23,9 @@ void BoardMap::draw(float deltaTime)
 	UIManager::draw();
 }
 
-void BoardMap::load()
+void BoardMap::load(float windowWidth, float windowHeight)
 {
-	Map::load();
+	Map::load(windowWidth, windowHeight);
 	load_skinned_objects();
 }
 
@@ -44,7 +44,7 @@ void BoardMap::set_controls(float deltaTime)
 void BoardMap::load_skinned_objects()
 {
 	glm::vec3 startingPosition = boardSpaces[0]->Position + glm::vec3(0.0f, 1.0f, 0.0f);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		Player* player = new Player(i, AssetManager::get_model(0), startingPosition, glm::vec3(2.0f), glm::vec3(0.0f), playerControls);
 		players.push_back(player);
@@ -52,7 +52,7 @@ void BoardMap::load_skinned_objects()
 		players[i]->init_deck();
 		players[i]->currSpace = boardSpaces[0];
 
-		int elementId = UIManager::add_text_element("Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats));
+		int elementId = UIManager::add_text_element("Player: " + std::to_string(i) + " Groats: " + std::to_string(players[i]->groats));
 
 		if (i == 0)
 		{
@@ -74,31 +74,6 @@ void BoardMap::load_skinned_objects()
 	}
 }
 
-void BoardMap::process_board_space(uint8_t boardId)
-{
-	switch (boardId)
-	{
-		case 0: 
-			//loadState = CHANGE_MAP;
-			break;
-		case 1:
-			players[currentPlayer]->add_groats(3);
-			std::cout << "added 3 groats to player: " << players[currentPlayer]->id << ", total groats = " << players[currentPlayer]->groats << std::endl;
-			break;
-		case 2:
-			players[currentPlayer]->add_groats(6);
-			std::cout << "added 6 groats to player: " << players[currentPlayer]->id  << ", total groats = " << players[currentPlayer]->groats << std::endl;
-			break;
-		case 3:
-			players[currentPlayer]->remove_groats(3);
-			std::cout << "removed 3 groats to player: " << players[currentPlayer]->id << ", total groats = " << players[currentPlayer]->groats << std::endl;
-			break;
-		default: 
-			std::cout << "error processing space" << std::endl;
-	}
-	UIManager::get_text_element(currentPlayer)->text = "Player: " + std::to_string(currentPlayer) + ", Groats: " + std::to_string(players[currentPlayer]->groats);
-}
-
 void BoardMap::display_cards()
 {
 	if (players[currentPlayer]->state == IN_MOTION) {
@@ -112,6 +87,7 @@ void BoardMap::display_cards()
 }
 
 //this also moves the player, fix
+//Bloated and gross...
 void BoardMap::update_camera_position(float deltaTime)
 {
 	// Update the camera's position
@@ -127,7 +103,7 @@ void BoardMap::update_camera_position(float deltaTime)
 			float heightAbove = 30.0f;
 			glm::vec3 cameraOffset = (playerDirection * -distanceBehind) + glm::vec3(0.0f, heightAbove, 0.0f);
 
-			camera->set_camera_pos(players[currentPlayer]->Position + cameraOffset);
+			//camera->set_camera_pos(players[currentPlayer]->Position + cameraOffset);
 			players[currentPlayer]->update(deltaTime);
 			players[currentPlayer]->move_player();
 		}
@@ -136,17 +112,15 @@ void BoardMap::update_camera_position(float deltaTime)
 			players[currentPlayer]->Rotation = -1.0f * glm::vec3(0.0f, glm::degrees(std::atan2(direction.x, direction.z)), 0.0f);
 		}
 
-		camera->set_camera_front(players[currentPlayer]->Position - camera->get_camera_pos());
+		//camera->set_camera_front(players[currentPlayer]->Position - camera->get_camera_pos());
 
 		if (players[currentPlayer]->state == TURN_COMPLETE)
 		{
-			//process_board_space(players[currentPlayer]->currSpace->spaceType);
+			players[currentPlayer]->currSpace->process_space(players[currentPlayer]);
+			UIManager::get_text_element(currentPlayer)->text = "Player: " + std::to_string(currentPlayer) + " Groats: " + std::to_string(players[currentPlayer]->groats);
 			players[currentPlayer]->state = INACTIVE;
-			int previousPlayer = currentPlayer;
 			currentPlayer = currentPlayer == players.size() - 1 ? 0 : currentPlayer += 1;
 			players[currentPlayer]->state = ACTIVE;
-
-			UIManager::get_text_element(previousPlayer)->text = "Player: " + std::to_string(currentPlayer) + " Groats: " + std::to_string(players[currentPlayer]->groats);
 		}
 	}
 }

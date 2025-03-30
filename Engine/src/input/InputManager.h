@@ -1,7 +1,7 @@
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 #include<map>
-#include <vector>
+#include<vector>
 #include<GLFW/glfw3.h>
 #include"Command.h"
 
@@ -32,10 +32,15 @@ struct GamepadState {
     float axes[6] = { 0.0f }; //(2 for left stick, 2 for right stick, 2 for triggers)
 };
 
+struct DoubleBinding {
+    int firstButton = 0;
+    int secondButton = 0;
+    bool buttonsProcessed = false;
+};
+
 namespace InputManager {
-    static bool Keys[1024] = { false };
     static bool KeysProcessed[1024] = { false };
-    static bool MouseButtons[7] = { false };
+    static bool MouseProcessed[7] = { false };
     static bool GamepadButtonsProcessed[15] = { false };
     static GamepadState gamepadStates[4] = { false };
 
@@ -47,7 +52,10 @@ namespace InputManager {
     void set_key_binding(int key, Command* command);
     void set_mouse_binding(int key, Command* command);
     void remove_mouse_binding(int key);
+    void remove_key_binding(int key);
+    void remove_key_and_mouse_binding(int key, int mouse);
     void set_gamepad_binding(std::vector<int> key, Command* command);
+    void set_key_and_mouse_binding(int key, int mouse, Command* command);
 
     double get_xpos();
     double get_last_xpos();
@@ -55,5 +63,7 @@ namespace InputManager {
     double get_last_ypos();
     double get_yaw();
     double get_pitch();
+    bool are_multiple_keys_pressed(int firstButton, int secondButton);
+    bool is_key_pressed(int button);
 };
 #endif // !INPUT_MANAGER_H

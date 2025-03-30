@@ -109,6 +109,9 @@
     <ClCompile Include="src\ImGuizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\maps\Chamber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\maps\BoardMap.h">
@@ -202,6 +205,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGuizmo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maps\Chamber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

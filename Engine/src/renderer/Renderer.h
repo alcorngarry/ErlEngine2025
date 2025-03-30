@@ -4,6 +4,7 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
 #include<stb_image/stb_image.h>
+#include<math/ErlMath.h>
 #include"Shader.h"
 #include"game_objects/Model.h"
 #include"game_objects/GameObject.h"
@@ -13,6 +14,7 @@
 #include"common/AssetManager.h"
 #include"ui/UIElement.h"
 #include"common/DebugMenu.h"
+
 
 namespace Renderer {
 	struct Erl3DRenderItem {
@@ -31,10 +33,15 @@ namespace Renderer {
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	
 	void create_menu(float deltaTime);
+	void draw_ray(glm::vec3 ray);
 	void deselect_index();
+	glm::vec3 get_ray_vector();
+	void cast_ray(int xpos, int ypos);
+	bool check_x_axis(GameObject* entity);
+	bool check_y_axis(GameObject* entity);
+	bool check_z_axis(GameObject* entity);
 	int get_selected_index();
 	void select_entity(float xpos, float ypos);
-
 
 	void draw_aabb(const glm::vec3& minAABB,const glm::vec3& maxAABB);
 	void draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix);

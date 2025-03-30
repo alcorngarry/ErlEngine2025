@@ -1,52 +1,68 @@
 #include"MoveCameraCommand.h"
 
-MoveCameraCommand::MoveCameraCommand(Camera* camera, float deltaTime, uint8_t direction) : camera(camera), deltaTime(deltaTime), direction(direction){}
+MoveCameraCommand::MoveCameraCommand(Camera* camera, float deltaTime, Movement movement) : camera(camera), deltaTime(deltaTime), movement(movement){}
 
 void MoveCameraCommand::execute() 
 {
 	float cameraSpeed = static_cast<float>(0.005f * deltaTime);
-	switch (direction)
+	switch (movement)
 	{
-		case 0: {
+		case FORWARD: {
 			//forward
 			camera->set_camera_pos(camera->get_camera_pos() + cameraSpeed * camera->get_camera_front());
 			break;
 		}
-		case 1: {
+		case BACK: {
 			//backward
 			camera->set_camera_pos(camera->get_camera_pos() - cameraSpeed * camera->get_camera_front());
 			break;
 		}
-		case 2: {
+		case LEFT: {
 			//left 
 			camera->set_camera_pos(camera->get_camera_pos() - glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up())) * cameraSpeed);
 			break;
 		}
-		case 3: {
+		case RIGHT: {
 			//right
 			camera->set_camera_pos(camera->get_camera_pos() + glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up())) * cameraSpeed);
 			break;
 		}
-		case 4: {
+		case MOUSE_DRAG: {
 			float deltaX = InputManager::get_xpos() - InputManager::get_last_xpos();
 			float deltaY = InputManager::get_ypos() - InputManager::get_last_ypos();
 
-			// Sensitivity adjustment for the mouse movement
-			deltaX *= .001;
-			deltaY *= .001;
+			deltaX *= 0.1f;
+			deltaY *= 0.1f;
 
-			// Move the camera horizontally (left-right) based on mouse X movement
-			camera->set_camera_pos(camera->get_camera_pos() - glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up())) * deltaX);
+			glm::mat4 transform = camera->get_view_matrix();
+			glm::vec3 right = glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up()));
+			
+			transform = glm::translate(transform, right * deltaX);
+			transform = glm::translate(transform, glm::vec3(0.0f, -deltaY, 0.0f));
 
-			// Move the camera vertically (up-down) based on mouse Y movement
-			//camera->set_camera_up(deltaY * camera->get_camera_up());
-			//camera->set_camera_pos(camera->get_camera_pos() );
-			camera->set_camera_pos(camera->get_camera_pos() + deltaY * camera->get_camera_up()); // Use camera position to adjust up/down
+			camera->update_view_matrix(transform);
 			break;
 		}
-		case 5: {
-			//scroll
-			camera->set_camera_pos(camera->get_camera_pos() + (float)InputManager::get_scroll_value() * camera->get_camera_front());
+		case SCROLL: {
+			camera->set_camera_pos(camera->get_camera_pos() + (float)InputManager::get_scroll_value() * 10 * camera->get_camera_front());
+			break;
+		}
+		case ORBIT: {
+			float deltaX = InputManager::get_xpos() - InputManager::get_last_xpos();
+			float deltaY = InputManager::get_ypos() - InputManager::get_last_ypos();
+			deltaX *= .1;
+			deltaY *= .1;
+
+			if (deltaX != 0.0f)
+			{
+				float camX = sin(deltaX);
+				float camZ = cos(deltaX);
+
+				glm::mat4 transform = camera->get_view_matrix();
+
+				transform *= glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+				camera->update_view_matrix(transform);
+			}
 			break;
 		}
 	}

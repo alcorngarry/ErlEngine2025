@@ -10,6 +10,7 @@ DebugMenu::DebugMenu(GLFWwindow* glfwWindow) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+    glfwGetWindowSize(glfwWindow, &windowWidth, &windowHeight);
 }
 
 DebugMenu::~DebugMenu() {}
@@ -22,19 +23,17 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
     ImGuizmo::BeginFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(600, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(windowHeight / 3, 0), ImGuiCond_Always);
 
     ImGui::Begin("Debug Menu");
     
     display_fps(deltaTime);
 
-    if (ImGui::Button("New Map")) {
-        create_new_map();
-    }
-
     draw_entity_hierarchy(entities);
     draw_camera_position(camera);
-    //display_board_tiles(entities);
+    display_board_tiles(entities);
+    draw_mouse_pos();
+    draw_ray_cast();
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
@@ -54,15 +53,29 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+//void DebugMenu::show_player_commands()
+//{
+//    if (ImGui::CollapsingHeader("Player Commands"))
+//    {
+//       
+//    }
+//}
+
 void DebugMenu::display_board_tiles(std::vector<GameObject*> entities)
 {
-    std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
-    ImGui::Text("BoardSpace Specific Properties:");
-    for (size_t i = 0; i < entities.size(); ++i)
+    if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
     {
-        if (auto boardSpace = dynamic_cast<BoardSpace*>(entities[i])) {
-            idToBoardSpaceMap[boardSpace->id] = boardSpace;
-            boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
+        std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
+        for (size_t i = 0; i < entities.size(); ++i)
+        {
+            if (auto boardSpace = dynamic_cast<BoardSpace*>(entities[i])) {
+                idToBoardSpaceMap[boardSpace->id] = boardSpace;
+                boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
+                ImGui::PushID(i);
+                std::string id = "BoardSpace: " + std::to_string((int)boardSpace->id);
+                ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
+                ImGui::PopID();
+            }
         }
     }
 }
@@ -103,9 +116,6 @@ void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
     ImGui::InputFloat("Rotation Z", &entity->Rotation.z, 1.0f, 180.0f, "%.1f");
 
     ImGui::Separator();
-
-    draw_mouse_pos();
-
     glm::mat4 modelMatrix = entity->ModelMatrix;
     glm::mat4 view = camera->get_view_matrix();
     glm::mat4 projection = camera->get_projection_matrix();
@@ -133,11 +143,28 @@ void DebugMenu::draw_mouse_pos()
     ImGui::Text("Y: %.2f", mousePos.y);
 }
 
+void DebugMenu::draw_ray_cast()
+{
+    glm::vec3 ray = Renderer::get_ray_vector();
+    ImGui::Text("Ray:");
+    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
+}
+
 void DebugMenu::draw_camera_position(Camera* camera) {
     ImGui::Text("Camera Position:");
     ImGui::Text("X: %.2f", camera->get_camera_pos().x);
     ImGui::Text("Y: %.2f", camera->get_camera_pos().y);
     ImGui::Text("Z: %.2f", camera->get_camera_pos().z);
+
+    ImGui::Text("Camera Front:");
+    ImGui::Text("X: %.2f", camera->get_camera_front().x);
+    ImGui::Text("Y: %.2f", camera->get_camera_front().y);
+    ImGui::Text("Z: %.2f", camera->get_camera_front().z);
+
+    ImGui::Text("Camera Up:");
+    ImGui::Text("X: %.2f", camera->get_camera_up().x);
+    ImGui::Text("Y: %.2f", camera->get_camera_up().y);
+    ImGui::Text("Z: %.2f", camera->get_camera_up().z);
 }
 
 void DebugMenu::create_new_map() 

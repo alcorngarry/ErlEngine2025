@@ -4,7 +4,6 @@ Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
 {
 	fileName = mapName;
 	//could be moved elsewhere don't see why at the moment
-	camera = new Camera();
 }
 
 void Map::save()
@@ -65,7 +64,7 @@ void Map::write_lights()
 	writeMap << "]";
 }
 
-void Map::load()
+void Map::load(float windowWidth, float windowHeight)
 {
 	readMap.open(fileName + ".esf");
 	char peek = 'B';
@@ -85,6 +84,7 @@ void Map::load()
 		}
 	} 
 
+	camera = new Camera(windowWidth, windowHeight);
 	readMap.close();
 	load_skybox();
 }

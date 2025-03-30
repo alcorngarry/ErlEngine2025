@@ -1,54 +1,77 @@
-#include"Camera.h"
+#include "Camera.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera()
+Camera::Camera(float windowWidth, float windowHeight)
 {
-	cameraPos = glm::vec3(0.0f, 50.0f, 150.0f);
-	setCameraToLookAtOrigin();
+    m_windowHeight = windowHeight;
+    m_windowWidth = windowWidth;
+    m_projection = glm::perspective(glm::radians(45.0f), m_windowWidth / m_windowHeight, 0.1f, 10000.0f);
+    setCameraToLookAtOrigin();
 }
 
-glm::vec3 Camera::get_camera_pos()
+glm::vec3 Camera::get_camera_pos() const
 {
-	return cameraPos;
+    return cameraPos;
 }
 
 void Camera::set_camera_pos(glm::vec3 pos)
 {
-	cameraPos = pos;
+    cameraPos = pos;
+    update_view_matrix();
 }
 
-glm::vec3 Camera::get_camera_front()
+glm::vec3 Camera::get_camera_front() const
 {
-	return cameraFront;
+    return cameraFront;
 }
 
 void Camera::set_camera_front(glm::vec3 front)
 {
-	cameraFront = front;
+    cameraFront = glm::normalize(front);
+    update_view_matrix();
 }
 
-glm::vec3 Camera::get_camera_up()
+glm::vec3 Camera::get_camera_up() const
 {
-	return cameraUp;
+    return cameraUp;
 }
 
 void Camera::set_camera_up(glm::vec3 up)
 {
-	cameraUp = up;
+    cameraUp = glm::normalize(up);
+    update_view_matrix();
 }
 
-void Camera::setCameraToLookAtOrigin() {
-	cameraFront = glm::normalize(glm::vec3(0.0f) - cameraPos); // Pointing to the origin
-	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); // Set a standard up vector
-}
-
-glm::mat4 Camera::get_view_matrix()
+void Camera::setCameraToLookAtOrigin()
 {
-	return glm::lookAt(get_camera_pos(), get_camera_pos() + get_camera_front(), get_camera_up());
-	
+    cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    cameraFront = glm::normalize(glm::vec3(0.0f, 0.0f, -1.0f));
+    cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    update_view_matrix();
 }
 
-glm::mat4 Camera::get_projection_matrix()
+glm::mat4 Camera::get_view_matrix() const
 {
-	//hard coded aspect ratio, figure out to transform this
-	return glm::perspective(glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 10000.0f);
+    return m_view;
+}
+
+void Camera::update_view_matrix(glm::mat4 view)
+{
+    m_view = view;
+
+    glm::mat3 rotationMatrix = glm::mat3(view);
+    cameraFront = -glm::vec3(rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2]);
+    cameraUp = glm::vec3(rotationMatrix[0][1], rotationMatrix[1][1], rotationMatrix[2][1]);
+    glm::mat4 inverseView = glm::inverse(view);
+    cameraPos = glm::vec3(inverseView[3][0], inverseView[3][1], inverseView[3][2]);
+}
+
+glm::mat4 Camera::get_projection_matrix() const
+{
+    return m_projection;
+}
+
+void Camera::update_view_matrix()
+{
+    m_view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }

@@ -6,14 +6,24 @@
 #include"common/Camera.h"
 #include"input/InputManager.h"
 
+enum Movement {
+    FORWARD,
+    BACK,
+    LEFT,
+    RIGHT,
+    MOUSE_DRAG,
+    SCROLL,
+    ORBIT
+};
+
 class MoveCameraCommand : public Command {
 public:
-    MoveCameraCommand(Camera* camera, float deltaTime, uint8_t direction);
+    MoveCameraCommand(Camera* camera, float deltaTime, Movement movement);
     void execute() override;
 
 private:
     Camera* camera;
-    uint8_t direction; //0 left, 1 right, 2 up, 3 down
+    Movement movement;
     float deltaTime;
 };
 #endif // !MOVE_CAMERA_COMMAND_H

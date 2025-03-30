@@ -7,7 +7,7 @@
 #include"renderer/Renderer.h"
 
 namespace Engine {
-	GLFWwindow* start();
+	GLFWwindow* start(float windowWidth, float windowHeight);
 	void shut_down(GLFWwindow* window);
 };
 

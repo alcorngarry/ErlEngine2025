@@ -34,13 +34,12 @@ void InputManager::update() {
         int key = binding.first;
         Command* command = binding.second;
 
-        //edge case random duplicate button presses
         if (doubleBindingMap.count(key) == 0 ||
             (doubleBindingMap.count(key) > 0 && !are_multiple_keys_pressed(key, doubleBindingMap.at(key))))
         {
             if (glfwGetKey(m_window, key) == GLFW_PRESS && !KeysProcessed[key]) {
                 command->execute();
-                KeysProcessed[key] = true;
+                KeysProcessed[key] = !command->isContinuous;
             }
             else if (glfwGetKey(m_window, key) == GLFW_RELEASE) {
                 KeysProcessed[key] = false;
@@ -85,14 +84,14 @@ void InputManager::update() {
 
         if (are_multiple_keys_pressed(keyAndMouseButtons->firstButton, keyAndMouseButtons->secondButton) && !keyAndMouseButtons->buttonsProcessed) {
             //will need to be generic.
-            if (keyAndMouseButtons->secondButton == GLFW_MOUSE_BUTTON_MIDDLE) {
+            if (keyAndMouseButtons->isDrag) {
                 glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
             }
             command->execute();
             keyAndMouseButtons->buttonsProcessed = true;
         }
         else if (are_multiple_keys_pressed(keyAndMouseButtons->firstButton, keyAndMouseButtons->secondButton) && keyAndMouseButtons->buttonsProcessed) {
-            if (keyAndMouseButtons->secondButton == GLFW_MOUSE_BUTTON_MIDDLE) {
+            if (keyAndMouseButtons->isDrag) {
                 command->execute();
                 glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
             }
@@ -102,7 +101,6 @@ void InputManager::update() {
         }
     }
 
-    //four max controllers
     for (int i = 0; i < 4; ++i) {
         if (glfwJoystickIsGamepad(i)) {
             GLFWgamepadstate state;
@@ -150,12 +148,12 @@ void InputManager::set_key_binding(int key, Command* command)
     keyBindings[key] = command;
 }
 
-void InputManager::set_key_and_mouse_binding(int key, int mouse, Command* command)
+void InputManager::set_key_and_mouse_binding(int key, int mouse, Command* command, bool isDrag)
 {
     doubleBindingMap[key] = mouse;
     doubleBindingMap[mouse] = key;
 
-    keyAndMouseBindings[new DoubleBinding{key, mouse}] = command;
+    keyAndMouseBindings[new DoubleBinding{key, mouse, false, isDrag}] = command;
 }
 
 void InputManager::set_mouse_binding(int key, Command* command)
@@ -211,6 +209,9 @@ void InputManager::update_cursor()
 
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;
+
+    Command* lookAroundCommand = mouseBindings[-2];
+    if (lookAroundCommand) lookAroundCommand->execute();
 }
 
 double InputManager::get_xpos()
@@ -253,4 +254,15 @@ bool InputManager::are_multiple_keys_pressed(int firstButton, int secondButton)
 bool InputManager::is_key_pressed(int button)
 {
     return glfwGetKey(m_window, button) == GLFW_PRESS || glfwGetMouseButton(m_window, button) == GLFW_PRESS;
+}
+
+void InputManager::show_cursor(bool show)
+{
+    if (show)
+    {
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else {
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
 }

@@ -84,9 +84,14 @@ void Map::load(float windowWidth, float windowHeight)
 		}
 	} 
 
-	camera = new Camera(windowWidth, windowHeight);
+	load_camera(windowWidth, windowHeight);
 	readMap.close();
 	load_skybox();
+}
+
+void Map::load_camera(float windowWidth, float windowHeight)
+{
+	camera = new Camera(windowWidth, windowHeight);
 }
 
 void Map::read_models()
@@ -168,6 +173,7 @@ void Map::draw(float deltaTime)
 
 void Map::duplicate_model(int selectedIndex)
 {
+	entities = Renderer::get_rendered_entities();
 	GameObject* model = new GameObject(*entities[selectedIndex]);
 	entities.push_back(model);
 	Renderer::add_render_object(model);
@@ -175,6 +181,7 @@ void Map::duplicate_model(int selectedIndex)
 
 void Map::remove_model(int selectedIndex)
 {
+	entities = Renderer::get_rendered_entities();
 	entities.erase(entities.begin() + selectedIndex);
 	Renderer::remove_render_object(selectedIndex);
 }

@@ -112,6 +112,9 @@
     <ClCompile Include="src\maps\Chamber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\FireCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\maps\BoardMap.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="src\maps\Chamber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\commands\FireCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font\Antonio-Bold.ttf" />
@@ -218,5 +224,6 @@
     <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
     <None Include="res\maps\mini_game_1.esf" />
+    <None Include="res\maps\chamber_1.esf" />
   </ItemGroup>
 </Project>

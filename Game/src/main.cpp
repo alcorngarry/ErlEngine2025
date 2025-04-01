@@ -26,6 +26,9 @@ int main(int argc, char** argv)
 	InputManager::set_key_binding(GLFW_KEY_F9, new SaveCommand(game->Maps[game->level]));
 	InputManager::set_key_binding(GLFW_KEY_M, new ToggleMenuCommand(game));
 	InputManager::set_key_binding(GLFW_KEY_ESCAPE, new CloseWindowCommand(window));
+	//move
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	
 	while (!glfwWindowShouldClose(window))
 	{

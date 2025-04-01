@@ -1,6 +1,7 @@
 #include"AssetManager.h"
 
 std::map<uint8_t, Model*> assetMap;
+std::map<uint16_t, unsigned int> uiAssetMap;
 SkyBox* skyBox;
 unsigned int cardTextures[13];
 unsigned int grassId;
@@ -80,23 +81,13 @@ void AssetManager::load()
 	assetMap[8] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal.obj");
 	assetMap[9] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal_map.obj");
 	assetMap[10] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/saucer.obj");
+	assetMap[11] = new Model((char*)"C:/Dev/assets/sonar/player_body.obj");
 
 	load_sky_box();
 
-	cardTextures[0] = load_texture("C:/Dev/assets/cards/c01.png", false, true);
-	cardTextures[1] = load_texture("C:/Dev/assets/cards/c02.png", false, true);
-	cardTextures[2] = load_texture("C:/Dev/assets/cards/c03.png", false, true);
-	cardTextures[3] = load_texture("C:/Dev/assets/cards/c04.png", false, true);
-	cardTextures[4] = load_texture("C:/Dev/assets/cards/c05.png", false, true);
-	cardTextures[5] = load_texture("C:/Dev/assets/cards/c06.png", false, true);
-	cardTextures[6] = load_texture("C:/Dev/assets/cards/c07.png", false, true);
-	cardTextures[7] = load_texture("C:/Dev/assets/cards/c08.png", false, true);
-	cardTextures[8] = load_texture("C:/Dev/assets/cards/c09.png", false, true);
-	cardTextures[9] = load_texture("C:/Dev/assets/cards/c10.png", false, true);
-	cardTextures[10] = load_texture("C:/Dev/assets/cards/c11.png", false, true);
-	cardTextures[11] = load_texture("C:/Dev/assets/cards/c12.png", false, true);
-	cardTextures[12] = load_texture("C:/Dev/assets/cards/c13.png", false, true);
-	grassId = load_texture("C:/Dev/assets/party_game/Billboard_grass/Billboard_grass/sprites/n_grass_diff_0_40.png", true, false);
+	uiAssetMap[0] = load_texture("C:/Dev/assets/sonar/crosshair006.png", false, false);
+
+	//grassId = load_texture("C:/Dev/assets/party_game/Billboard_grass/Billboard_grass/sprites/n_grass_diff_0_40.png", true, false);*/
 }
 
 Model* AssetManager::get_model(uint8_t id)
@@ -107,7 +98,7 @@ Model* AssetManager::get_model(uint8_t id)
 uint16_t AssetManager::get_num_loaded_assets()
 {
 	//update this with map
-	return 11;
+	return 12;
 }
 
 SkyBox* AssetManager::get_sky_box()
@@ -118,4 +109,9 @@ SkyBox* AssetManager::get_sky_box()
 uint8_t AssetManager::get_card(uint8_t card)
 {
 	return cardTextures[card];
+}
+
+unsigned int AssetManager::get_ui_element(uint16_t id)
+{
+	return uiAssetMap[id];
 }

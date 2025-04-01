@@ -1,4 +1,4 @@
- #version 330 core
+#version 330 core
 out vec4 FragColor;
 in vec2 TexCoords;
 
@@ -9,7 +9,6 @@ void main()
 {
     if (selected)
     {
-        //FragColor = vec4(1.0, 0.0, 0.0, 0.0);
         FragColor = texture(texture1, TexCoords) * vec4(1.0, 0.0, 0.0, 0.0);
     }
     else {

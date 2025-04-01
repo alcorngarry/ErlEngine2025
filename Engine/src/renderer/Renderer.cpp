@@ -73,6 +73,7 @@ void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
 
 void Renderer::render(Camera* camera)
 {
+
 	m_camera = camera;
 	view = m_camera->get_view_matrix();
 	projection = m_camera->get_projection_matrix();
@@ -327,6 +328,7 @@ void Renderer::select_entity(float xpos, float ypos)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+//move this to physics like class or something.
 void Renderer::cast_ray(int xpos, int ypos) 
 {
 	float NDC_X = ((int)xpos * (2.0f / m_windowWidth)) - 1;
@@ -341,7 +343,7 @@ void Renderer::cast_ray(int xpos, int ypos)
 	near_plane_point = glm::inverse(view) * glm::vec4(near_plane_point, 1.0f);
 	glm::vec3 cam_dir_vec = near_plane_point - m_camera->get_camera_pos();
 
-	out_direction = glm::normalize(cam_dir_vec);
+	out_direction = glm::normalize(m_camera->get_camera_front());
 	out_origin = m_camera->get_camera_pos();
 }
 

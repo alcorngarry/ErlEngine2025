@@ -36,6 +36,7 @@ struct DoubleBinding {
     int firstButton = 0;
     int secondButton = 0;
     bool buttonsProcessed = false;
+    bool isDrag = false;
 };
 
 namespace InputManager {
@@ -55,7 +56,7 @@ namespace InputManager {
     void remove_key_binding(int key);
     void remove_key_and_mouse_binding(int key, int mouse);
     void set_gamepad_binding(std::vector<int> key, Command* command);
-    void set_key_and_mouse_binding(int key, int mouse, Command* command);
+    void set_key_and_mouse_binding(int key, int mouse, Command* command, bool isDrag);
 
     double get_xpos();
     double get_last_xpos();
@@ -65,5 +66,6 @@ namespace InputManager {
     double get_pitch();
     bool are_multiple_keys_pressed(int firstButton, int secondButton);
     bool is_key_pressed(int button);
+    void show_cursor(bool show);
 };
 #endif // !INPUT_MANAGER_H

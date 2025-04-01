@@ -13,7 +13,8 @@ enum Movement {
     RIGHT,
     MOUSE_DRAG,
     SCROLL,
-    ORBIT
+    ORBIT,
+    LOOK_AROUND
 };
 
 class MoveCameraCommand : public Command {

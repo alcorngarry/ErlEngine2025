@@ -13,8 +13,6 @@
 class Map 
 {
 	public:
-		//PlayerControls playerControls{ GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_SPACE, GLFW_KEY_LEFT, GLFW_KEY_RIGHT };
-
 		enum State {
 			DEFAULT,
 			DEBUG,
@@ -36,23 +34,22 @@ class Map
 		Map(std::string mapName);
 		virtual void save();
 		virtual void load(float windowWidth, float windowHeight);
-		void read_models();
-		void read_lights();
 		virtual void draw(float deltaTime);
 		virtual void set_controls(float deltaTime) = 0;
 		virtual void update(float deltaTime) = 0;
-		//move to editor class
+		void read_models();
+		void read_lights();
 		void duplicate_model(int selectedIndex);
 		void remove_model(int selectedIndex);
 	protected:
 		std::ofstream writeMap;
 		std::ifstream readMap;
 		std::string fileName;
-		//probably rename and fix.
 		virtual void load_skinned_objects() = 0;
+		virtual void load_camera(float windowWidth, float windowHeight);
+		virtual void read_board_spaces() {};
 		void write_models();
 		void write_lights();
-		virtual void read_board_spaces() {};
 	private:
 		std::string line;
 		void load_skybox();

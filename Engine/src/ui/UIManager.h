@@ -15,8 +15,9 @@ struct TextElement {
 
 namespace UIManager {
     void init(int screenWidth, int screenHeight);
-    void load_elements(uint8_t* cards, uint8_t card);
     int add_text_element(std::string text);
+    void load_elements();
+    void load_elements(uint8_t* cards, uint8_t selectedCard);
     void draw();
     void load_defaults();
     void remove_text_element(int index);

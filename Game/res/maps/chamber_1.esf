@@ -1,0 +1,6 @@
+models: [{assetId: 2, position: 0,-8,0, scale: 1,1,1, rotation: 0,-0,0},
+{assetId: 2, position: 100,-41.3465,-0.349126, scale: 1,1,1, rotation: 0.200097,-0.000108102,89.9997},
+{assetId: 2, position: -99.9997,-41.3458,-0.348746, scale: 1,1,1, rotation: 0.200097,-0.000108102,89.9997},
+{assetId: 11, position: 0,-6,0, scale: 1,1,1, rotation: 0,-0,0},
+{assetId: 11, position: 0,-6,0, scale: 1,1,1, rotation: 0,-0,0}]
+lights: []

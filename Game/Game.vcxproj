@@ -29,6 +29,7 @@
     <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp" />
     <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
+    <ClCompile Include="src\commands\FireCommand.cpp" />
     <ClCompile Include="src\commands\MoveCameraCommand.cpp" />
     <ClCompile Include="src\commands\MoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\SaveCommand.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
     <ClInclude Include="src\commands\AddSubtractCountCommand.h" />
     <ClInclude Include="src\commands\CloseWindowCommand.h" />
+    <ClInclude Include="src\commands\FireCommand.h" />
     <ClInclude Include="src\commands\MoveCameraCommand.h" />
     <ClInclude Include="src\commands\MoveEntityCommand.h" />
     <ClInclude Include="src\commands\OpenMenuCommand.h" />
@@ -100,6 +102,7 @@
     <Font Include="res\font\Antonio-Bold.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\maps\chamber_1.esf" />
     <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
     <None Include="res\maps\mini_game_1.esf" />

@@ -17,5 +17,6 @@ class Chamber : public Map {
 		void load_skinned_objects() override;
 		void load_camera(float windowWidth, float windowHeight) override;
 		void draw(float deltaTime) override;
+		void cast_ray_logic(Renderer::Ray* ray);
 };
 #endif // !CHAMBER_H

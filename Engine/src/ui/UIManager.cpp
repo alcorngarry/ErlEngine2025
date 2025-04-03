@@ -15,13 +15,7 @@ void UIManager::init(int screenWidth, int screenHeight)
     text_shader = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/text.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/text.frag.glsl");
     uiElements.clear();
     set_screen_res(screenWidth, screenHeight);
-    load_defaults();
     UIText::init();
-}
-
-void UIManager::load_defaults() 
-{
-    center(uiElements);
 }
 
 void UIManager::set_screen_res(int width, int height) 
@@ -31,7 +25,6 @@ void UIManager::set_screen_res(int width, int height)
     m_projection = glm::ortho(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, -1.0f, 1.0f);
 }
 
-//will probably need to be decoupled.
 void UIManager::load_elements(uint8_t* cards, uint8_t selectedCard)
 {
     int size = 0;

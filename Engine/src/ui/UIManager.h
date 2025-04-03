@@ -19,7 +19,6 @@ namespace UIManager {
     void load_elements();
     void load_elements(uint8_t* cards, uint8_t selectedCard);
     void draw();
-    void load_defaults();
     void remove_text_element(int index);
     TextElement* get_text_element(int index);
     void set_text_element_top(int index);

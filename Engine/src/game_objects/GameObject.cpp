@@ -1,6 +1,6 @@
 #include"GameObject.h"
 
-GameObject::GameObject(uint16_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation) : GameModel(model), Position(pos), Size(size), Rotation(rotation)
+GameObject::GameObject(uint16_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered) : GameModel(model), Position(pos), Size(size), Rotation(rotation), isRendered(isRendered)
 {
 	this->id = id;
 	set_model_matrix(Position, Rotation, Size);

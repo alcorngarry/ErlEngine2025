@@ -19,13 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\maps\back_up_map.txt" />
-    <Text Include="res\maps\counting_sheep.txt" />
-    <Text Include="res\maps\standardized_map_save.txt" />
-    <Text Include="res\maps\test_map_1.txt" />
-    <Text Include="res\maps\test_map_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp" />
     <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
@@ -103,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\maps\chamber_1.esf" />
-    <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
     <None Include="res\maps\mini_game_1.esf" />
   </ItemGroup>

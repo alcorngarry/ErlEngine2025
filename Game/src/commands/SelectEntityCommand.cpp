@@ -12,6 +12,5 @@ void SelectEntityCommand::execute() {
 		{
 			Renderer::select_entity(InputManager::get_xpos(), InputManager::get_ypos());
 		}
-		Renderer::cast_ray(InputManager::get_xpos(), InputManager::get_ypos());
 	}
 }

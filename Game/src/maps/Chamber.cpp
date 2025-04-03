@@ -10,11 +10,14 @@ void Chamber::update(float deltaTime)
 	{
 		set_controls(deltaTime);
 	}
+	if(!Renderer::get_rays().empty())
+	{
+		cast_ray_logic(Renderer::get_rays().back());
+	}
 }
 
 void Chamber::load_skinned_objects()
 {
-	
 }
 
 void Chamber::load_camera(float windowWidth, float windowHeight)
@@ -31,7 +34,11 @@ void Chamber::draw(float deltaTime)
 	UIManager::draw();
 }
 
-
+void Chamber::cast_ray_logic(Renderer::Ray* ray)
+{
+	GameObject* selectedObject = ErlPhysics::check_collision(ray, entities);
+	if(selectedObject != nullptr) selectedObject->isRendered = false;
+}
 
 void Chamber::set_controls(float deltaTime)
 {
@@ -40,5 +47,5 @@ void Chamber::set_controls(float deltaTime)
 	InputManager::set_key_binding(GLFW_KEY_A, new MoveCameraCommand(camera, deltaTime, LEFT));
 	InputManager::set_key_binding(GLFW_KEY_S, new MoveCameraCommand(camera, deltaTime, BACK));
 	InputManager::set_key_binding(GLFW_KEY_D, new MoveCameraCommand(camera, deltaTime, RIGHT));
-	InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new FireCommand());
+	InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new FireCommand(camera));
 }

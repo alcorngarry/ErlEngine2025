@@ -1,8 +1,8 @@
 #include"FireCommand.h"
 
-FireCommand::FireCommand(){}
+FireCommand::FireCommand(Camera* camera) : m_camera(camera) {}
 
 void FireCommand::execute() 
 {
-	Renderer::cast_ray(InputManager::get_xpos(), InputManager::get_ypos());
+	ErlPhysics::cast_ray_from_screen(m_camera);
 }

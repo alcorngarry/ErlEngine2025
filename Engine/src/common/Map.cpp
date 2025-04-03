@@ -3,13 +3,10 @@
 Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
 {
 	fileName = mapName;
-	//could be moved elsewhere don't see why at the moment
 }
 
 void Map::save()
 {
-	//probably fix this in the future, and add lights and skins
-	entities = Renderer::get_rendered_entities();
 	writeMap = std::ofstream{ fileName + ".esf" };
 
 	write_models();
@@ -30,7 +27,7 @@ void Map::write_models()
 			writeMap << "assetId: " << entities[i]->id << ", " << "position: "
 				<< entities[i]->Position.x << "," << entities[i]->Position.y << "," << entities[i]->Position.z << ", "
 				<< "scale: " << entities[i]->Size.x << "," << entities[i]->Size.y << "," << entities[i]->Size.z << ", "
-				<< "rotation: " << entities[i]->Rotation.x << "," << entities[i]->Rotation.y << "," << entities[i]->Rotation.z;
+				<< "rotation: " << entities[i]->Rotation.x << "," << entities[i]->Rotation.y << "," << entities[i]->Rotation.z << ", " << "isRendered: " << (entities[i]->isRendered == 1);
 		}
 		if (i == entities.size() - 1)
 		{
@@ -100,7 +97,7 @@ void Map::read_models()
 	{
 		GameObject* entity = read_asset();
 		entities.push_back(entity);
-		Renderer::add_render_object(entity);
+		if(entity->isRendered) Renderer::add_render_object(entity);
 	}
 	getline(readMap, line, '\n');
 }
@@ -123,6 +120,7 @@ GameObject* Map::read_asset()
 	uint8_t assetId;
 	float x, y, z;
 	glm::vec3 position, scale, rotation;
+	bool isRendered;
 
 	//asset
 	getline(readMap, line, ',');
@@ -154,11 +152,15 @@ GameObject* Map::read_asset()
 	x = std::stof(line);
 	getline(readMap, line, ',');
 	y = std::stof(line);
-	getline(readMap, line, '}');
+	getline(readMap, line, ',');
 	z = std::stof(line);
 	rotation = { x, y, z };
+
+	getline(readMap, line, ':');
+	getline(readMap, line, '}');
+	isRendered = std::stof(line) == 1;
 	
-	return new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation);
+	return new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation, isRendered);
 }
 
 void Map::load_skybox()
@@ -173,68 +175,16 @@ void Map::draw(float deltaTime)
 
 void Map::duplicate_model(int selectedIndex)
 {
-	entities = Renderer::get_rendered_entities();
-	GameObject* model = new GameObject(*entities[selectedIndex]);
+	GameObject* model = new GameObject(entities[selectedIndex]->id, 
+		entities[selectedIndex]->GameModel, entities[selectedIndex]->Position, entities[selectedIndex]->Size,
+		entities[selectedIndex]->Rotation, entities[selectedIndex]->isRendered);
+
 	entities.push_back(model);
 	Renderer::add_render_object(model);
 }
 
 void Map::remove_model(int selectedIndex)
 {
-	entities = Renderer::get_rendered_entities();
 	entities.erase(entities.begin() + selectedIndex);
 	Renderer::remove_render_object(selectedIndex);
 }
-
-
-////check space type 0 : blank, 1 : add3, 2 add6, 3 remove3
-		//if (id == 4)
-		//{
-		//	getline(readMap, line, ',');
-		//	boardSpaceId = std::stof(line);
-		//}
-
-		////parse position
-		//getline(readMap, line, ',');
-		//x = std::stof(line);
-		//getline(readMap, line, ',');
-		//y = std::stof(line);
-		//getline(readMap, line, ',');
-		//z = std::stof(line);
-
-		////parse size
-		//getline(readMap, line, ',');
-		//sizeX = std::stof(line);
-		//getline(readMap, line, ',');
-		//sizeY = std::stof(line);
-		//getline(readMap, line, ',');
-		//sizeZ = std::stof(line);
-
-		////parse rotation
-		//getline(readMap, line, ',');
-		//rotationX = std::stof(line);
-		//getline(readMap, line, ',');
-		//rotationY = std::stof(line);
-		//getline(readMap, line);
-		//rotationZ = std::stof(line);
-		//if light
-		//if (id == 1)
-		//{
-		//	//set Id to 10 right now to avoid collisions with board space Idds
-		//	GameObject* light = new GameObject(10, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
-		//	lights.push_back(light);
-		//	Renderer::add_light_render_object(light);
-		//}
-		////if board space
-		//else if (id == 4)
-		//{
-		//	GameObject* boardSpace = new GameObject(boardSpaceId, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
-		//	entities.push_back(boardSpace);
-		//	Renderer::add_render_object(boardSpace);
-		//}
-		//else
-		//{
-		//	GameObject* entity = new GameObject(11, AssetManager::get_model(id), glm::vec3(x, y, z), glm::vec3(sizeX, sizeY, sizeZ), glm::vec3(rotationX, rotationY, rotationZ));
-		//	entities.push_back(entity);
-		//	Renderer::add_render_object(entity);
-		//} 

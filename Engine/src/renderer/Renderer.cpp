@@ -2,6 +2,7 @@
 
 std::vector<SkinnedGameObject*> m_skinned_entities;
 std::vector<GameObject*> m_entities, m_lights;
+std::vector<Renderer::Ray*> m_rays;
 
 Shader* shaderProgram;
 Shader* lightShaderProgram;
@@ -48,6 +49,16 @@ void Renderer::add_sky_box(SkyBox* skybox)
 void Renderer::add_render_object(GameObject* gameObject)
 {
 	m_entities.push_back(gameObject);
+}
+
+void Renderer::add_ray(glm::vec3 origin, glm::vec3 direction, float length)
+{
+	m_rays.push_back(new Renderer::Ray{ origin, direction, length });
+}
+
+std::vector<Renderer::Ray*> Renderer::get_rays()
+{
+	return m_rays;
 }
 
 void Renderer::remove_render_object(int index)
@@ -120,7 +131,7 @@ void Renderer::render(Camera* camera)
 	}
 
 	//render_grass(glm::vec3(0.0f), camera);
-	draw_ray(out_direction);
+	draw_rays();
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
@@ -239,20 +250,19 @@ void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
 	glDeleteBuffers(1, &EBO);
 }
 
-void Renderer::draw_ray(glm::vec3 ray)
+void Renderer::draw_rays()
 {
-	if (ray != glm::vec3(0.0f))
-	{
-		lineShaderProgram->use();
-		lineShaderProgram->setMat4("view", view);
-		lineShaderProgram->setMat4("projection", projection);
+	lineShaderProgram->use();
+	lineShaderProgram->setMat4("view", view);
+	lineShaderProgram->setMat4("projection", projection);
 
+	for (Renderer::Ray* ray : m_rays)
+	{
 		glm::vec3 startPoint = out_origin;
-		ray *= 10000.0f;
-		glm::vec3 endPoint = startPoint + ray;
+		glm::vec3 endPoint = ray->direction * ray->length;
 
 		float vertices[] = {
-			startPoint.x, startPoint.y, startPoint.z,
+			ray->origin.x, ray->origin.y, ray->origin.z,
 			endPoint.x, endPoint.y, endPoint.z,
 		};
 
@@ -328,25 +338,6 @@ void Renderer::select_entity(float xpos, float ypos)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-//move this to physics like class or something.
-void Renderer::cast_ray(int xpos, int ypos) 
-{
-	float NDC_X = ((int)xpos * (2.0f / m_windowWidth)) - 1;
-	float NDC_Y = -((int)ypos * (2.0f / m_windowHeight)) + 1;
-	float near_plane_height = glm::tan(45 / 2.0f) * 0.1f;
-	float aspect_ratio = (float)m_windowWidth / (float)m_windowHeight;
-
-	float X_3D = NDC_X * near_plane_height * aspect_ratio;
-	float Y_3D = NDC_Y * near_plane_height;
-
-	glm::vec3 near_plane_point(X_3D, Y_3D, -0.1f); 
-	near_plane_point = glm::inverse(view) * glm::vec4(near_plane_point, 1.0f);
-	glm::vec3 cam_dir_vec = near_plane_point - m_camera->get_camera_pos();
-
-	out_direction = glm::normalize(m_camera->get_camera_front());
-	out_origin = m_camera->get_camera_pos();
-}
-
 int Renderer::get_selected_index()
 {
 	return selectedIndex;
@@ -360,4 +351,14 @@ void Renderer::deselect_index()
 glm::vec3 Renderer::get_ray_vector()
 {
 	return out_direction;
+}
+
+float Renderer::get_window_width()
+{
+	return m_windowWidth;
+}
+
+float Renderer::get_window_height()
+{
+	return m_windowHeight;
 }

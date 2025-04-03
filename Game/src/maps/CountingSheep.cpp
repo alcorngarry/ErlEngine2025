@@ -71,7 +71,7 @@ void CountingSheep::load_skinned_objects()
 	
 	for (int i = 0; i < numSheep; i++)
 	{
-		GameObject* shoop = new GameObject(7, AssetManager::get_model(7), glm::vec3(ErlMath::generate_random(0, 200), 0.0f, ErlMath::generate_random(-100, 100)), glm::vec3(0.1f), glm::vec3(-90.0f, 0.0f, -90.0f));
+		GameObject* shoop = new GameObject(7, AssetManager::get_model(7), glm::vec3(ErlMath::generate_random(0, 200), 0.0f, ErlMath::generate_random(-100, 100)), glm::vec3(0.1f), glm::vec3(-90.0f, 0.0f, -90.0f), true);
 		sheep.push_back(shoop);
 		Renderer::add_render_object(shoop);
 	}

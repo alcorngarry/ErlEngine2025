@@ -55,7 +55,7 @@ void PongMap::load_skinned_objects()
 	players.push_back(new Player(2, AssetManager::get_model(0), glm::vec3(0, 4, -20), glm::vec3(2.0f), glm::vec3(0.0f, 0.0f, 0.0f), playerControls));
 	players.push_back(new Player(3, AssetManager::get_model(0), glm::vec3(15, 4, -40), glm::vec3(2.0f), glm::vec3(0.0f, 0.0f, 0.0f), playerControls));
 
-	entities.push_back(new GameObject(5, AssetManager::get_model(5), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2, 3, 3), glm::vec3(0.0f)));
+	entities.push_back(new GameObject(5, AssetManager::get_model(5), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2, 3, 3), glm::vec3(0.0f), true));
 	ballIndex = entities.size() - 1;
 }
 

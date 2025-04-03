@@ -15,13 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\maps\back_up_map.txt" />
-    <Text Include="res\maps\standardized_map_save.txt" />
-    <Text Include="res\maps\test_map_1.txt" />
-    <Text Include="res\maps\test_map_2.txt" />
-    <Text Include="res\maps\counting_sheep.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\maps\BoardMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,7 +214,6 @@
     <Font Include="res\font\Antonio-Bold.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\maps\map.json" />
     <None Include="res\maps\test_map_1.esf" />
     <None Include="res\maps\mini_game_1.esf" />
     <None Include="res\maps\chamber_1.esf" />

@@ -15,11 +15,17 @@
 #include"ui/UIElement.h"
 #include"common/DebugMenu.h"
 
-
 namespace Renderer {
+	//not implemented check if wanted
 	struct Erl3DRenderItem {
 		Model* model;
 		glm::mat4 transform;
+	};
+
+	struct Ray {
+		glm::vec3 origin;
+		glm::vec3 direction;
+		float length;
 	};
 
 	void init_render(GLFWwindow* window);
@@ -27,23 +33,23 @@ namespace Renderer {
 
 	void add_sky_box(SkyBox* skybox);
 	void add_render_object(GameObject* gameObject);
+	void add_ray(glm::vec3 origin, glm::vec3 direction, float length);
+	std::vector<Renderer::Ray*> get_rays();
 	void remove_render_object(int index);
 	std::vector<GameObject*> get_rendered_entities();
 	void add_light_render_object(GameObject* gameObject);
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	
 	void create_menu(float deltaTime);
-	void draw_ray(glm::vec3 ray);
 	void deselect_index();
 	glm::vec3 get_ray_vector();
-	void cast_ray(int xpos, int ypos);
-	bool check_x_axis(GameObject* entity);
-	bool check_y_axis(GameObject* entity);
-	bool check_z_axis(GameObject* entity);
+	float get_window_width();
+	float get_window_height();
 	int get_selected_index();
 	void select_entity(float xpos, float ypos);
 
 	void draw_aabb(const glm::vec3& minAABB,const glm::vec3& maxAABB);
+	void draw_rays();
 	void draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix);
 	void draw_skinned(Model* model, glm::mat4 modelMatrix, std::vector<glm::mat4>* transform);
 	void render_grass(glm::vec3 pos, Camera* camera);

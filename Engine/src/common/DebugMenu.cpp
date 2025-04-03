@@ -85,7 +85,7 @@ void DebugMenu::draw_entity_hierarchy(std::vector<GameObject*>& entities) {
     if (ImGui::CollapsingHeader("Entity Hierarchy")) {
         for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++) {
             if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str())) {
-                GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f));
+                GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f), true);
                 entities.push_back(entity);
                 Renderer::add_render_object(entity);
             }

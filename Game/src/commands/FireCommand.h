@@ -1,13 +1,13 @@
 #ifndef FIRE_COMMAND_H
 #define FIRE_COMMAND_H
+#include<math/physics/ErlPhysics.h>
 #include"input/Command.h"
-#include"renderer/Renderer.h"
-#include"input/InputManager.h"
 
 class FireCommand : public Command {
-public:
-    FireCommand();
-    void execute() override;
-private:
+    public:
+        FireCommand(Camera* camera);
+        void execute() override;
+    private:
+        Camera* m_camera;
 };
 #endif // !FIRE_COMMAND_H

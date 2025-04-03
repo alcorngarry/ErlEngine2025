@@ -81,12 +81,11 @@ void AssetManager::load()
 	assetMap[8] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal.obj");
 	assetMap[9] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal_map.obj");
 	assetMap[10] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/saucer.obj");
-	assetMap[11] = new Model((char*)"C:/Dev/assets/sonar/player_body.obj");
+	assetMap[11] = new Model((char*)"C:/Dev/assets/sonar/block.obj");
 
 	load_sky_box();
 
-	uiAssetMap[0] = load_texture("C:/Dev/assets/sonar/crosshair006.png", false, false);
-
+	uiAssetMap[0] = load_texture("C:/Dev/assets/sonar/crosshair006.png", true, false);
 	//grassId = load_texture("C:/Dev/assets/party_game/Billboard_grass/Billboard_grass/sprites/n_grass_diff_0_40.png", true, false);*/
 }
 

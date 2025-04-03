@@ -37,6 +37,7 @@
     <ClInclude Include="src\game_objects\Mesh.h" />
     <ClInclude Include="src\game_objects\Model.h" />
     <ClInclude Include="src\math\ErlMath.h" />
+    <ClInclude Include="src\math\physics\ErlPhysics.h" />
     <ClInclude Include="src\networking\Server.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="src\game_objects\Mesh.cpp" />
     <ClCompile Include="src\game_objects\Model.cpp" />
     <ClCompile Include="src\math\ErlMath.cpp" />
+    <ClCompile Include="src\math\physics\ErlPhysics.cpp" />
     <ClCompile Include="src\networking\Server.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\ui\UIElement.cpp" />

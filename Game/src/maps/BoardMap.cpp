@@ -132,9 +132,9 @@ void BoardMap::write_board_spaces()
 	for (int i = 0; i < boardSpaces.size(); i++)
 	{
 		writeMap << "{";
-		writeMap << "uniqueId: " << boardSpaces[i]->id << ", " 
+		writeMap << "uniqueId: " << boardSpaces[i]->assetId << ", "
 			<< "spaceType: " << static_cast<int>(boardSpaces[i]->spaceType) << ", "
-			<< "nextSpaces: " << "[" << boardSpaces[i]->nextSpace[0]->id << "], "
+			<< "nextSpaces: " << "[" << boardSpaces[i]->nextSpace[0]->assetId << "], "
 			<< "position: " << boardSpaces[i]->Position.x << "," << boardSpaces[i]->Position.y << "," << boardSpaces[i]->Position.z << ", "
 			<< "scale: " << boardSpaces[i]->Size.x << "," << boardSpaces[i]->Size.y << "," << boardSpaces[i]->Size.z << ", "
 			<< "rotation: " << boardSpaces[i]->Rotation.x << "," << boardSpaces[i]->Rotation.y << "," << boardSpaces[i]->Rotation.z;

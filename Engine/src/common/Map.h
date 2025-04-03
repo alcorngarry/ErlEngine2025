@@ -41,6 +41,7 @@ class Map
 		void read_lights();
 		void duplicate_model(int selectedIndex);
 		void remove_model(int selectedIndex);
+		void toggle_render(int index);
 	protected:
 		std::ofstream writeMap;
 		std::ifstream readMap;

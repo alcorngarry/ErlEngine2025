@@ -36,8 +36,8 @@ void Chamber::draw(float deltaTime)
 
 void Chamber::cast_ray_logic(Renderer::Ray* ray)
 {
-	GameObject* selectedObject = ErlPhysics::check_collision(ray, entities);
-	if(selectedObject != nullptr) selectedObject->isRendered = false;
+	int index = ErlPhysics::check_collision(ray, Renderer::get_rendered_entities());
+	if (index != -1) toggle_render(index);
 }
 
 void Chamber::set_controls(float deltaTime)

@@ -6,14 +6,14 @@
 
 class GameObject {
 	public:
+		Model* GameModel;
 		glm::vec3 Position,Size,Rotation;
 		glm::mat4 ModelMatrix;
-		Model* GameModel;
-		uint16_t id;
+		uint16_t assetId;
+		uint16_t instanceId;
 		bool isRendered;
 		
-		GameObject(uint16_t id, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered);
-		
+		GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered);
 		virtual void update(float deltaTime);
 		glm::vec3 get_aabb_min() const;
 		glm::vec3 get_aabb_max() const;

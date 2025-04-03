@@ -47,7 +47,7 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
         draw_entity_properties(entity, camera);
 
         if (auto boardSpace = dynamic_cast<BoardSpace*>(entity)) {
-            std::string id = "BoardSpace: " + std::to_string((int)boardSpace->id);
+            std::string id = "BoardSpace: " + std::to_string((int)boardSpace->assetId);
             ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
         }
     }
@@ -65,10 +65,10 @@ void DebugMenu::display_board_tiles(std::vector<GameObject*> entities)
         for (size_t i = 0; i < entities.size(); ++i)
         {
             if (auto boardSpace = dynamic_cast<BoardSpace*>(entities[i])) {
-                idToBoardSpaceMap[boardSpace->id] = boardSpace;
+                idToBoardSpaceMap[boardSpace->assetId] = boardSpace;
                 boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
                 ImGui::PushID(i);
-                std::string id = "BoardSpace: " + std::to_string((int)boardSpace->id);
+                std::string id = "BoardSpace: " + std::to_string((int)boardSpace->assetId);
                 ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
                 ImGui::PopID();
             }

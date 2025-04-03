@@ -84,7 +84,6 @@ void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
 
 void Renderer::render(Camera* camera)
 {
-
 	m_camera = camera;
 	view = m_camera->get_view_matrix();
 	projection = m_camera->get_projection_matrix();

@@ -6,7 +6,7 @@
 class ToggleMenuCommand : public Command {
 public:
     ToggleMenuCommand(Game* game);
-    void execute() override;
+    void execute(float deltaTime) override;
 
 private:
     Game* game;

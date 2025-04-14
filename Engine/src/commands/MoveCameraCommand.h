@@ -6,11 +6,7 @@
 #include"common/Camera.h"
 #include"input/InputManager.h"
 
-enum Movement {
-    FORWARD,
-    BACK,
-    LEFT,
-    RIGHT,
+enum CameraMovement {
     MOUSE_DRAG,
     SCROLL,
     ORBIT,
@@ -19,12 +15,11 @@ enum Movement {
 
 class MoveCameraCommand : public Command {
 public:
-    MoveCameraCommand(Camera* camera, float deltaTime, Movement movement);
-    void execute() override;
+    MoveCameraCommand(Camera* camera, CameraMovement movement);
+    void execute(float deltaTime) override;
 
 private:
     Camera* camera;
-    Movement movement;
-    float deltaTime;
+    CameraMovement movement;
 };
 #endif // !MOVE_CAMERA_COMMAND_H

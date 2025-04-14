@@ -2,7 +2,7 @@
 
 AddSubtractCountCommand::AddSubtractCountCommand(int& count, bool isAdd) : count(count), isAdd(isAdd) {}
 
-void AddSubtractCountCommand::execute()
+void AddSubtractCountCommand::execute(float deltaTime)
 {
 	if (isAdd)
 	{

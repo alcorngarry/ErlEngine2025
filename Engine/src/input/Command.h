@@ -3,7 +3,7 @@
 
 class Command {
 public:
-    virtual void execute() = 0;
+    virtual void execute(float delta) = 0;
     virtual ~Command() = default;
     bool isContinuous = false;
 };

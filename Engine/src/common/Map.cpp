@@ -8,10 +8,8 @@ Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
 void Map::save()
 {
 	writeMap = std::ofstream{ fileName + ".esf" };
-
 	write_models();
 	write_lights();
-
 	writeMap.close();
 }
 
@@ -21,14 +19,12 @@ void Map::write_models()
 	for (int i = 0; i < entities.size(); i++)
 	{
 		writeMap << "{";
-		//don't save ball location
-		if (entities[i]->assetId != 5)
-		{
-			writeMap << "assetId: " << entities[i]->assetId << ", " << "position: "
-				<< entities[i]->Position.x << "," << entities[i]->Position.y << "," << entities[i]->Position.z << ", "
-				<< "scale: " << entities[i]->Size.x << "," << entities[i]->Size.y << "," << entities[i]->Size.z << ", "
-				<< "rotation: " << entities[i]->Rotation.x << "," << entities[i]->Rotation.y << "," << entities[i]->Rotation.z << ", " << "isRendered: " << (entities[i]->isRendered == 1);
-		}
+
+		writeMap << "assetId: " << entities[i]->assetId << ", " << "position: "
+			<< entities[i]->Position.x << "," << entities[i]->Position.y << "," << entities[i]->Position.z << ", "
+			<< "scale: " << entities[i]->Size.x << "," << entities[i]->Size.y << "," << entities[i]->Size.z << ", "
+			<< "rotation: " << entities[i]->Rotation.x << "," << entities[i]->Rotation.y << "," << entities[i]->Rotation.z << ", " << "isRendered: " << (entities[i]->isRendered == 1);
+
 		if (i == entities.size() - 1)
 		{
 			writeMap << "}";
@@ -75,15 +71,13 @@ void Map::load(float windowWidth, float windowHeight)
 		} else if (line == "lights: ") {
 			read_lights();
 		}
-		else if (line == "boardSpaces: ")
-		{
-			read_board_spaces();
-		}
+		
 	} 
-
-	load_camera(windowWidth, windowHeight);
 	readMap.close();
 	load_skybox();
+	// important order, think before changing
+	load_camera(windowWidth, windowHeight);
+	load_player();
 }
 
 void Map::load_camera(float windowWidth, float windowHeight)
@@ -122,7 +116,6 @@ GameObject* Map::read_asset()
 	glm::vec3 position, scale, rotation;
 	bool isRendered;
 
-	//asset
 	getline(readMap, line, ',');
 	assetId = std::stof(line);
 
@@ -195,7 +188,7 @@ void Map::toggle_render(int index)
 	if (isRendered)
 	{
 		entities[index]->isRendered = false;
-		Renderer::remove_render_object(index);
+		Renderer::remove_render_object(entities[index]->instanceId);
 	}
 	else {
 		entities[index]->isRendered = true;

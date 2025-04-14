@@ -1,7 +1,0 @@
-models: [{assetId: 7, position: 0,0,-220.85, scale: 1,1,1, rotation: -90.1175,-0,0},
-{assetId: 7, position: 0,0,-220.85, scale: 1,1,1, rotation: -90.1175,-0,0},
-{assetId: 7, position: 0,0,206.894, scale: 1,1,1, rotation: -89.6089,-0,0},
-{assetId: 7, position: 0,0,206.894, scale: 1,1,1, rotation: -89.6089,-0,0},
-{assetId: 2, position: 0,0,0, scale: 3.53312,1,4.01679, rotation: 0,-0,0},
-{assetId: 2, position: 0,0,0, scale: 3.53312,1,4.01679, rotation: 0,-0,0}]
-lights: []

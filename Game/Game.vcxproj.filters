@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\maps\BoardMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\game_objects\CharacterController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,43 +24,19 @@
     <ClCompile Include="src\game_objects\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\maps\PongMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\commands\MoveDownCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\commands\MoveUpCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\commands\SelectCardCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\SelectCardLeftCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\SelectCardRightCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\MoveCameraCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\commands\MoveEntityCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\commands\SaveCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\SelectEntityCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\commands\ToggleMenuCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\commands\CloseWindowCommand.cpp">
@@ -90,13 +63,7 @@
     <ClCompile Include="src\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\maps\CountingSheep.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_objects\board_space\BoardSpace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ImGuizmo.cpp">
@@ -108,11 +75,17 @@
     <ClCompile Include="src\commands\FireCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\JumpCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\MovePlayerCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\ToggleMenuCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\maps\BoardMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\game_objects\CharacterController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -122,43 +95,16 @@
     <ClInclude Include="src\game_objects\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\maps\PongMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\commands\MoveDownCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\commands\MoveUpCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\commands\SelectCardCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\SelectCardLeftCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\SelectCardRightCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\MoveCameraCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\commands\MoveEntityCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\commands\OpenMenuCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\commands\SaveCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\AddRemoveEntityCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\SelectEntityCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\commands\ToggleMenuCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\commands\CloseWindowCommand.h">
@@ -191,13 +137,7 @@
     <ClInclude Include="src\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\maps\CountingSheep.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\commands\AddSubtractCountCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_objects\board_space\BoardSpace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ImGuizmo.h">
@@ -209,13 +149,20 @@
     <ClInclude Include="src\commands\FireCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\commands\JumpCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\MovePlayerCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\ToggleMenuCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font\Antonio-Bold.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\maps\test_map_1.esf" />
-    <None Include="res\maps\mini_game_1.esf" />
     <None Include="res\maps\chamber_1.esf" />
   </ItemGroup>
 </Project>

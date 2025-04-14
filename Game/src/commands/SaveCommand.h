@@ -6,7 +6,7 @@
 class SaveCommand : public Command {
 public:
     SaveCommand(Map* map);
-    void execute() override;
+    void execute(float deltaTime) override;
 
 private:
     Map* map;

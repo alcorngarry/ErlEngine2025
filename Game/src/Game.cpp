@@ -15,46 +15,20 @@ void Game::init()
 
 	level = 0;
 	Maps[level]->load(m_windowWidth, m_windowHeight);
-	Maps[level]->set_controls(0.0f);
+	Maps[level]->set_controls();
 }
 
 void Game::update_controls(GameState before, GameState after)
 {
-	switch (before)
+	if (before == GAME_ACTIVE)
 	{
-		case DEBUG_MENU: {
-			InputManager::remove_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE);
-			InputManager::remove_mouse_binding(-1);
-			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
-			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT);
-			InputManager::remove_key_binding(GLFW_KEY_N);
-			InputManager::remove_key_binding(GLFW_KEY_P);
-			break;
-		}
-		case ACTIVE: {
-			//do this in the map.. probably really need to think aboute per map controls.
-			InputManager::remove_mouse_binding(-2);
-			InputManager::remove_key_binding(GLFW_KEY_W);
-			InputManager::remove_key_binding(GLFW_KEY_A);
-			InputManager::remove_key_binding(GLFW_KEY_S);
-			InputManager::remove_key_binding(GLFW_KEY_D);
-			InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
-		}
-		default: break;
+		Maps[level]->clear_controls();
 	}
-	switch (after)
+
+	if (after == GAME_ACTIVE)
 	{
-		case DEBUG_MENU: {
-			InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(Maps[level]->camera, 0.0f, MOUSE_DRAG), true);
-			InputManager::set_mouse_binding(-1, new MoveCameraCommand(Maps[level]->camera, 0.0f, SCROLL));
-			InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(false));
-			InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(true));
-			InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(Maps[level]->camera, 0.0f, ORBIT));
-			InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
-			InputManager::set_key_binding(GLFW_KEY_P, new AddRemoveEntityCommand(Maps[level], false));
-			break;
-		}
-		default: break;
+		Renderer::disable_menu();
+		Maps[level]->set_controls();
 	}
 }
 
@@ -88,8 +62,9 @@ void Game::render(float deltaTime)
 {
 	Maps[level]->draw(deltaTime);
 
-	if (State == DEBUG_MENU)
-	{
+	/*if (State == DEBUG_MENU)
+	{*/
+		
 		Renderer::create_menu(deltaTime);
-	}
-} 
+	//}
+}

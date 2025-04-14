@@ -8,7 +8,6 @@ std::map<std::vector<int>, Command*> gamepadBindings;
 GLFWwindow* m_window;
 
 double xpos, ypos = 0.0f;
-//may/maynot be center of screen
 double lastX;
 double lastY;
 double scrollY = 0;
@@ -26,7 +25,7 @@ void InputManager::init(GLFWwindow* window) {
     glfwSetScrollCallback(window, scroll_callback);
 }
 
-void InputManager::update() {
+void InputManager::update(float deltaTime) {
 
     update_cursor();
 
@@ -38,7 +37,7 @@ void InputManager::update() {
             (doubleBindingMap.count(key) > 0 && !are_multiple_keys_pressed(key, doubleBindingMap.at(key))))
         {
             if (glfwGetKey(m_window, key) == GLFW_PRESS && !KeysProcessed[key]) {
-                command->execute();
+                command->execute(deltaTime);
                 KeysProcessed[key] = !command->isContinuous;
             }
             else if (glfwGetKey(m_window, key) == GLFW_RELEASE) {
@@ -61,12 +60,12 @@ void InputManager::update() {
                     if (mouseButton == GLFW_MOUSE_BUTTON_MIDDLE) {
                         glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
                     }
-                    command->execute();
+                    command->execute(deltaTime);
                     MouseProcessed[mouseButton] = true;
                 }
                 else if (glfwGetMouseButton(m_window, mouseButton) == GLFW_PRESS && MouseProcessed[mouseButton]) {
                     if (mouseButton == GLFW_MOUSE_BUTTON_MIDDLE) {
-                        command->execute();
+                        command->execute(deltaTime);
                         glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
                     }
                 }
@@ -87,12 +86,12 @@ void InputManager::update() {
             if (keyAndMouseButtons->isDrag) {
                 glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
             }
-            command->execute();
+            command->execute(deltaTime);
             keyAndMouseButtons->buttonsProcessed = true;
         }
         else if (are_multiple_keys_pressed(keyAndMouseButtons->firstButton, keyAndMouseButtons->secondButton) && keyAndMouseButtons->buttonsProcessed) {
             if (keyAndMouseButtons->isDrag) {
-                command->execute();
+                command->execute(deltaTime);
                 glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
             }
         }
@@ -108,7 +107,7 @@ void InputManager::update() {
                 for (int button = 0; button < GLFW_GAMEPAD_BUTTON_LAST + 1; ++button) {
                     if (state.buttons[button] == GLFW_PRESS && !GamepadButtonsProcessed[button]) {
                         if (gamepadBindings.find({ i, button }) != gamepadBindings.end()) {
-                            gamepadBindings[{i, button}]->execute();
+                            gamepadBindings[{i, button}]->execute(deltaTime);
                             GamepadButtonsProcessed[button] = true;
                         }
                     }
@@ -130,7 +129,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     scrollY = yoffset;
     Command* scrollCommand = mouseBindings[-1];
-    if(scrollCommand) scrollCommand->execute();
+    if(scrollCommand) scrollCommand->execute(0.0f);
 }
 
 double InputManager::get_scroll_value()
@@ -211,7 +210,7 @@ void InputManager::update_cursor()
     if (pitch < -89.0f) pitch = -89.0f;
 
     Command* lookAroundCommand = mouseBindings[-2];
-    if (lookAroundCommand) lookAroundCommand->execute();
+    if (lookAroundCommand) lookAroundCommand->execute(0.0f);
 }
 
 double InputManager::get_xpos()

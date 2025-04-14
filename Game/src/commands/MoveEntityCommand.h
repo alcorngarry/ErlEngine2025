@@ -7,7 +7,7 @@ class MoveEntityCommand : public Command {
 public:
     // for right now  axis = 0:x, 1:y, 2:z
     MoveEntityCommand(GameObject* entity, int axis, float moveSpeed);
-    void execute() override;
+    void execute(float deltaTime) override;
 
 private:
     GameObject* entity;

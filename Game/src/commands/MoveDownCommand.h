@@ -5,11 +5,10 @@ class Player;
 
 class MoveDownCommand : public Command {
 public:
-    MoveDownCommand(Player* player, float deltaTime);
-    void execute() override;
+    MoveDownCommand(Player* player);
+    void execute(float deltaTime) override;
 
 private:
     Player* player;
-    float deltaTime;
 };
 #endif // !MOVE_DOWN_COMMAND_H

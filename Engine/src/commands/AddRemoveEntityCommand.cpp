@@ -2,7 +2,7 @@
 
 AddRemoveEntityCommand::AddRemoveEntityCommand(Map* map, bool isAdd) : map(map), isAdd(isAdd) {}
 
-void AddRemoveEntityCommand::execute()
+void AddRemoveEntityCommand::execute(float deltaTime)
 {
 	if (isAdd)
 	{

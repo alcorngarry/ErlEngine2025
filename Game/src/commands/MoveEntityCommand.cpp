@@ -2,7 +2,7 @@
 
 MoveEntityCommand::MoveEntityCommand(GameObject* entity, int axis, float moveSpeed) : entity(entity), axis(axis), moveSpeed(moveSpeed) {}
 
-void MoveEntityCommand::execute() 
+void MoveEntityCommand::execute(float deltaTime)
 {
 	if (axis == 0)
 	{

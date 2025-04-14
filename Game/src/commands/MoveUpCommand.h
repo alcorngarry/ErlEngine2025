@@ -5,8 +5,8 @@
 
 class MoveUpCommand : public Command {
 public:
-    MoveUpCommand(Player* player, float deltaTime);
-    void execute() override;
+    MoveUpCommand(Player* player);
+    void execute(float deltaTime) override;
 
 private:
     Player* player;

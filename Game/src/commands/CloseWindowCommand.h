@@ -6,7 +6,7 @@
 class CloseWindowCommand : public Command {
 public:
     CloseWindowCommand(GLFWwindow* window);
-    void execute() override;
+    void execute(float deltaTime) override;
 private:
     GLFWwindow* window;
 };

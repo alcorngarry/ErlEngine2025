@@ -21,8 +21,9 @@ DebugMenu::DebugMenu(GLFWwindow* glfwWindow) {
 
 DebugMenu::~DebugMenu() {}
 
-void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, float deltaTime) 
+void DebugMenu::create_menu(std::map<uint16_t, GameObject*>& entities, Camera* camera, float deltaTime) 
 {
+    m_camera = camera;
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -38,6 +39,7 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
     draw_entity_hierarchy(entities);
     draw_camera_position(camera);
     display_board_tiles(entities);
+    //display_player_velocity(entities);
     draw_mouse_pos();
     draw_ray_cast();
 
@@ -45,21 +47,17 @@ void DebugMenu::create_menu(std::vector<GameObject*>& entities, Camera* camera, 
     if (selectedIndex != -1) {
         GameObject* entity = entities[selectedIndex];
         draw_entity_properties(entity, camera);
-
-        if (auto boardSpace = dynamic_cast<BoardSpace*>(entity)) {
-            std::string id = "BoardSpace: " + std::to_string((int)boardSpace->assetId);
-            ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
-        }
     }
 
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //awful fix later
 }
 
-void DebugMenu::display_board_tiles(std::vector<GameObject*> entities)
+void DebugMenu::display_board_tiles(std::map<uint16_t, GameObject*> entities)
 {
-    if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
+  /*  if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
     {
         std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
         for (size_t i = 0; i < entities.size(); ++i)
@@ -73,7 +71,7 @@ void DebugMenu::display_board_tiles(std::vector<GameObject*> entities)
                 ImGui::PopID();
             }
         }
-    }
+    }*/
 }
 
 void DebugMenu::display_fps(float deltaTime) {
@@ -81,17 +79,30 @@ void DebugMenu::display_fps(float deltaTime) {
     ImGui::Text(fps.c_str());
 }
 
-void DebugMenu::draw_entity_hierarchy(std::vector<GameObject*>& entities) {
+void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities) {
     if (ImGui::CollapsingHeader("Entity Hierarchy")) {
         for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++) {
             if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str())) {
                 GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f), true);
-                entities.push_back(entity);
                 Renderer::add_render_object(entity);
             }
         }
     }
 }
+
+//void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> entities)
+//{
+//
+//    for (const auto& entity : entities)
+//    {
+//        if (entity.second->assetId == 99)
+//        {
+//            dynamic_cast<Player*>(entity.second);
+//        }
+//    }
+//    std::string fps = "velocity = " +;
+//    ImGui::Text(fps.c_str());
+//}
 
 void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
     ImGui::Text("Entity %zu", Renderer::get_selected_index());
@@ -201,17 +212,29 @@ void DebugMenu::create_new_map()
 {
 }
 
-void DebugMenu::load_board_space_data(std::vector<BoardSpace*> boardSpaces)
-{
-    ImGui::Text("BoardData:");
-    for (BoardSpace* boardSpace : boardSpaces)
-    {
-        ImGui::Text("spaceID", boardSpace->nextSpaceIds[0]);
-    }
-}
-
 void DebugMenu::shut_down() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+void DebugMenu::set_controls()
+{
+    InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_camera, MOUSE_DRAG), true);
+    InputManager::set_mouse_binding(-1, new MoveCameraCommand(m_camera, SCROLL));
+    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(false));
+    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(true));
+    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_camera, ORBIT));
+    //InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
+    //InputManager::set_key_binding(GLFW_KEY_P, new AddRemoveEntityCommand(Maps[level], false));
+}
+
+void DebugMenu::clear_controls()
+{
+    InputManager::remove_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE);
+    InputManager::remove_mouse_binding(-1);
+    InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
+    InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT);
+    InputManager::remove_key_binding(GLFW_KEY_N);
+    InputManager::remove_key_binding(GLFW_KEY_P);
 }

@@ -1,15 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
-#include<glm/glm.hpp>
-#include"common/Map.h"
-#include"maps/BoardMap.h"
 #include"maps/Chamber.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
-#include"commands/MoveCameraCommand.h"
-#include"commands/SelectEntityCommand.h"
-#include"commands/AddRemoveEntityCommand.h"
-#include"commands/MoveEntityCommand.h"
 
 enum GameState {
 	GAME_ACTIVE,

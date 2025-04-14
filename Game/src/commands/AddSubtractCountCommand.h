@@ -7,7 +7,7 @@
 class AddSubtractCountCommand : public Command {
 public:
     AddSubtractCountCommand(int& count, bool isAdd);
-    void execute() override;
+    void execute(float deltaTime) override;
 private:
     int& count;
     bool isAdd;

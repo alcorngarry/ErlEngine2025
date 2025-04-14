@@ -20,6 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\third-party-dependencies\include\stb_image\stb_image.h" />
+    <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
+    <ClInclude Include="src\commands\MoveCameraCommand.h" />
+    <ClInclude Include="src\commands\SelectEntityCommand.h" />
     <ClInclude Include="src\common\DebugMenu.h" />
     <ClInclude Include="src\common\SkyBox.h" />
     <ClInclude Include="src\game_objects\animation\Animation.h" />
@@ -48,6 +51,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\third-party-dependencies\include\glad\glad.c" />
     <ClCompile Include="..\..\..\..\third-party-dependencies\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
+    <ClCompile Include="src\commands\MoveCameraCommand.cpp" />
+    <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
     <ClCompile Include="src\common\DebugMenu.cpp" />
     <ClCompile Include="src\common\Skybox.cpp" />
     <ClCompile Include="src\game_objects\animation\Animation.cpp" />
@@ -71,6 +77,8 @@
     <ClCompile Include="src\ui\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\renderer\shaders\aabb.frag.glsl" />
+    <None Include="src\renderer\shaders\aabb.vert.glsl" />
     <None Include="src\renderer\shaders\cubemap.frag.glsl" />
     <None Include="src\renderer\shaders\cubemap.vert.glsl" />
     <None Include="src\renderer\shaders\default.frag.glsl" />
@@ -84,7 +92,6 @@
     <None Include="src\renderer\shaders\light.frag.glsl" />
     <None Include="src\renderer\shaders\light.vert.glsl" />
     <None Include="src\renderer\shaders\line.frag.glsl" />
-    <None Include="src\renderer\shaders\line.gs.glsl" />
     <None Include="src\renderer\shaders\line.vert.glsl" />
     <None Include="src\renderer\shaders\picking.frag.glsl" />
     <None Include="src\renderer\shaders\picking.vert.glsl" />
@@ -205,7 +212,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Dev\third-party-dependencies\include;$(SolutionDir)Engine\vendor;C:\Dev\third-party-dependencies\imgui;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

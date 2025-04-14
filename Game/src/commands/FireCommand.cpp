@@ -2,7 +2,8 @@
 
 FireCommand::FireCommand(Camera* camera) : m_camera(camera) {}
 
-void FireCommand::execute() 
+void FireCommand::execute(float deltaTime)
 {
-	ErlPhysics::cast_ray_from_screen(m_camera);
+	ErlPhysics::Ray* ray = ErlPhysics::cast_ray_from_screen(m_camera);
+	Renderer::add_ray(ray);
 }

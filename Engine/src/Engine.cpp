@@ -11,7 +11,7 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 
 	void get_resolution();
 	//const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "sonar", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Sonar", NULL, NULL);
 
 	if (window == NULL)
 	{

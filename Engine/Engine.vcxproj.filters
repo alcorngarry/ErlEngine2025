@@ -75,9 +75,6 @@
     <ClInclude Include="src\game_objects\SkinnedGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\DebugMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\math\ErlMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -88,6 +85,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\physics\ErlPhysics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\MoveCameraCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\SelectEntityCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\AddRemoveEntityCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\DebugMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,9 +155,6 @@
     <ClCompile Include="src\game_objects\SkinnedGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\DebugMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\math\ErlMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,6 +165,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\math\physics\ErlPhysics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\MoveCameraCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\SelectEntityCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\DebugMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -183,6 +201,7 @@
     <None Include="src\renderer\shaders\default.gs.glsl" />
     <None Include="src\renderer\shaders\line.vert.glsl" />
     <None Include="src\renderer\shaders\line.frag.glsl" />
-    <None Include="src\renderer\shaders\line.gs.glsl" />
+    <None Include="src\renderer\shaders\aabb.vert.glsl" />
+    <None Include="src\renderer\shaders\aabb.frag.glsl" />
   </ItemGroup>
 </Project>

@@ -19,16 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\AddSubtractCountCommand.cpp" />
     <ClCompile Include="src\commands\CloseWindowCommand.cpp" />
     <ClCompile Include="src\commands\FireCommand.cpp" />
-    <ClCompile Include="src\commands\MoveCameraCommand.cpp" />
     <ClCompile Include="src\commands\MoveEntityCommand.cpp" />
+    <ClCompile Include="src\commands\MovePlayerCommand.cpp" />
     <ClCompile Include="src\commands\SaveCommand.cpp" />
-    <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
+    <ClCompile Include="src\commands\JumpCommand.cpp" />
     <ClCompile Include="src\commands\ToggleMenuCommand.cpp" />
-    <ClCompile Include="src\game_objects\board_space\BoardSpace.cpp" />
     <ClCompile Include="src\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -37,32 +35,23 @@
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\maps\BoardMap.cpp" />
     <ClCompile Include="src\game_objects\CharacterController.cpp" />
     <ClCompile Include="src\commands\MoveDownCommand.cpp" />
     <ClCompile Include="src\commands\MoveUpCommand.cpp" />
-    <ClCompile Include="src\commands\SelectCardCommand.cpp" />
-    <ClCompile Include="src\commands\SelectCardLeftCommand.cpp" />
-    <ClCompile Include="src\commands\SelectCardRightCommand.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\game_objects\Player.cpp" />
     <ClCompile Include="src\maps\Chamber.cpp" />
-    <ClCompile Include="src\maps\CountingSheep.cpp" />
-    <ClCompile Include="src\maps\PongMap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
     <ClInclude Include="src\commands\AddSubtractCountCommand.h" />
     <ClInclude Include="src\commands\CloseWindowCommand.h" />
     <ClInclude Include="src\commands\FireCommand.h" />
-    <ClInclude Include="src\commands\MoveCameraCommand.h" />
+    <ClInclude Include="src\commands\JumpCommand.h" />
     <ClInclude Include="src\commands\MoveEntityCommand.h" />
-    <ClInclude Include="src\commands\OpenMenuCommand.h" />
+    <ClInclude Include="src\commands\MovePlayerCommand.h" />
     <ClInclude Include="src\commands\SaveCommand.h" />
-    <ClInclude Include="src\commands\SelectEntityCommand.h" />
     <ClInclude Include="src\commands\ToggleMenuCommand.h" />
-    <ClInclude Include="src\game_objects\board_space\BoardSpace.h" />
     <ClInclude Include="src\ImGuizmo.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />
@@ -73,18 +62,12 @@
     <ClInclude Include="src\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\maps\BoardMap.h" />
     <ClInclude Include="src\game_objects\CharacterController.h" />
     <ClInclude Include="src\commands\MoveDownCommand.h" />
     <ClInclude Include="src\commands\MoveUpCommand.h" />
-    <ClInclude Include="src\commands\SelectCardCommand.h" />
-    <ClInclude Include="src\commands\SelectCardLeftCommand.h" />
-    <ClInclude Include="src\commands\SelectCardRightCommand.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\game_objects\Player.h" />
     <ClInclude Include="src\maps\Chamber.h" />
-    <ClInclude Include="src\maps\CountingSheep.h" />
-    <ClInclude Include="src\maps\PongMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
@@ -96,8 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\maps\chamber_1.esf" />
-    <None Include="res\maps\test_map_1.esf" />
-    <None Include="res\maps\mini_game_1.esf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -211,7 +192,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\src;$(SolutionDir)Editor\src;$(ProjectDir)src;C:\Dev\third-party-dependencies\include;$(SolutionDir)Editor\src;$(SolutionDir)Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

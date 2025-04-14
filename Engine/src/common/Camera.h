@@ -17,15 +17,16 @@ class Camera {
 		void update_view_matrix(glm::mat4 view);
 		glm::mat4 get_projection_matrix() const;
 		void update_view_matrix();
+		
+		float m_windowHeight;
+		float m_windowWidth;
 	private:
 		glm::vec3 cameraPos;
 		glm::vec3 cameraFront;
 		glm::vec3 cameraUp;
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
-
-		float m_windowHeight;
-		float m_windowWidth;
+		
 		void setCameraToLookAtOrigin();
 };
 #endif // !CAMERA_H

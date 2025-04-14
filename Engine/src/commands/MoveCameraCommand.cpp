@@ -1,47 +1,21 @@
 #include"MoveCameraCommand.h"
 
-MoveCameraCommand::MoveCameraCommand(Camera* camera, float deltaTime, Movement movement) : camera(camera), deltaTime(deltaTime), movement(movement)
+MoveCameraCommand::MoveCameraCommand(Camera* camera, CameraMovement movement) : camera(camera), movement(movement)
 {
-	/*switch (movement)
-	{
-		case FORWARD: isContinuous = true;
-		case BACK: isContinuous = true;
-		case LEFT: isContinuous = true;
-		case RIGHT: isContinuous = true;
-		default:;
-	}*/
-
 	isContinuous = true;
-		
 }
 
-void MoveCameraCommand::execute() 
+void MoveCameraCommand::execute(float deltaTime)
 {
-	float cameraSpeed = static_cast<float>(100.0f * deltaTime);
+	float cameraSpeed = static_cast<float>(.5f * deltaTime);
 	switch (movement)
 	{
-		case FORWARD: {
-			camera->set_camera_pos(camera->get_camera_pos() + cameraSpeed * glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z));
-			break;
-		}
-		case BACK: {
-			camera->set_camera_pos(camera->get_camera_pos() - cameraSpeed * glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z));
-			break;
-		}
-		case LEFT: {
-			camera->set_camera_pos(camera->get_camera_pos() - glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up())) * cameraSpeed);
-			break;
-		}
-		case RIGHT: {
-			camera->set_camera_pos(camera->get_camera_pos() + glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up())) * cameraSpeed);
-			break;
-		}
 		case MOUSE_DRAG: {
 			float deltaX = InputManager::get_xpos() - InputManager::get_last_xpos();
 			float deltaY = InputManager::get_ypos() - InputManager::get_last_ypos();
 
-			deltaX *= 0.1f;
-			deltaY *= 0.1f;
+			deltaX *= 0.1f * cameraSpeed;
+			deltaY *= 0.1f * cameraSpeed;
 
 			glm::mat4 transform = camera->get_view_matrix();
 			glm::vec3 right = glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up()));
@@ -59,8 +33,8 @@ void MoveCameraCommand::execute()
 		case ORBIT: {
 			float deltaX = InputManager::get_xpos() - InputManager::get_last_xpos();
 			float deltaY = InputManager::get_ypos() - InputManager::get_last_ypos();
-			deltaX *= .1;
-			deltaY *= .1;
+			deltaX *= .1 * cameraSpeed;
+			deltaY *= .1 * cameraSpeed;
 
 			if (deltaX != 0.0f)
 			{

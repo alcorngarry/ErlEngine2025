@@ -2,7 +2,7 @@
 
 SaveCommand::SaveCommand(Map* map) : map(map) {}
 
-void SaveCommand::execute() {
+void SaveCommand::execute(float deltaTime) {
 	map->save();
 	std::cout << "saved current map" << std::endl;
 }

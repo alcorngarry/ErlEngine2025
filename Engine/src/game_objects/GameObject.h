@@ -9,6 +9,7 @@ class GameObject {
 		Model* GameModel;
 		glm::vec3 Position,Size,Rotation;
 		glm::mat4 ModelMatrix;
+		static int idCounter;
 		uint16_t assetId;
 		uint16_t instanceId;
 		bool isRendered;

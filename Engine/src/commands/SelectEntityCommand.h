@@ -7,7 +7,7 @@
 class SelectEntityCommand : public Command {
 public:
     SelectEntityCommand(bool isDeselect);
-    void execute() override;
+    void execute(float deltaTime) override;
 private:
     bool isDeselect;
 };

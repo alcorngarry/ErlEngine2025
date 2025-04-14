@@ -9,6 +9,7 @@
 #include"renderer/Renderer.h"
 #include"AssetManager.h"
 #include"input/InputManager.h"
+#include"../../../Game/src/game_objects/Player.h"
 
 class Map 
 {
@@ -26,17 +27,19 @@ class Map
 
 		LoadState loadState;
 		State state;
-		std::vector<GameObject*> entities;
-		std::vector<GameObject*> lights;
+		std::vector<GameObject*> entities, lights;
 		std::vector<SkinnedGameObject*> skinned_entities;
+		Player* player;
 		Camera* camera;
 
 		Map(std::string mapName);
 		virtual void save();
 		virtual void load(float windowWidth, float windowHeight);
 		virtual void draw(float deltaTime);
-		virtual void set_controls(float deltaTime) = 0;
+		virtual void set_controls() = 0;
+		virtual void clear_controls() = 0;
 		virtual void update(float deltaTime) = 0;
+		
 		void read_models();
 		void read_lights();
 		void duplicate_model(int selectedIndex);
@@ -46,9 +49,8 @@ class Map
 		std::ofstream writeMap;
 		std::ifstream readMap;
 		std::string fileName;
-		virtual void load_skinned_objects() = 0;
+		virtual void load_player() = 0;
 		virtual void load_camera(float windowWidth, float windowHeight);
-		virtual void read_board_spaces() {};
 		void write_models();
 		void write_lights();
 	private:

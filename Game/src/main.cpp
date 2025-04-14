@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-		InputManager::update();
+		InputManager::update(deltaTime);
 	}
 
 	Engine::shut_down(window);

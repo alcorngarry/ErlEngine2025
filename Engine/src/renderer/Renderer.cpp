@@ -1,8 +1,8 @@
 #include"Renderer.h"
 
 std::vector<SkinnedGameObject*> m_skinned_entities;
-std::vector<GameObject*> m_entities, m_lights;
-std::vector<Renderer::Ray*> m_rays;
+std::map<uint16_t, GameObject*> m_entities, m_lights;
+std::vector<ErlPhysics::Ray*> m_rays;
 
 Shader* shaderProgram;
 Shader* lightShaderProgram;
@@ -11,6 +11,7 @@ Shader* pickingShaderProgram;
 Shader* cubemapShaderProgram;
 Shader* grassShaderProgram;
 Shader* lineShaderProgram;
+Shader* aabbShaderProgram;
 
 Camera* m_camera;
 SkyBox* m_skybox;
@@ -36,6 +37,7 @@ void Renderer::init_render(GLFWwindow* window)
 	pickingShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/picking.frag.glsl");
 	cubemapShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/cubemap.frag.glsl");
 	lineShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.frag.glsl");
+	aabbShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/aabb.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/aabb.frag.glsl");
 	grassShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.frag.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.gs.glsl");
 	debugMenu = new DebugMenu(window);
 	glfwGetWindowSize(window, &m_windowWidth, &m_windowHeight);
@@ -48,33 +50,33 @@ void Renderer::add_sky_box(SkyBox* skybox)
 
 void Renderer::add_render_object(GameObject* gameObject)
 {
-	m_entities.push_back(gameObject);
+	m_entities[gameObject->instanceId] = gameObject;
 }
 
-void Renderer::add_ray(glm::vec3 origin, glm::vec3 direction, float length)
+void Renderer::add_ray(ErlPhysics::Ray* ray)
 {
-	m_rays.push_back(new Renderer::Ray{ origin, direction, length });
+	m_rays.push_back(ray);
 }
 
-std::vector<Renderer::Ray*> Renderer::get_rays()
+std::vector<ErlPhysics::Ray*> Renderer::get_rays()
 {
 	return m_rays;
 }
 
-void Renderer::remove_render_object(int index)
+void Renderer::remove_ray_object(int index)
 {
-	m_entities.erase(m_entities.begin() + index);
-	selectedIndex = -1;
+	m_rays.erase(m_rays.begin() + index);
 }
 
-std::vector<GameObject*> Renderer::get_rendered_entities()
+void Renderer::remove_render_object(uint16_t uniqueID)
 {
-	return m_entities;
+	m_entities.erase(uniqueID);
+	selectedIndex = -1;
 }
 
 void Renderer::add_light_render_object(GameObject* gameObject)
 {
-	m_lights.push_back(gameObject);
+	m_lights[gameObject->instanceId] = gameObject;
 }
 
 void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
@@ -94,7 +96,6 @@ void Renderer::render(Camera* camera)
 	cubemapShaderProgram->setMat4("view", glm::mat4(glm::mat3(view)));
 	cubemapShaderProgram->setMat4("projection", projection);
 	m_skybox->draw();
-
 	
 	skinnedShaderProgram->use();
 	if (!m_lights.empty())
@@ -109,7 +110,6 @@ void Renderer::render(Camera* camera)
 	
 	for (SkinnedGameObject* skinned_entity : m_skinned_entities)
 	{
-		//draw_aabb(skinned_entity->GameModel->getMinAABB(), skinned_entity->GameModel->getMaxAABB());
 		Renderer::draw_skinned(skinned_entity->GameModel, skinned_entity->ModelMatrix, skinned_entity->transforms);
 	}
 
@@ -123,10 +123,13 @@ void Renderer::render(Camera* camera)
 	}
 	shaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 
-	for (int i = 0; i < m_entities.size(); i++)
+	for (const auto& m_entity : m_entities)
 	{
-		shaderProgram->setBool("selected", i == Renderer::get_selected_index());
-		Renderer::draw_static(shaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
+		if (m_entity.second->assetId != 99)
+		{
+			shaderProgram->setBool("selected", m_entity.first == Renderer::get_selected_index());
+			Renderer::draw_static(shaderProgram, m_entity.second->GameModel, m_entity.second->ModelMatrix);
+		}
 	}
 
 	//render_grass(glm::vec3(0.0f), camera);
@@ -134,11 +137,18 @@ void Renderer::render(Camera* camera)
 
 	lightShaderProgram->use();
 	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
-	for (GameObject* light : m_lights)
+	for (const auto& light : m_lights)
 	{
-		Renderer::draw_static(lightShaderProgram, light->GameModel, light->ModelMatrix);
+		Renderer::draw_static(lightShaderProgram, light.second->GameModel, light.second->ModelMatrix);
 	}
 
+	aabbShaderProgram->use();
+	aabbShaderProgram->setMat4("view", view);
+	aabbShaderProgram->setMat4("projection", projection);
+	for (const auto& m_entity : m_entities)
+	{
+		draw_aabb(m_entity.second->GameModel->getMinAABB(), m_entity.second->GameModel->getMaxAABB(), m_entity.second->ModelMatrix);
+	}
 }
 
 void Renderer::render_grass(glm::vec3 pos, Camera* camera)
@@ -203,8 +213,11 @@ void Renderer::draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix)
 	model->draw(*shaderProgram);
 }
 
-void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
+// these are all inefficient creating and deleting buffers but who cares for now.
+void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB, const glm::mat4& model)
 {
+	aabbShaderProgram->setMat4("model", model);
+
 	const GLfloat vertices[] = {
 		minAABB.x, minAABB.y, minAABB.z,
 		minAABB.x, minAABB.y, maxAABB.z,
@@ -239,7 +252,6 @@ void Renderer::draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB)
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
-
 	glBindVertexArray(VAO);
 	glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -255,7 +267,7 @@ void Renderer::draw_rays()
 	lineShaderProgram->setMat4("view", view);
 	lineShaderProgram->setMat4("projection", projection);
 
-	for (Renderer::Ray* ray : m_rays)
+	for (ErlPhysics::Ray* ray : m_rays)
 	{
 		glm::vec3 startPoint = out_origin;
 		glm::vec3 endPoint = ray->direction * ray->length;
@@ -289,8 +301,15 @@ void Renderer::draw_rays()
 void Renderer::create_menu(float deltaTime)
 {
 	debugMenu->create_menu(m_entities, m_camera, deltaTime);
+	debugMenu->set_controls();
 }
 
+void Renderer::disable_menu()
+{
+	debugMenu->clear_controls();
+}
+
+// to be deprecated... probably, maybe not
 void Renderer::select_entity(float xpos, float ypos)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -301,14 +320,15 @@ void Renderer::select_entity(float xpos, float ypos)
 	pickingShaderProgram->setMat4("view", view);
 	pickingShaderProgram->setMat4("projection", projection);
 
-	for (int i = 0; i < m_entities.size(); i++)
+
+	for (const auto& pair : m_entities)
 	{
-		int r = (i & 0x000000FF) >> 0;
-		int g = (i & 0x0000FF00) >> 8;
-		int b = (i & 0x00FF0000) >> 16;
+		int r = (pair.first & 0x000000FF) >> 0;
+		int g = (pair.first & 0x0000FF00) >> 8;
+		int b = (pair.first & 0x00FF0000) >> 16;
 
 		pickingShaderProgram->setVec4("PickingColor", glm::vec4((float)r / 255.0, (float)g / 255.0, (float)b / 255.0, 1.0f));
-		Renderer::draw_static(pickingShaderProgram, m_entities[i]->GameModel, m_entities[i]->ModelMatrix);
+		Renderer::draw_static(pickingShaderProgram, pair.second->GameModel, pair.second->ModelMatrix);
 		glGetError();
 	}
 

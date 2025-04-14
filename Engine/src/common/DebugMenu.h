@@ -8,8 +8,11 @@
 #include"ImGuizmo.h"
 #include<string>
 #include<vector>
-#include"renderer/Renderer.h"
-#include "../../../Game/src/game_objects/board_space/BoardSpace.h"
+#include<common/Camera.h>
+#include<renderer/Renderer.h>
+#include<input/InputManager.h>
+#include"commands/MoveCameraCommand.h"
+#include"commands/SelectEntityCommand.h"
 
 class DebugMenu
 {
@@ -18,18 +21,20 @@ class DebugMenu
 		DebugMenu();
 
 		~DebugMenu();
-		void create_menu(std::vector<GameObject*>& entities, Camera* camera, float deltaTime);
-		void display_board_tiles(std::vector<GameObject*> entities);
+		void create_menu(std::map<uint16_t, GameObject*>& entities, Camera* camera, float deltaTime);
+		void display_board_tiles(std::map<uint16_t, GameObject*> entities);
 		void display_fps(float deltaTime);
-		void draw_entity_hierarchy(std::vector<GameObject*>& entities);
+		void draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities);
 		void draw_entity_properties(GameObject* entity, Camera* camera);
 		void draw_mouse_pos();
 		void draw_ray_cast();
 		void draw_camera_position(Camera* camera);
 		void create_new_map();
-		void load_board_space_data(std::vector<BoardSpace*> boardSpaces);
 		void shut_down();
+		void set_controls();
+		void clear_controls();
 	private:
+		Camera* m_camera;
 		int windowWidth = 0;
 		int windowHeight = 0;
 };

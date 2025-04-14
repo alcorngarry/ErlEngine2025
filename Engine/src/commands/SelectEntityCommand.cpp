@@ -2,7 +2,7 @@
 
 SelectEntityCommand::SelectEntityCommand(bool isDeselect) : isDeselect(isDeselect) {}
 
-void SelectEntityCommand::execute() {
+void SelectEntityCommand::execute(float deltaTimes) {
 	if (isDeselect)
 	{
 		Renderer::deselect_index();

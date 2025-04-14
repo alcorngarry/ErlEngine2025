@@ -46,7 +46,7 @@ namespace InputManager {
     static GamepadState gamepadStates[4] = { false };
 
     void init(GLFWwindow* window);
-    void update();
+    void update(float deltaTime);
     double get_scroll_value();
     bool is_mouse_button_pressed();
     void update_cursor();

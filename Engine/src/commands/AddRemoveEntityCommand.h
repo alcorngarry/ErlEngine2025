@@ -6,8 +6,7 @@
 class AddRemoveEntityCommand : public Command {
 public:
     AddRemoveEntityCommand(Map* map, bool isAdd);
-    void execute() override;
-
+    void execute(float deltaTime) override;
 private:
     Map* map;
     bool isAdd;

@@ -12,19 +12,19 @@ void MovePlayerCommand::execute(float deltaTime)
 	switch (movement)
 	{
 		case FORWARD: {
-			player->velocity = player->camera->get_camera_pos() + cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
+			player->Velocity = player->camera->get_camera_pos() + cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
 			break;
 		}
 		case BACK: {
-			player->velocity = player->camera->get_camera_pos() - cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
+			player->Velocity = player->camera->get_camera_pos() - cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
 			break;
 		}
 		case LEFT: {
-			player->velocity = player->camera->get_camera_pos() - glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
+			player->Velocity = player->camera->get_camera_pos() - glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
 			break;
 		}
 		case RIGHT: {
-			player->velocity = player->camera->get_camera_pos() + glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
+			player->Velocity = player->camera->get_camera_pos() + glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
 			break;
 		}
 	}

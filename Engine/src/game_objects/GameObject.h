@@ -7,7 +7,8 @@
 class GameObject {
 	public:
 		Model* GameModel;
-		glm::vec3 Position,Size,Rotation;
+		glm::vec3 Position, Size, Rotation;
+		glm::vec3 Velocity = glm::vec3(0.0f);
 		glm::mat4 ModelMatrix;
 		static int idCounter;
 		uint16_t assetId;

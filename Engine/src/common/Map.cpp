@@ -77,12 +77,22 @@ void Map::load(float windowWidth, float windowHeight)
 	load_skybox();
 	// important order, think before changing
 	load_camera(windowWidth, windowHeight);
+	load_physics_objects();
 	load_player();
 }
 
 void Map::load_camera(float windowWidth, float windowHeight)
 {
 	camera = new Camera(windowWidth, windowHeight);
+}
+
+void Map::load_physics_objects()
+{
+	for (GameObject* entity : entities)
+	{
+		ErlPhysics::add_physics_object(entity);
+	}
+
 }
 
 void Map::read_models()

@@ -17,22 +17,22 @@ void Player::update(float deltaTime)
 	if (jumping)
 	{  
 		jumpVelocity += -90.0f * deltaTime;
-		Position = velocity += glm::vec3(0.0f, jumpVelocity * deltaTime, 0.0f);
+		Position = Velocity += glm::vec3(0.0f, jumpVelocity * deltaTime, 0.0f);
 
 		if (Position.y <= floorHeight + playerHeight)
 		{
 			jumpVelocity = 0.0f;
-			velocity = glm::vec3(Position.x, floorHeight + playerHeight, Position.z);
+			Velocity = glm::vec3(Position.x, floorHeight + playerHeight, Position.z);
 			jumping = false;
 		}
 	}
 	else {
 		if (!floorHeight > playerHeight / 2)
 		{
-			velocity = glm::vec3(Position.x, floorHeight + playerHeight, Position.z);
+			Velocity = glm::vec3(Position.x, floorHeight + playerHeight, Position.z);
 		}
 	}
-	set_position(velocity);
+	set_position(Velocity);
 }
 
 glm::vec3 Player::get_aabb_max()

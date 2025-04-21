@@ -51,6 +51,7 @@ class Map
 		std::string fileName;
 		virtual void load_player() = 0;
 		virtual void load_camera(float windowWidth, float windowHeight);
+		void load_physics_objects();
 		void write_models();
 		void write_lights();
 	private:

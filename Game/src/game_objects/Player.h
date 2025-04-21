@@ -15,7 +15,6 @@ class Player : public GameObject {
 	public:
 		Camera* camera;
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
-		glm::vec3 velocity = glm::vec3(0.0f);
 		float jumpHeight = 50.0f;
 		float jumpVelocity = 0.0f;
 		float floorHeight = 0.0f;

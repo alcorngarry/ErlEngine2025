@@ -15,18 +15,7 @@ void Chamber::update(float deltaTime)
 	{
 		player->update(deltaTime);
 		player->floorHeight = ErlPhysics::check_floor_collision(player->Position, entities);
-		ErlPhysics::CollisionResult result = ErlPhysics::sweep_aabb(player->GameModel->getMinAABB(), player->GameModel->getMaxAABB(), player->velocity, entities);
-
-		if (result.hit) {
-			glm::vec3 movement = player->velocity * deltaTime * result.timeOfImpact;
-			player->Position += movement;
-			std::cout << "HIT" << std::endl;
-			glm::vec3 slideDir = player->velocity - (glm::dot(player->velocity, result.normal) * result.normal);
-			player->velocity = slideDir;
-		}
-		else {
-			player->Position += player->velocity * deltaTime;
-		}
+		player->Position += player->Velocity * deltaTime;
 	}
 }
 

@@ -92,7 +92,6 @@ void Map::load_physics_objects()
 	{
 		ErlPhysics::add_physics_object(entity);
 	}
-
 }
 
 void Map::read_models()

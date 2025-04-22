@@ -130,8 +130,16 @@ void Renderer::render(Camera* camera)
 	aabbShaderProgram->use();
 	aabbShaderProgram->setMat4("view", view);
 	aabbShaderProgram->setMat4("projection", projection);
+	std::set<uint16_t> ids = ErlPhysics::get_collided_objects();
 	for (const auto& m_entity : m_entities)
 	{
+		if (ids.find(m_entity.first) != ids.end())
+		{
+			aabbShaderProgram->setVec3("color", glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		else {
+			aabbShaderProgram->setVec3("color", glm::vec3(1.0f, 0.0f, 0.0f));
+		}
 		draw_aabb(m_entity.second->GameModel->getMinAABB(), m_entity.second->GameModel->getMaxAABB(), m_entity.second->ModelMatrix);
 	}
 }

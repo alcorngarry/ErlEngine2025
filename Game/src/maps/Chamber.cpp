@@ -18,6 +18,7 @@ void Chamber::load_player()
 {
 	player = new Player(0, AssetManager::get_model(11), camera, glm::vec3(0.0f));
 	Renderer::add_render_object(player);
+	ErlPhysics::add_player_physics_object(player);
 }
 
 void Chamber::load_camera(float windowWidth, float windowHeight)

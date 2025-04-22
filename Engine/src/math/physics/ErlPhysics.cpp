@@ -1,10 +1,12 @@
 #include"ErlPhysics.h"
 
-std::vector<ErlPhysics::PhysicsObject*> physObjects;
+std::map<uint16_t, ErlPhysics::PhysicsObject*> physObjects;
+std::vector<ErlPhysics::PhysicsObject*> playerPhysObjects;
 std::vector<ErlPhysics::Ray*> rays;
 
 void ErlPhysics::update(float deltaTime)
 {
+    check_aabb_collision();
 }
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, float ypos)
@@ -26,7 +28,12 @@ ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, flo
 
 void ErlPhysics::add_physics_object(GameObject* object)
 {
-    physObjects.push_back(new ErlPhysics::PhysicsObject{ErlPhysics::AABB{object->get_aabb_min(), object->get_aabb_max()}, object->Velocity, object->Position});
+    physObjects[object->instanceId] = new ErlPhysics::PhysicsObject{object};
+}
+
+void ErlPhysics::add_player_physics_object(GameObject* object)
+{
+    playerPhysObjects.push_back(new ErlPhysics::PhysicsObject{object});
 }
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_screen(Camera* camera)
@@ -61,23 +68,40 @@ int ErlPhysics::check_collision(Ray* ray, std::vector<GameObject*> entities)
         }
         return i;
     }
+        
     return -1;
 }
 
-int ErlPhysics::check_aabb_collision(glm::vec3 targetMin, glm::vec3 targetMax, std::vector<GameObject*> entities)
+void ErlPhysics::check_aabb_collision()
 {
-    for (GameObject* object : entities)
+    for (const auto& object : physObjects)
     {
-        AABB mink = calculate_minkowski_difference(targetMin, targetMax, object->get_aabb_min(), object->get_aabb_max());
+        AABB mink = calculate_minkowski_difference(playerPhysObjects.at(0)->object->get_aabb_min(), playerPhysObjects.at(0)->object->get_aabb_max(), object.second->object->get_aabb_min(), object.second->object->get_aabb_max());
         
         if(mink.min.x <= 0 && mink.max.x >= 0 &&
             mink.min.y <= 0 && mink.max.y >= 0 &&
             mink.min.z <= 0 && mink.max.z >= 0)
         {
-            return object->instanceId;
+            object.second->hit = true;
+        }
+        else {
+            object.second->hit = false;
         }
     }
-    return -1;
+}
+
+std::set<uint16_t> ErlPhysics::get_collided_objects()
+{
+    std::set<uint16_t> collidedIds;
+    for (const auto& object : physObjects)
+    {
+        if (object.second->hit)
+        {
+            collidedIds.insert(object.second->object->instanceId);
+        }
+    }
+    if (collidedIds.size() != 0) collidedIds.insert(playerPhysObjects.at(0)->object->instanceId);
+    return collidedIds;
 }
 
 float ErlPhysics::check_floor_collision(glm::vec3 position, std::vector<GameObject*> entities)

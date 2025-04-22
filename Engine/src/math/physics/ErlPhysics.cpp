@@ -1,6 +1,11 @@
 #include"ErlPhysics.h"
 
 std::vector<ErlPhysics::PhysicsObject*> physObjects;
+std::vector<ErlPhysics::Ray*> rays;
+
+void ErlPhysics::update(float deltaTime)
+{
+}
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, float ypos)
 {
@@ -93,4 +98,19 @@ float ErlPhysics::check_floor_collision(glm::vec3 position, std::vector<GameObje
 ErlPhysics::AABB ErlPhysics::calculate_minkowski_difference(glm::vec3 minA, glm::vec3 maxA, glm::vec3 minB, glm::vec3 maxB)
 {
     return AABB{ minA - maxB, maxA - minB };
+}
+
+void ErlPhysics::add_ray(ErlPhysics::Ray* ray)
+{
+    rays.push_back(ray);
+}
+
+std::vector<ErlPhysics::Ray*> ErlPhysics::get_rays()
+{
+    return rays;
+}
+
+void ErlPhysics::remove_ray_object(int index)
+{
+    rays.erase(rays.begin() + index);
 }

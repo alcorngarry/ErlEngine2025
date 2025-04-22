@@ -25,18 +25,13 @@ namespace Renderer {
 
 	void add_sky_box(SkyBox* skybox);
 	void add_render_object(GameObject* gameObject);
-	void add_ray(ErlPhysics::Ray* ray);
-	std::vector<ErlPhysics::Ray*> get_rays();
-	void remove_ray_object(int index);
 	void remove_render_object(uint16_t uniqueID);
-	//std::vector<GameObject*> get_rendered_entities();
 	void add_light_render_object(GameObject* gameObject);
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	
 	void create_menu(float deltaTime);
 	void disable_menu();
 	void deselect_index();
-	glm::vec3 get_ray_vector();
 	float get_window_width();
 	float get_window_height();
 	int get_selected_index();

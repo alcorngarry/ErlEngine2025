@@ -3,6 +3,7 @@
 #include"maps/Chamber.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
+#include<math/physics/ErlPhysics.h>
 
 enum GameState {
 	GAME_ACTIVE,

@@ -1,7 +1,6 @@
 #ifndef MOVE_CAMERA_COMMAND_H
 #define MOVE_CAMERA_COMMAND_H
 #include<iostream>
-#include<commands/SelectEntityCommand.h>
 #include"input/Command.h"
 #include"common/Camera.h"
 #include"input/InputManager.h"

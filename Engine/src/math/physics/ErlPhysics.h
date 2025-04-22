@@ -32,6 +32,8 @@ namespace ErlPhysics {
 		glm::vec3 position;
 	};
 
+
+	void update(float deltaTime);
 	ErlPhysics::Ray* cast_ray_from_mouse(Camera* camera, float xpos, float ypos);
 	void add_physics_object(GameObject* object);
 	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
@@ -39,5 +41,8 @@ namespace ErlPhysics {
 	int check_aabb_collision(glm::vec3 targetMin, glm::vec3 targetMax, std::vector<GameObject*> entities);
 	float check_floor_collision(glm::vec3 position, std::vector<GameObject*> entities);
 	AABB calculate_minkowski_difference(glm::vec3 minA, glm::vec3 vec3, glm::vec3 minB, glm::vec3 maxB);
+	void add_ray(ErlPhysics::Ray* ray);
+	std::vector<ErlPhysics::Ray*> get_rays();
+	void remove_ray_object(int index);
 };
 #endif // !ERL_PHYSICS_H

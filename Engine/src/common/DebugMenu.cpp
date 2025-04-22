@@ -41,7 +41,6 @@ void DebugMenu::create_menu(std::map<uint16_t, GameObject*>& entities, Camera* c
     display_board_tiles(entities);
     //display_player_velocity(entities);
     draw_mouse_pos();
-    draw_ray_cast();
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
@@ -184,12 +183,12 @@ void DebugMenu::draw_mouse_pos()
     ImGui::Text("Y: %.2f", mousePos.y);
 }
 
-void DebugMenu::draw_ray_cast()
-{
-    glm::vec3 ray = Renderer::get_ray_vector();
-    ImGui::Text("Ray:");
-    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
-}
+//void DebugMenu::draw_ray_cast()
+//{
+//    glm::vec3 ray = Renderer::get_ray_vector();
+//    ImGui::Text("Ray:");
+//    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
+//}
 
 void DebugMenu::draw_camera_position(Camera* camera) {
     ImGui::Text("Camera Position:");

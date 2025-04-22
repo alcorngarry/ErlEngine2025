@@ -6,11 +6,6 @@ Chamber::Chamber(std::string mapName) : Map(mapName)
 
 void Chamber::update(float deltaTime)
 {
-	if (!Renderer::get_rays().empty())
-	{
-		cast_ray_logic(Renderer::get_rays().back());
-	}
-
 	if(state == DEFAULT)
 	{
 		player->update(deltaTime);
@@ -35,15 +30,6 @@ void Chamber::draw(float deltaTime)
 {
 	Renderer::render(camera);
 	UIManager::draw();
-}
-
-void Chamber::cast_ray_logic(ErlPhysics::Ray* ray)
-{
-	int index = ErlPhysics::check_collision(ray, entities);
-	if (index != -1) {
-		toggle_render(index);
-		Renderer::remove_ray_object(Renderer::get_rays().size() - 1);
-	}
 }
 
 void Chamber::set_controls()

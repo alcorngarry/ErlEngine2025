@@ -53,21 +53,6 @@ void Renderer::add_render_object(GameObject* gameObject)
 	m_entities[gameObject->instanceId] = gameObject;
 }
 
-void Renderer::add_ray(ErlPhysics::Ray* ray)
-{
-	m_rays.push_back(ray);
-}
-
-std::vector<ErlPhysics::Ray*> Renderer::get_rays()
-{
-	return m_rays;
-}
-
-void Renderer::remove_ray_object(int index)
-{
-	m_rays.erase(m_rays.begin() + index);
-}
-
 void Renderer::remove_render_object(uint16_t uniqueID)
 {
 	m_entities.erase(uniqueID);
@@ -267,7 +252,7 @@ void Renderer::draw_rays()
 	lineShaderProgram->setMat4("view", view);
 	lineShaderProgram->setMat4("projection", projection);
 
-	for (ErlPhysics::Ray* ray : m_rays)
+	for (ErlPhysics::Ray* ray : ErlPhysics::get_rays())
 	{
 		glm::vec3 startPoint = out_origin;
 		glm::vec3 endPoint = ray->direction * ray->length;
@@ -301,7 +286,6 @@ void Renderer::draw_rays()
 void Renderer::create_menu(float deltaTime)
 {
 	debugMenu->create_menu(m_entities, m_camera, deltaTime);
-	debugMenu->set_controls();
 }
 
 void Renderer::disable_menu()
@@ -365,11 +349,6 @@ int Renderer::get_selected_index()
 void Renderer::deselect_index()
 {
 	selectedIndex = -1;
-}
-
-glm::vec3 Renderer::get_ray_vector()
-{
-	return out_direction;
 }
 
 float Renderer::get_window_width()

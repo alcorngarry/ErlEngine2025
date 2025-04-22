@@ -34,6 +34,8 @@ void Game::update_controls(GameState before, GameState after)
 
 void Game::update(float deltaTime)
 { 
+	ErlPhysics::update(deltaTime);
+
 	if (State == DEBUG_MENU)
 	{
 		Maps[level]->state = Map::DEBUG;
@@ -48,12 +50,6 @@ void Game::update(float deltaTime)
 		Maps[level]->state = Map::DEFAULT;
 		InputManager::show_cursor(false);
 	}
-	
-	//if (Maps[level]->loadState == Map::LoadState::CHANGE_MAP)
-	//{
-	//	level++;
-	//	Maps[level]->load(m_windowWidth, m_windowHeight);
-	//}
 	
 	Maps[level]->update(deltaTime);
 }

@@ -27,7 +27,6 @@ class DebugMenu
 		void draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities);
 		void draw_entity_properties(GameObject* entity, Camera* camera);
 		void draw_mouse_pos();
-		void draw_ray_cast();
 		void draw_camera_position(Camera* camera);
 		void create_new_map();
 		void shut_down();

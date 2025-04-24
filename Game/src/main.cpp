@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "commands/ToggleMenuCommand.h"
 #include "commands/CloseWindowCommand.h"
+#include <math/physics/ErlPhysics.h>
 
 int main(int argc, char** argv)
 {
@@ -36,6 +37,7 @@ int main(int argc, char** argv)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		ErlPhysics::update(deltaTime);
 		game->update(deltaTime);
 
 		//do you need this?

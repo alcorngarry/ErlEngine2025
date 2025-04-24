@@ -6,12 +6,8 @@ Chamber::Chamber(std::string mapName) : Map(mapName)
 
 void Chamber::update(float deltaTime)
 {
-	if(state == DEFAULT)
-	{
-		player->update(deltaTime);
-		player->floorHeight = ErlPhysics::check_floor_collision(player->Position, entities);
-		player->Position += player->Velocity * deltaTime;
-	}
+	player->floorHeight = ErlPhysics::check_floor_collision();
+	player->update(deltaTime);
 }
 
 void Chamber::load_player()

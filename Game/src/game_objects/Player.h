@@ -15,17 +15,17 @@ class Player : public GameObject {
 	public:
 		Camera* camera;
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
-		float jumpHeight = 50.0f;
-		float jumpVelocity = 0.0f;
+		glm::vec2 viewAngles;
+
+		float jumpForce = 50.0f;
+		float friction = 8.0f;
+		float moveSpeed = 1000.0f;
 		float floorHeight = 0.0f;
-		bool jumping = false;
+		bool onGround = true;
 
 		Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos);
 		void move_player();
 		void update(float deltaTime);
-		void set_position(glm::vec3 pos);
-		glm::vec3 get_aabb_max();
-		glm::vec3 get_aabb_min();
 	private:
 		PlayerControls m_controls;
 		float playerHeight = 5.0f;

@@ -34,8 +34,6 @@ void Game::update_controls(GameState before, GameState after)
 
 void Game::update(float deltaTime)
 { 
-	ErlPhysics::update(deltaTime);
-
 	if (State == DEBUG_MENU)
 	{
 		Maps[level]->state = Map::DEBUG;
@@ -60,7 +58,6 @@ void Game::render(float deltaTime)
 
 	/*if (State == DEBUG_MENU)
 	{*/
-		
 		Renderer::create_menu(deltaTime);
 	//}
 }

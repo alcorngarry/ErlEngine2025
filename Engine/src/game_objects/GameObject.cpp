@@ -5,6 +5,7 @@ int GameObject::idCounter = 0;
 GameObject::GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered) : assetId(assetId), GameModel(model), Position(pos), Size(size), Rotation(rotation), isRendered(isRendered)
 {
 	instanceId = idCounter++;
+	Velocity = glm::vec3(0.0f);
 	set_model_matrix(Position, Rotation, Size);
 }
 

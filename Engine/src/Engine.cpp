@@ -8,9 +8,7 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	void get_resolution();
-	//const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	
 	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Sonar", NULL, NULL);
 
 	if (window == NULL)
@@ -20,6 +18,7 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 	}
 
 	glfwMakeContextCurrent(window);
+
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -36,6 +35,15 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	return window;
+}
+
+void Engine::full_screen()
+{
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	float WIN_WIDTH = mode->width;
+	float WIN_HEIGHT = mode->height;
+
+	GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "Sonar", glfwGetPrimaryMonitor(), NULL);
 }
 
 void Engine::shut_down(GLFWwindow* window)

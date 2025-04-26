@@ -16,16 +16,16 @@ void Map::save()
 void Map::write_models()
 {
 	writeMap << "models: [";
-	for (int i = 0; i < entities.size(); i++)
+	for (auto entity = entities.begin(); entity != entities.end(); ++entity)
 	{
 		writeMap << "{";
 
-		writeMap << "assetId: " << entities[i]->assetId << ", " << "position: "
-			<< entities[i]->Position.x << "," << entities[i]->Position.y << "," << entities[i]->Position.z << ", "
-			<< "scale: " << entities[i]->Size.x << "," << entities[i]->Size.y << "," << entities[i]->Size.z << ", "
-			<< "rotation: " << entities[i]->Rotation.x << "," << entities[i]->Rotation.y << "," << entities[i]->Rotation.z << ", " << "isRendered: " << (entities[i]->isRendered == 1);
+		writeMap << "assetId: " << entity->second->assetId << ", " << "position: "
+			<< entity->second->Position.x << "," << entity->second->Position.y << "," << entity->second->Position.z << ", "
+			<< "scale: " << entity->second->Size.x << "," << entity->second->Size.y << "," << entity->second->Size.z << ", "
+			<< "rotation: " << entity->second->Rotation.x << "," << entity->second->Rotation.y << "," << entity->second->Rotation.z << ", " << "isRendered: " << (entity->second->isRendered == 1);
 
-		if (i == entities.size() - 1)
+		if (entity == std::prev(entities.end()))
 		{
 			writeMap << "}";
 		}
@@ -39,14 +39,15 @@ void Map::write_models()
 void Map::write_lights()
 {
 	writeMap << "lights: [";
-	for (int i = 0; i < lights.size(); i++)
+	for (auto light = lights.begin(); light != lights.end(); ++light)
 	{
 		writeMap << "{";
-		writeMap << "assetId: " << lights[i]->assetId << ", " << "position: "
-			<< lights[i]->Position.x << "," << lights[i]->Position.y << "," << lights[i]->Position.z << ", "
-			<< "scale: " << lights[i]->Size.x << "," << lights[i]->Size.y << "," << lights[i]->Size.z << ", "
-			<< "rotation: " << lights[i]->Rotation.x << "," << lights[i]->Rotation.y << "," << lights[i]->Rotation.z;
-		if (i == lights.size() - 1)
+		writeMap << "assetId: " << light->second->assetId << ", " << "position: "
+			<< light->second->Position.x << "," << light->second->Position.y << "," << light->second->Position.z << ", "
+			<< "scale: " << light->second->Size.x << "," << light->second->Size.y << "," << light->second->Size.z << ", "
+			<< "rotation: " << light->second->Rotation.x << "," << light->second->Rotation.y << "," << light->second->Rotation.z;
+		
+		if (light == std::prev(lights.end()))
 		{
 			writeMap << "}";
 		}

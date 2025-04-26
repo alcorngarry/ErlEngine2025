@@ -13,21 +13,21 @@
 #include<input/InputManager.h>
 #include"commands/MoveCameraCommand.h"
 #include"commands/SelectEntityCommand.h"
+#include"commands/AddRemoveEntityCommand.h"
 #include"game_objects/Player.h"
 
 namespace DebugMenu
 {
 		void init(GLFWwindow* glfwWindow);
-		void load_entities(std::map<uint16_t, GameObject*>& entities);
-		void load_camera(Camera* camera);
+		void load_map(Map* map);
 		void create_menu(float deltaTime);
-		void display_board_tiles(std::map<uint16_t, GameObject*> entities);
+		void display_board_tiles();
 		void display_fps(float deltaTime);
-		void draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities);
-		void display_player_velocity(std::map<uint16_t, GameObject*> entities);
-		void draw_entity_properties(GameObject* entity, Camera* camera);
+		void draw_entity_hierarchy();
+		void display_player_velocity();
+		void draw_entity_properties(GameObject* entity);
 		void draw_mouse_pos();
-		void draw_camera_position(Camera* camera);
+		void draw_camera_position();
 		void create_new_map();
 		void shut_down();
 		void set_controls();

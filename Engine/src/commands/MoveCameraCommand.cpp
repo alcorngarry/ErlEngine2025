@@ -7,7 +7,7 @@ MoveCameraCommand::MoveCameraCommand(Camera* camera, CameraMovement movement) : 
 
 void MoveCameraCommand::execute(float deltaTime)
 {
-	float cameraSpeed = static_cast<float>(.5f * deltaTime);
+	float cameraSpeed = static_cast<float>(20.0f * deltaTime);
 	switch (movement)
 	{
 		case MOUSE_DRAG: {

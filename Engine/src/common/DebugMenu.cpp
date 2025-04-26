@@ -6,9 +6,7 @@ static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 static bool useSnap(false);
 float snap[3] = { 1.f, 1.f, 1.f };
 
-std::map<uint16_t, GameObject*> d_entities;
-Camera* m_camera;
-
+Map* m_map;
 
 void DebugMenu::init(GLFWwindow* glfwWindow) {
     IMGUI_CHECKVERSION();
@@ -17,17 +15,11 @@ void DebugMenu::init(GLFWwindow* glfwWindow) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-    //glfwGetWindowSize(glfwWindow, &windowWidth, &windowHeight);
 }
 
-void DebugMenu::load_entities(std::map<uint16_t, GameObject*>& entities)
+void DebugMenu::load_map(Map* map)
 {
-    d_entities = entities;
-}
-
-void DebugMenu::load_camera(Camera* camera)
-{
-    m_camera = camera;
+    m_map = map;
 }
 
 void DebugMenu::create_menu(float deltaTime) 
@@ -38,21 +30,20 @@ void DebugMenu::create_menu(float deltaTime)
     ImGuizmo::BeginFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(m_camera->m_windowHeight / 3, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(m_map->camera->m_windowHeight / 3, 0), ImGuiCond_Always);
 
     ImGui::Begin("Debug Menu");
     
     display_fps(deltaTime);
-    draw_entity_hierarchy(d_entities);
-    draw_camera_position(m_camera);
-    display_board_tiles(d_entities);
-    display_player_velocity(d_entities);
+    draw_entity_hierarchy();
+    draw_camera_position();
+    display_player_velocity();
     draw_mouse_pos();
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
-        GameObject* entity = d_entities[selectedIndex];
-        draw_entity_properties(entity, m_camera);
+        GameObject* entity = m_map->entities[selectedIndex];
+        draw_entity_properties(entity);
     }
 
     ImGui::End();
@@ -61,7 +52,7 @@ void DebugMenu::create_menu(float deltaTime)
     //awful fix later
 }
 
-void DebugMenu::display_board_tiles(std::map<uint16_t, GameObject*> d_entities)
+void DebugMenu::display_board_tiles()
 {
   /*  if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
     {
@@ -85,7 +76,7 @@ void DebugMenu::display_fps(float deltaTime) {
     ImGui::Text(fps.c_str());
 }
 
-void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& d_entities) {
+void DebugMenu::draw_entity_hierarchy() {
     if (ImGui::CollapsingHeader("Entity Hierarchy")) {
         for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++) {
             if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str())) {
@@ -96,9 +87,9 @@ void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& d_entitie
     }
 }
 
-void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> d_entities)
+void DebugMenu::display_player_velocity()
 {
-    for (const auto& entity : d_entities)
+    for (const auto& entity : m_map->entities)
     {
         if (entity.second->assetId == 99)
         {
@@ -111,13 +102,12 @@ void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> d_entiti
     }
 }
    
-
-void DebugMenu::draw_entity_properties(GameObject* entity, Camera* m_camera) {
+void DebugMenu::draw_entity_properties(GameObject* entity) {
     ImGui::Text("Entity %zu", Renderer::get_selected_index());
 
     glm::mat4 modelMatrix = entity->ModelMatrix;
-    glm::mat4 view = m_camera->get_view_matrix();
-    glm::mat4 projection = m_camera->get_projection_matrix();
+    glm::mat4 view = m_map->camera->get_view_matrix();
+    glm::mat4 projection = m_map->camera->get_projection_matrix();
     glm::vec3 position, scale, rotation;
 
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
@@ -125,11 +115,11 @@ void DebugMenu::draw_entity_properties(GameObject* entity, Camera* m_camera) {
     static bool boundSizing = false;
     static bool boundSizingSnap = false;
 
-    if (ImGui::IsKeyPressed(ImGuiKey_T))
+    if (ImGui::IsKeyPressed(ImGuiKey_1))
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-    if (ImGui::IsKeyPressed(ImGuiKey_E))
+    if (ImGui::IsKeyPressed(ImGuiKey_2))
         mCurrentGizmoOperation = ImGuizmo::ROTATE;
-    if (ImGui::IsKeyPressed(ImGuiKey_R))
+    if (ImGui::IsKeyPressed(ImGuiKey_3))
         mCurrentGizmoOperation = ImGuizmo::SCALE;
     if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -199,21 +189,21 @@ void DebugMenu::draw_mouse_pos()
 //    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
 //}
 
-void DebugMenu::draw_camera_position(Camera* m_camera) {
+void DebugMenu::draw_camera_position() {
     ImGui::Text("Camera Position:");
-    ImGui::Text("X: %.2f", m_camera->get_camera_pos().x);
-    ImGui::Text("Y: %.2f", m_camera->get_camera_pos().y);
-    ImGui::Text("Z: %.2f", m_camera->get_camera_pos().z);
+    ImGui::Text("X: %.2f", m_map->camera->get_camera_pos().x);
+    ImGui::Text("Y: %.2f", m_map->camera->get_camera_pos().y);
+    ImGui::Text("Z: %.2f", m_map->camera->get_camera_pos().z);
 
     ImGui::Text("Camera Front:");
-    ImGui::Text("X: %.2f", m_camera->get_camera_front().x);
-    ImGui::Text("Y: %.2f", m_camera->get_camera_front().y);
-    ImGui::Text("Z: %.2f", m_camera->get_camera_front().z);
+    ImGui::Text("X: %.2f", m_map->camera->get_camera_front().x);
+    ImGui::Text("Y: %.2f", m_map->camera->get_camera_front().y);
+    ImGui::Text("Z: %.2f", m_map->camera->get_camera_front().z);
 
     ImGui::Text("Camera Up:");
-    ImGui::Text("X: %.2f", m_camera->get_camera_up().x);
-    ImGui::Text("Y: %.2f", m_camera->get_camera_up().y);
-    ImGui::Text("Z: %.2f", m_camera->get_camera_up().z);
+    ImGui::Text("X: %.2f", m_map->camera->get_camera_up().x);
+    ImGui::Text("Y: %.2f", m_map->camera->get_camera_up().y);
+    ImGui::Text("Z: %.2f", m_map->camera->get_camera_up().z);
 }
 
 void DebugMenu::create_new_map() 
@@ -228,13 +218,13 @@ void DebugMenu::shut_down() {
 
 void DebugMenu::set_controls()
 {
-    InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_camera, MOUSE_DRAG), true);
-    InputManager::set_mouse_binding(-1, new MoveCameraCommand(m_camera, SCROLL));
+    InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->camera, MOUSE_DRAG), true);
+    InputManager::set_mouse_binding(-1, new MoveCameraCommand(m_map->camera, SCROLL));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(false));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(true));
-    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_camera, ORBIT));
-    //InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(Maps[level], true));
-    //InputManager::set_key_binding(GLFW_KEY_P, new AddRemoveEntityCommand(Maps[level], false));
+    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->camera, ORBIT));
+    InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(m_map, true));
+    InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(m_map, false));
 }
 
 void DebugMenu::clear_controls()
@@ -244,5 +234,5 @@ void DebugMenu::clear_controls()
     InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
     InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT);
     InputManager::remove_key_binding(GLFW_KEY_N);
-    InputManager::remove_key_binding(GLFW_KEY_P);
+    InputManager::remove_key_binding(GLFW_KEY_R);
 }

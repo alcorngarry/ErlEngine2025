@@ -1,10 +1,7 @@
 models: [{assetId: 2, position: 0,2,-200, scale: 1,1,1, rotation: 0,-0,0, isRendered: 0},
-{assetId: 2, position: 100,99.654,-0.349126, scale: 1,1,1, rotation: 0.000104979,0.200097,89.9997, isRendered: 1},
-{assetId: 2, position: -99.9997,99.6542,-0.348746, scale: 1,1,1, rotation: -0.200097,0.00010602,89.9997, isRendered: 1},
-{assetId: 11, position: 41,20,0, scale: 20,20,20, rotation: 0,-0,0, isRendered: 1},
-{assetId: 11, position: -22,1,0, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
-{assetId: 11, position: 0,1,0, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
-{assetId: 2, position: 0,0,200, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
-{assetId: 2, position: 0,0,0, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
-{assetId: 2, position: 0,0,-200, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1}]
+{assetId: 11, position: 231,160,-71, scale: 20,160,20, rotation: 0,-0,0, isRendered: 1},
+{assetId: 11, position: -82,1,0, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
+{assetId: 11, position: 0,1,-40, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
+{assetId: 2, position: 0,0,0, scale: 10,1,10, rotation: 0,-0,0, isRendered: 1},
+{assetId: 11, position: 41,20,-71, scale: 20,20,20, rotation: 0,-0,0, isRendered: 1}]
 lights: []

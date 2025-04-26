@@ -10,7 +10,6 @@
 #include"ui/UIManager.h"
 #include"common/AssetManager.h"
 #include"ui/UIElement.h"
-#include"common/DebugMenu.h"
 #include"math/physics/ErlPhysics.h"
 
 namespace Renderer {
@@ -29,8 +28,6 @@ namespace Renderer {
 	void add_light_render_object(GameObject* gameObject);
 	void add_skinned_render_object(SkinnedGameObject* skinnedGameObject);
 	
-	void create_menu(float deltaTime);
-	void disable_menu();
 	void deselect_index();
 	float get_window_width();
 	float get_window_height();

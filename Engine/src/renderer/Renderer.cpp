@@ -13,9 +13,7 @@ Shader* grassShaderProgram;
 Shader* lineShaderProgram;
 Shader* aabbShaderProgram;
 
-Camera* m_camera;
 SkyBox* m_skybox;
-DebugMenu* debugMenu;
 
 glm::mat4 view, projection;
 glm::vec3 delta(0.0f);
@@ -39,7 +37,6 @@ void Renderer::init_render(GLFWwindow* window)
 	lineShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/line.frag.glsl");
 	aabbShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/aabb.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/aabb.frag.glsl");
 	grassShaderProgram = new Shader("C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.vert.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.frag.glsl", "C:/Dev/opengl_code/Erl/Erl/Engine/src/renderer/shaders/grass.gs.glsl");
-	debugMenu = new DebugMenu(window);
 	glfwGetWindowSize(window, &m_windowWidth, &m_windowHeight);
 }
 
@@ -71,9 +68,8 @@ void Renderer::add_skinned_render_object(SkinnedGameObject* skinnedGameObject)
 
 void Renderer::render(Camera* camera)
 {
-	m_camera = camera;
-	view = m_camera->get_view_matrix();
-	projection = m_camera->get_projection_matrix();
+	view = camera->get_view_matrix();
+	projection = camera->get_projection_matrix();
 
 	//draw first for environment mapping
 	cubemapShaderProgram->use();
@@ -288,17 +284,6 @@ void Renderer::draw_rays()
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);
 	}
-}
-
-// This is for the debug menu, not part of game rendering.
-void Renderer::create_menu(float deltaTime)
-{
-	debugMenu->create_menu(m_entities, m_camera, deltaTime);
-}
-
-void Renderer::disable_menu()
-{
-	debugMenu->clear_controls();
 }
 
 // to be deprecated... probably, maybe not

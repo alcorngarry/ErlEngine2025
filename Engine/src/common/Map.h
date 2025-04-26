@@ -27,7 +27,7 @@ class Map
 
 		LoadState loadState;
 		State state;
-		std::vector<GameObject*> entities, lights;
+		std::map<uint16_t, GameObject*> entities, lights;
 		std::vector<SkinnedGameObject*> skinned_entities;
 		Player* player;
 		Camera* camera;

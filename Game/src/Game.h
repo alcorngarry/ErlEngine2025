@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include"maps/Chamber.h"
+#include"common/DebugMenu.h"
 #include"common/AssetManager.h"
 #include"commands/SaveCommand.h"
 

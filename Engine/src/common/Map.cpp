@@ -88,9 +88,9 @@ void Map::load_camera(float windowWidth, float windowHeight)
 
 void Map::load_physics_objects()
 {
-	for (GameObject* entity : entities)
+	for (const auto& entity : entities)
 	{
-		ErlPhysics::add_physics_object(entity);
+		ErlPhysics::add_physics_object(entity.second);
 	}
 }
 
@@ -99,7 +99,7 @@ void Map::read_models()
 	while (readMap.peek() != ']')
 	{
 		GameObject* entity = read_asset();
-		entities.push_back(entity);
+		entities[entity->instanceId] = (entity);
 		if(entity->isRendered) Renderer::add_render_object(entity);
 	}
 	getline(readMap, line, '\n');
@@ -110,7 +110,7 @@ void Map::read_lights()
 	while (readMap.peek() != ']')
 	{
 		GameObject* light = read_asset();
-		lights.push_back(light);
+		lights[light->instanceId] = (light);
 		Renderer::add_light_render_object(light);
 	}
 	getline(readMap, line, '\n');
@@ -181,13 +181,13 @@ void Map::duplicate_model(int selectedIndex)
 		entities[selectedIndex]->GameModel, entities[selectedIndex]->Position, entities[selectedIndex]->Size,
 		entities[selectedIndex]->Rotation, entities[selectedIndex]->isRendered);
 
-	entities.push_back(model);
+	entities[model->instanceId] = model;
 	Renderer::add_render_object(model);
 }
 
 void Map::remove_model(int selectedIndex)
 {
-	entities.erase(entities.begin() + selectedIndex);
+	entities.erase(selectedIndex);
 	Renderer::remove_render_object(selectedIndex);
 }
 

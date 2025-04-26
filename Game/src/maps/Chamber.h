@@ -5,6 +5,7 @@
 #include"commands/MovePlayerCommand.h"
 #include"commands/FireCommand.h"
 #include"commands/JumpCommand.h"
+#include<commands/MoveCameraCommand.h>
 
 class Chamber : public Map {
 	public:
@@ -17,6 +18,5 @@ class Chamber : public Map {
 		void load_player() override;
 		void load_camera(float windowWidth, float windowHeight) override;
 		void draw(float deltaTime) override;
-		void cast_ray_logic(ErlPhysics::Ray* ray);
 };
 #endif // !CHAMBER_H

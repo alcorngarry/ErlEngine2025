@@ -4,6 +4,7 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
 #include"input/InputManager.h"
+#include"common/DebugMenu.h"
 #include"renderer/Renderer.h"
 
 namespace Engine {

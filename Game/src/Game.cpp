@@ -16,6 +16,8 @@ void Game::init()
 	level = 0;
 	Maps[level]->load(m_windowWidth, m_windowHeight);
 	Maps[level]->set_controls();
+	DebugMenu::load_camera(Maps[level]->camera);
+	DebugMenu::load_entities(Maps[level]->entities);
 }
 
 void Game::update_controls(GameState before, GameState after)
@@ -27,7 +29,6 @@ void Game::update_controls(GameState before, GameState after)
 
 	if (after == GAME_ACTIVE)
 	{
-		Renderer::disable_menu();
 		Maps[level]->set_controls();
 	}
 }
@@ -58,6 +59,6 @@ void Game::render(float deltaTime)
 
 	/*if (State == DEBUG_MENU)
 	{*/
-		Renderer::create_menu(deltaTime);
+		DebugMenu::create_menu(deltaTime);
 	//}
 }

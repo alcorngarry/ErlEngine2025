@@ -15,14 +15,12 @@
 #include"commands/SelectEntityCommand.h"
 #include"game_objects/Player.h"
 
-class DebugMenu
+namespace DebugMenu
 {
-	public:
-		DebugMenu(GLFWwindow* glfwWindow);
-		DebugMenu();
-
-		~DebugMenu();
-		void create_menu(std::map<uint16_t, GameObject*>& entities, Camera* camera, float deltaTime);
+		void init(GLFWwindow* glfwWindow);
+		void load_entities(std::map<uint16_t, GameObject*>& entities);
+		void load_camera(Camera* camera);
+		void create_menu(float deltaTime);
 		void display_board_tiles(std::map<uint16_t, GameObject*> entities);
 		void display_fps(float deltaTime);
 		void draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities);
@@ -34,9 +32,5 @@ class DebugMenu
 		void shut_down();
 		void set_controls();
 		void clear_controls();
-	private:
-		Camera* m_camera;
-		int windowWidth = 0;
-		int windowHeight = 0;
 };
 #endif // !DEBUG_MENU_H

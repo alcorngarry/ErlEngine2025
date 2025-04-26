@@ -31,6 +31,7 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 
 	Renderer::init_render(window);
 	InputManager::init(window);
+	DebugMenu::init(window);
 	UIManager::init(windowWidth, windowHeight);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

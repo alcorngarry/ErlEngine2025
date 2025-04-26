@@ -6,45 +6,53 @@ static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 static bool useSnap(false);
 float snap[3] = { 1.f, 1.f, 1.f };
 
+std::map<uint16_t, GameObject*> d_entities;
+Camera* m_camera;
 
-DebugMenu::DebugMenu() {}
 
-DebugMenu::DebugMenu(GLFWwindow* glfwWindow) {
+void DebugMenu::init(GLFWwindow* glfwWindow) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-    glfwGetWindowSize(glfwWindow, &windowWidth, &windowHeight);
+    //glfwGetWindowSize(glfwWindow, &windowWidth, &windowHeight);
 }
 
-DebugMenu::~DebugMenu() {}
+void DebugMenu::load_entities(std::map<uint16_t, GameObject*>& entities)
+{
+    d_entities = entities;
+}
 
-void DebugMenu::create_menu(std::map<uint16_t, GameObject*>& entities, Camera* camera, float deltaTime) 
+void DebugMenu::load_camera(Camera* camera)
 {
     m_camera = camera;
+}
+
+void DebugMenu::create_menu(float deltaTime) 
+{
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     ImGuizmo::BeginFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(windowHeight / 3, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(m_camera->m_windowHeight / 3, 0), ImGuiCond_Always);
 
     ImGui::Begin("Debug Menu");
     
     display_fps(deltaTime);
-    draw_entity_hierarchy(entities);
-    draw_camera_position(camera);
-    display_board_tiles(entities);
-    display_player_velocity(entities);
+    draw_entity_hierarchy(d_entities);
+    draw_camera_position(m_camera);
+    display_board_tiles(d_entities);
+    display_player_velocity(d_entities);
     draw_mouse_pos();
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
-        GameObject* entity = entities[selectedIndex];
-        draw_entity_properties(entity, camera);
+        GameObject* entity = d_entities[selectedIndex];
+        draw_entity_properties(entity, m_camera);
     }
 
     ImGui::End();
@@ -53,14 +61,14 @@ void DebugMenu::create_menu(std::map<uint16_t, GameObject*>& entities, Camera* c
     //awful fix later
 }
 
-void DebugMenu::display_board_tiles(std::map<uint16_t, GameObject*> entities)
+void DebugMenu::display_board_tiles(std::map<uint16_t, GameObject*> d_entities)
 {
   /*  if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
     {
         std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
-        for (size_t i = 0; i < entities.size(); ++i)
+        for (size_t i = 0; i < d_entities.size(); ++i)
         {
-            if (auto boardSpace = dynamic_cast<BoardSpace*>(entities[i])) {
+            if (auto boardSpace = dynamic_cast<BoardSpace*>(d_entities[i])) {
                 idToBoardSpaceMap[boardSpace->assetId] = boardSpace;
                 boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
                 ImGui::PushID(i);
@@ -77,7 +85,7 @@ void DebugMenu::display_fps(float deltaTime) {
     ImGui::Text(fps.c_str());
 }
 
-void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities) {
+void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& d_entities) {
     if (ImGui::CollapsingHeader("Entity Hierarchy")) {
         for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++) {
             if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str())) {
@@ -88,9 +96,9 @@ void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities)
     }
 }
 
-void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> entities)
+void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> d_entities)
 {
-    for (const auto& entity : entities)
+    for (const auto& entity : d_entities)
     {
         if (entity.second->assetId == 99)
         {
@@ -104,12 +112,12 @@ void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> entities
 }
    
 
-void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
+void DebugMenu::draw_entity_properties(GameObject* entity, Camera* m_camera) {
     ImGui::Text("Entity %zu", Renderer::get_selected_index());
 
     glm::mat4 modelMatrix = entity->ModelMatrix;
-    glm::mat4 view = camera->get_view_matrix();
-    glm::mat4 projection = camera->get_projection_matrix();
+    glm::mat4 view = m_camera->get_view_matrix();
+    glm::mat4 projection = m_camera->get_projection_matrix();
     glm::vec3 position, scale, rotation;
 
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
@@ -191,21 +199,21 @@ void DebugMenu::draw_mouse_pos()
 //    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
 //}
 
-void DebugMenu::draw_camera_position(Camera* camera) {
+void DebugMenu::draw_camera_position(Camera* m_camera) {
     ImGui::Text("Camera Position:");
-    ImGui::Text("X: %.2f", camera->get_camera_pos().x);
-    ImGui::Text("Y: %.2f", camera->get_camera_pos().y);
-    ImGui::Text("Z: %.2f", camera->get_camera_pos().z);
+    ImGui::Text("X: %.2f", m_camera->get_camera_pos().x);
+    ImGui::Text("Y: %.2f", m_camera->get_camera_pos().y);
+    ImGui::Text("Z: %.2f", m_camera->get_camera_pos().z);
 
     ImGui::Text("Camera Front:");
-    ImGui::Text("X: %.2f", camera->get_camera_front().x);
-    ImGui::Text("Y: %.2f", camera->get_camera_front().y);
-    ImGui::Text("Z: %.2f", camera->get_camera_front().z);
+    ImGui::Text("X: %.2f", m_camera->get_camera_front().x);
+    ImGui::Text("Y: %.2f", m_camera->get_camera_front().y);
+    ImGui::Text("Z: %.2f", m_camera->get_camera_front().z);
 
     ImGui::Text("Camera Up:");
-    ImGui::Text("X: %.2f", camera->get_camera_up().x);
-    ImGui::Text("Y: %.2f", camera->get_camera_up().y);
-    ImGui::Text("Z: %.2f", camera->get_camera_up().z);
+    ImGui::Text("X: %.2f", m_camera->get_camera_up().x);
+    ImGui::Text("Y: %.2f", m_camera->get_camera_up().y);
+    ImGui::Text("Z: %.2f", m_camera->get_camera_up().z);
 }
 
 void DebugMenu::create_new_map() 

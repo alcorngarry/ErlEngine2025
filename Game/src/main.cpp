@@ -33,6 +33,8 @@ int main(int argc, char** argv)
 	
 	while (!glfwWindowShouldClose(window))
 	{
+		InputManager::update(deltaTime);
+
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -48,8 +50,6 @@ int main(int argc, char** argv)
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
-		InputManager::update(deltaTime);
 	}
 
 	Engine::shut_down(window);

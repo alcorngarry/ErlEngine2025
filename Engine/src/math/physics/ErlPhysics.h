@@ -25,7 +25,6 @@ namespace ErlPhysics {
 
 	struct PhysicsObject {
 		GameObject* object;
-		Ellipsoid* elipsoid;
 		bool hit = false;
 	};
 

@@ -35,11 +35,10 @@ void DebugMenu::create_menu(std::map<uint16_t, GameObject*>& entities, Camera* c
     ImGui::Begin("Debug Menu");
     
     display_fps(deltaTime);
-
     draw_entity_hierarchy(entities);
     draw_camera_position(camera);
     display_board_tiles(entities);
-    //display_player_velocity(entities);
+    display_player_velocity(entities);
     draw_mouse_pos();
 
     int selectedIndex = Renderer::get_selected_index();
@@ -89,19 +88,21 @@ void DebugMenu::draw_entity_hierarchy(std::map<uint16_t, GameObject*>& entities)
     }
 }
 
-//void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> entities)
-//{
-//
-//    for (const auto& entity : entities)
-//    {
-//        if (entity.second->assetId == 99)
-//        {
-//            dynamic_cast<Player*>(entity.second);
-//        }
-//    }
-//    std::string fps = "velocity = " +;
-//    ImGui::Text(fps.c_str());
-//}
+void DebugMenu::display_player_velocity(std::map<uint16_t, GameObject*> entities)
+{
+    for (const auto& entity : entities)
+    {
+        if (entity.second->assetId == 99)
+        {
+            Player* player = dynamic_cast<Player*>(entity.second);
+            ImGui::Text("Velocity:");
+            ImGui::Text("X: %.2f", player->Velocity.x);
+            ImGui::Text("Y: %.2f", player->Velocity.y);
+            ImGui::Text("Z: %.2f", player->Velocity.z);
+        }
+    }
+}
+   
 
 void DebugMenu::draw_entity_properties(GameObject* entity, Camera* camera) {
     ImGui::Text("Entity %zu", Renderer::get_selected_index());

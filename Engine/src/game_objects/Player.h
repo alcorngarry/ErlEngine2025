@@ -15,11 +15,20 @@ class Player : public GameObject {
 	public:
 		Camera* camera;
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		glm::vec3 wishVelocity = glm::vec3(0.0f);
+		glm::vec3 wishDir = glm::vec3(0.0f);
+		float wishSpeed = 0.0f;
 		glm::vec2 viewAngles;
 
-		float jumpForce = 50.0f;
-		float friction = 8.0f;
-		float moveSpeed = 1000.0f;
+		float fmove = 0.0f;
+		float smove = 0.0f;
+		float maxSpeed = 320.0f;
+
+		float fmovePrev = 0.0f;
+		float smovePrev = 0.0f;
+
+		float jumpForce = 270.0f;
+		float fric = 4.0f;
 		float floorHeight = 0.0f;
 		bool onGround = true;
 
@@ -30,5 +39,8 @@ class Player : public GameObject {
 		PlayerControls m_controls;
 		float playerHeight = 5.0f;
 		void set_controls(PlayerControls controls);
+		void accelerate(float deltaTime);
+		void air_accelerate(float deltaTime);
+		void friction(float deltaTime);
 };
 #endif // !PLAYER_H

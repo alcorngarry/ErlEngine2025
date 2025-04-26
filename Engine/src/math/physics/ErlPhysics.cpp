@@ -80,7 +80,7 @@ void ErlPhysics::check_aabb_collision(float deltaTime)
             mink.min.z <= 0 && mink.max.z >= 0)
         {
             object.second->hit = true;
-            resolve_collision(mink, deltaTime);
+            //resolve_collision(mink, deltaTime);
         }
         else {
             object.second->hit = false;

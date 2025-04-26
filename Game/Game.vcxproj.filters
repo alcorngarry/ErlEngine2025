@@ -21,9 +21,6 @@
     <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_objects\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\commands\MoveDownCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_objects\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\commands\MoveDownCommand.h">

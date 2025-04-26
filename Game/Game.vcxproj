@@ -40,7 +40,6 @@
     <ClCompile Include="src\commands\MoveUpCommand.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\game_objects\Player.cpp" />
     <ClCompile Include="src\maps\Chamber.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -66,7 +65,6 @@
     <ClInclude Include="src\commands\MoveDownCommand.h" />
     <ClInclude Include="src\commands\MoveUpCommand.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\game_objects\Player.h" />
     <ClInclude Include="src\maps\Chamber.h" />
   </ItemGroup>
   <ItemGroup>

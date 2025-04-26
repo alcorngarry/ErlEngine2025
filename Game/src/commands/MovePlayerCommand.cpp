@@ -7,24 +7,22 @@ MovePlayerCommand::MovePlayerCommand(Player* player, PlayerMovement movement) : 
 
 void MovePlayerCommand::execute(float deltaTime)
 {
-	// speed is currently set as a float of 100.0
-	float cameraSpeed = static_cast<float>(1000.0f * deltaTime);
 	switch (movement)
 	{
 		case FORWARD: {
-			player->Velocity += cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
+			player->fmove += 200.0f * 0.25f;
 			break;
 		}
 		case BACK: {
-			player->Velocity -= cameraSpeed * glm::vec3(player->camera->get_camera_front().x, 0.0f, player->camera->get_camera_front().z);
+			player->fmove -= 200.0f * 0.25f;
 			break;
 		}
 		case LEFT: {
-			player->Velocity -= glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
+			player->smove -= 320.0f * 0.25f;
 			break;
 		}
 		case RIGHT: {
-			player->Velocity += glm::normalize(glm::cross(player->camera->get_camera_front(), player->camera->get_camera_up())) * cameraSpeed;
+			player->smove += 320.0f * 0.25f;
 			break;
 		}
 	}

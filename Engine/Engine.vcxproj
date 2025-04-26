@@ -31,6 +31,7 @@
     <ClInclude Include="src\game_objects\animation\Bone.h" />
     <ClInclude Include="src\game_objects\animation\BoneInfo.h" />
     <ClInclude Include="src\common\Camera.h" />
+    <ClInclude Include="src\game_objects\Player.h" />
     <ClInclude Include="src\game_objects\SkinnedGameObject.h" />
     <ClInclude Include="src\input\Command.h" />
     <ClInclude Include="src\Engine.h" />
@@ -63,6 +64,7 @@
     <ClCompile Include="src\common\Camera.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\game_objects\GameObject.cpp" />
+    <ClCompile Include="src\game_objects\Player.cpp" />
     <ClCompile Include="src\game_objects\SkinnedGameObject.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\common\Map.cpp" />

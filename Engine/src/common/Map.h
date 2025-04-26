@@ -9,7 +9,7 @@
 #include"renderer/Renderer.h"
 #include"AssetManager.h"
 #include"input/InputManager.h"
-#include"../../../Game/src/game_objects/Player.h"
+#include"game_objects/Player.h"
 
 class Map 
 {

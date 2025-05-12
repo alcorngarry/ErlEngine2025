@@ -13,13 +13,22 @@ void Player::move_player()
 
 void Player::update(float deltaTime)
 {
+	Position += Velocity * deltaTime;
+
+	camera->set_camera_pos(Position);
+	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));
+	set_model_matrix(Position, Rotation, Size);
+}
+
+void Player::update_movement(float deltaTime)
+{
 	if (fmovePrev == fmove) fmove = 0.0f, fmovePrev = 0.0f;
 	if (smovePrev == smove) smove = 0.0f, smovePrev = 0.0f;
 	friction(deltaTime);
 
 	wishSpeed = 0.0f;
-	
-	wishVelocity = fmove * glm::normalize(glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z)) + 
+
+	wishVelocity = fmove * glm::normalize(glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z)) +
 		smove * glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up()));
 
 	if (wishVelocity != glm::vec3(0.0f))
@@ -35,13 +44,14 @@ void Player::update(float deltaTime)
 	}
 
 	if (onGround)
-	{  
+	{
 		/*if (!floorHeight > playerHeight / 2)
 		{
 			Velocity += glm::vec3(Velocity.x, floorHeight + playerHeight, Velocity.z);
 		}*/
 		accelerate(deltaTime);
-	} else {
+	}
+	else {
 		air_accelerate(deltaTime);
 
 		//Velocity.y += -90.0f * deltaTime;
@@ -54,13 +64,6 @@ void Player::update(float deltaTime)
 			onGround = true;
 		}
 	}
-	
-
-	Position += Velocity * deltaTime;
-
-	camera->set_camera_pos(Position);
-	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));
-	set_model_matrix(Position, Rotation, Size);
 
 	fmovePrev = fmove;
 	smovePrev = smove;
@@ -118,6 +121,5 @@ void Player::friction(float deltaTime)
 	float newspeed = speed - drop;
 	if (newspeed < 0.0f) newspeed = 0.0f;
 	newspeed /= speed;
-
 	Velocity *= newspeed;
 }

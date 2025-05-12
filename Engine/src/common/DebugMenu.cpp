@@ -5,6 +5,7 @@ static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 static bool useSnap(false);
 float snap[3] = { 1.f, 1.f, 1.f };
+		MENU_TYPE type = MENU_TYPE::PLAYER;
 
 Map* m_map;
 
@@ -35,16 +36,19 @@ void DebugMenu::create_menu(float deltaTime)
     ImGui::Begin("Debug Menu");
     
     display_fps(deltaTime);
-    draw_entity_hierarchy();
     draw_camera_position();
     display_player_velocity();
-    draw_mouse_pos();
-
-    int selectedIndex = Renderer::get_selected_index();
-    if (selectedIndex != -1) {
-        GameObject* entity = m_map->entities[selectedIndex];
-        draw_entity_properties(entity);
-    }
+    
+    //if (type == MENU_TYPE::EDITOR)
+    //{
+        draw_mouse_pos();
+        draw_entity_hierarchy();
+        int selectedIndex = Renderer::get_selected_index();
+        if (selectedIndex != -1) {
+            GameObject* entity = m_map->entities[selectedIndex];
+            draw_entity_properties(entity);
+        }
+    //}
 
     ImGui::End();
     ImGui::Render();
@@ -89,17 +93,10 @@ void DebugMenu::draw_entity_hierarchy() {
 
 void DebugMenu::display_player_velocity()
 {
-    for (const auto& entity : m_map->entities)
-    {
-        if (entity.second->assetId == 99)
-        {
-            Player* player = dynamic_cast<Player*>(entity.second);
-            ImGui::Text("Velocity:");
-            ImGui::Text("X: %.2f", player->Velocity.x);
-            ImGui::Text("Y: %.2f", player->Velocity.y);
-            ImGui::Text("Z: %.2f", player->Velocity.z);
-        }
-    }
+    ImGui::Text("Velocity:");
+    ImGui::Text("X: %.2f", m_map->player->Velocity.x);
+    ImGui::Text("Y: %.2f", m_map->player->Velocity.y);
+    ImGui::Text("Z: %.2f", m_map->player->Velocity.z);
 }
    
 void DebugMenu::draw_entity_properties(GameObject* entity) {

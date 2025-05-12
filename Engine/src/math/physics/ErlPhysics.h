@@ -6,6 +6,7 @@
 #include<common/Camera.h>
 #include<game_objects/GameObject.h>
 #include<set>
+#include <game_objects/Player.h>
 
 namespace ErlPhysics {
 	struct Ray {
@@ -24,14 +25,26 @@ namespace ErlPhysics {
 	};
 
 	struct PhysicsObject {
+		AABB* minkowskiSum;
 		GameObject* object;
 		bool hit = false;
+	};
+
+	struct PlayerPhysicsObject {
+		AABB* minkowskiSum;
+		Player* player;
+		bool hit = false;
+	};
+
+	struct SweptCollisionResult {
+		float collisionTime;
+		glm::vec3 normal;
 	};
 
 	void update(float deltaTime);
 	ErlPhysics::Ray* cast_ray_from_mouse(Camera* camera, float xpos, float ypos);
 	void add_physics_object(GameObject* object);
-	void add_player_physics_object(GameObject* object);
+	void add_player_physics_object(Player* player);
 	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
 	int check_collision(Ray* ray);
 	void check_aabb_collision(float deltaTime);
@@ -42,5 +55,6 @@ namespace ErlPhysics {
 	void add_ray(ErlPhysics::Ray* ray);
 	std::vector<ErlPhysics::Ray*> get_rays();
 	void remove_ray_object(int index);
+	void swept_aabb_collision(float deltaTime);
 };
 #endif // !ERL_PHYSICS_H

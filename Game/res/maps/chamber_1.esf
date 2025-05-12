@@ -2,6 +2,7 @@ models: [{assetId: 2, position: 0,2,-200, scale: 1,1,1, rotation: 0,-0,0, isRend
 {assetId: 11, position: 231,160,-71, scale: 20,160,20, rotation: 0,-0,0, isRendered: 1},
 {assetId: 11, position: -82,1,0, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
 {assetId: 11, position: 0,1,-40, scale: 1,1,1, rotation: 0,-0,0, isRendered: 1},
-{assetId: 2, position: 0,0,0, scale: 10,1,10, rotation: 0,-0,0, isRendered: 1},
+{assetId: 2, position: 0,-1,0, scale: 10,1,10, rotation: 0,-0,0, isRendered: 1},
+{assetId: 11, position: 228,120,119, scale: 20,120,120, rotation: 0,-0,0, isRendered: 1},
 {assetId: 11, position: 41,20,-71, scale: 20,20,20, rotation: 0,-0,0, isRendered: 1}]
 lights: []

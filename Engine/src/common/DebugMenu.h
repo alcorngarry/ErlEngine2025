@@ -16,6 +16,12 @@
 #include"commands/AddRemoveEntityCommand.h"
 #include"game_objects/Player.h"
 
+enum class MENU_TYPE {
+	EDITOR,
+	PLAYER,
+	DISABLED
+};
+
 namespace DebugMenu
 {
 		void init(GLFWwindow* glfwWindow);

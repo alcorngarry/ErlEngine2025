@@ -78,8 +78,8 @@ void Map::load(float windowWidth, float windowHeight)
 	load_skybox();
 	// important order, think before changing
 	load_camera(windowWidth, windowHeight);
-	load_physics_objects();
 	load_player();
+	load_physics_objects();
 }
 
 void Map::load_camera(float windowWidth, float windowHeight)

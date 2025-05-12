@@ -134,7 +134,7 @@ void Renderer::render(Camera* camera)
 			aabbShaderProgram->setVec3("color", glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		else {
-			aabbShaderProgram->setVec3("color", glm::vec3(1.0f, 0.0f, 0.0f));
+			aabbShaderProgram->setVec3("color", glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 		draw_aabb(m_entity.second->GameModel->getMinAABB(), m_entity.second->GameModel->getMaxAABB(), m_entity.second->ModelMatrix);
 	}

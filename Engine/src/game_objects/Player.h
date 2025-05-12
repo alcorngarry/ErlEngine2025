@@ -35,6 +35,7 @@ class Player : public GameObject {
 		Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos);
 		void move_player();
 		void update(float deltaTime);
+		void update_movement(float deltaTime);
 	private:
 		PlayerControls m_controls;
 		float playerHeight = 5.0f;

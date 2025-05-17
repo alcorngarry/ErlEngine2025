@@ -32,6 +32,7 @@ namespace Renderer {
 	float get_window_width();
 	float get_window_height();
 	int get_selected_index();
+	void set_selected_index(int i);
 	void select_entity(float xpos, float ypos);
 
 	void draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB, const glm::mat4& model);

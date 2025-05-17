@@ -48,7 +48,6 @@ namespace ErlPhysics {
 	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
 	int check_collision(Ray* ray);
 	void check_aabb_collision(float deltaTime);
-	void resolve_collision(AABB mink, float deltaTime);
 	std::set<uint16_t> get_collided_objects();
 	float check_floor_collision();
 	AABB calculate_minkowski_difference(glm::vec3 minA, glm::vec3 vec3, glm::vec3 minB, glm::vec3 maxB);

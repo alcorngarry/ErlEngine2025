@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 	float window_height = 768;
     // Start the server in a separate thread
 	//std::thread serverThread(Server::start_server);
-
+	//Engine::set_full_screen(true);
 	GLFWwindow* window = Engine::start(window_width, window_height);
 	float lastFrame = 0.0f;
 	float deltaTime = 0.0f;
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 		game->update(deltaTime);
 
 		//do you need this?
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		game->render(deltaTime);

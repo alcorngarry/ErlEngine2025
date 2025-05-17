@@ -28,6 +28,7 @@ namespace DebugMenu
 		void load_map(Map* map);
 		void create_menu(float deltaTime);
 		void display_board_tiles();
+		void show_all_entities();
 		void display_fps(float deltaTime);
 		void draw_entity_hierarchy();
 		void display_player_velocity();

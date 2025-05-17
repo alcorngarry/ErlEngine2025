@@ -26,6 +26,7 @@ class Player : public GameObject {
 
 		float fmovePrev = 0.0f;
 		float smovePrev = 0.0f;
+		float playerHeight = 5.0f;
 
 		float jumpForce = 270.0f;
 		float fric = 4.0f;
@@ -38,7 +39,6 @@ class Player : public GameObject {
 		void update_movement(float deltaTime);
 	private:
 		PlayerControls m_controls;
-		float playerHeight = 5.0f;
 		void set_controls(PlayerControls controls);
 		void accelerate(float deltaTime);
 		void air_accelerate(float deltaTime);

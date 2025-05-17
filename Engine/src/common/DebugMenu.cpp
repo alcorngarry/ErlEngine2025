@@ -38,6 +38,7 @@ void DebugMenu::create_menu(float deltaTime)
     display_fps(deltaTime);
     draw_camera_position();
     display_player_velocity();
+    show_all_entities();
     
     //if (type == MENU_TYPE::EDITOR)
     //{
@@ -73,6 +74,18 @@ void DebugMenu::display_board_tiles()
             }
         }
     }*/
+}
+
+void DebugMenu::show_all_entities()
+{
+    if (ImGui::CollapsingHeader("Map entities")) {
+        for (const auto& pair : m_map->entities)
+        {
+            if (ImGui::Selectable(std::to_string(pair.first).c_str())) {
+                Renderer::set_selected_index(pair.first);
+            }
+        }
+    }
 }
 
 void DebugMenu::display_fps(float deltaTime) {

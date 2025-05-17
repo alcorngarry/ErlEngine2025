@@ -258,8 +258,8 @@ void Renderer::draw_rays()
 
 	for (ErlPhysics::Ray* ray : ErlPhysics::get_rays())
 	{
-		glm::vec3 startPoint = out_origin;
-		glm::vec3 endPoint = ray->direction * ray->length;
+		glm::vec3 startPoint = ray->origin;
+		glm::vec3 endPoint = ray->origin + (ray->direction * ray->length);
 
 		float vertices[] = {
 			ray->origin.x, ray->origin.y, ray->origin.z,
@@ -330,13 +330,16 @@ void Renderer::select_entity(float xpos, float ypos)
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 int Renderer::get_selected_index()
 {
 	return selectedIndex;
+}
+
+void Renderer::set_selected_index(int i)
+{
+	selectedIndex = i;
 }
 
 void Renderer::deselect_index()

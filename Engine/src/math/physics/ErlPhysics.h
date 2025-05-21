@@ -46,6 +46,7 @@ namespace ErlPhysics {
 	void add_physics_object(GameObject* object);
 	void add_player_physics_object(Player* player);
 	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
+	ErlPhysics::Ray* cast_ray_from_player(Player* player);
 	int check_collision(Ray* ray);
 	void check_aabb_collision(float deltaTime);
 	std::set<uint16_t> get_collided_objects();

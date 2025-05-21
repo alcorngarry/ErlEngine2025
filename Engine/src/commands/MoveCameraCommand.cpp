@@ -58,3 +58,29 @@ void MoveCameraCommand::execute(float deltaTime)
 		}
 	}
 }
+
+void MoveCameraCommand::execute(float deltaTime, float axis)
+{
+	float cameraSpeed = static_cast<float>(20.0f * deltaTime);
+	switch (movement)
+	{
+		case LOOK_X: {
+			InputManager::set_yaw(axis);
+			glm::vec3 direction;
+			direction.x = cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
+			direction.y = sin(glm::radians(InputManager::get_pitch()));
+			direction.z = sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
+			camera->set_camera_front(glm::normalize(direction));
+			break;
+		}
+		case LOOK_Y: {
+			InputManager::set_pitch(-axis);
+			glm::vec3 direction;
+			direction.x = cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
+			direction.y = sin(glm::radians(InputManager::get_pitch()));
+			direction.z = sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
+			camera->set_camera_front(glm::normalize(direction));
+			break;
+		}
+	}
+}

@@ -1,11 +1,10 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(float windowWidth, float windowHeight)
 {
     m_windowHeight = windowHeight;
     m_windowWidth = windowWidth;
-    m_projection = glm::perspective(glm::radians(90.0f), m_windowWidth / m_windowHeight, 0.1f, 10000.0f);
+    m_projection = glm::perspective(glm::radians(45.0f), m_windowWidth / m_windowHeight, 0.1f, 10000.0f);
     setCameraToLookAtOrigin();
 }
 
@@ -75,3 +74,8 @@ void Camera::update_view_matrix()
 {
     m_view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
+
+//void Camera::follow_player(Player* player)
+//{
+//    came
+//}

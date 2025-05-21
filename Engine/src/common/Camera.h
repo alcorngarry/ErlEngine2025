@@ -17,6 +17,8 @@ class Camera {
 		void update_view_matrix(glm::mat4 view);
 		glm::mat4 get_projection_matrix() const;
 		void update_view_matrix();
+
+		void look_at(glm::vec3 lookAtPosition);
 		
 		float m_windowHeight;
 		float m_windowWidth;

@@ -14,7 +14,6 @@ struct PlayerControls {
 class Player : public GameObject {
 	public:
 		Camera* camera;
-		glm::mat4 modelMatrix = glm::mat4(1.0f);
 		glm::vec3 wishVelocity = glm::vec3(0.0f);
 		glm::vec3 wishDir = glm::vec3(0.0f);
 		float wishSpeed = 0.0f;
@@ -22,7 +21,9 @@ class Player : public GameObject {
 
 		float fmove = 0.0f;
 		float smove = 0.0f;
-		float maxSpeed = 320.0f;
+		//float maxSpeed = 320.0f;
+		float maxSpeed = 160.0f;
+
 
 		float fmovePrev = 0.0f;
 		float smovePrev = 0.0f;
@@ -43,5 +44,6 @@ class Player : public GameObject {
 		void accelerate(float deltaTime);
 		void air_accelerate(float deltaTime);
 		void friction(float deltaTime);
+		glm::vec3 get_direction();
 };
 #endif // !PLAYER_H

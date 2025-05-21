@@ -4,6 +4,7 @@
 class Command {
 public:
     virtual void execute(float delta) = 0;
+    virtual void execute(float delta, float axis) {};
     virtual ~Command() = default;
     bool isContinuous = false;
 };

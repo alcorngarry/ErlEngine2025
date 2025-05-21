@@ -50,6 +50,11 @@ ErlPhysics::Ray* ErlPhysics::cast_ray_from_screen(Camera* camera)
     return new ErlPhysics::Ray{ camera->get_camera_pos(), camera->get_camera_front(), 1000.0f };
 }
 
+ErlPhysics::Ray* ErlPhysics::cast_ray_from_player(Player* player)
+{
+    return new ErlPhysics::Ray{ player->Position, player->wishDir, 1000.0f };
+}
+
 int ErlPhysics::check_collision(Ray* ray)
 {
     float maxHeight = -1000.0f; //fix this later

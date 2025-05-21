@@ -27,3 +27,18 @@ void MovePlayerCommand::execute(float deltaTime)
 		}
 	}
 }
+
+void MovePlayerCommand::execute(float deltaTime, float axis)
+{
+	switch (movement)
+	{
+		case GAMEPAD_X: {
+			player->smove += 100.0f * axis;
+			break;
+		}
+		case GAMEPAD_Y: {
+			player->fmove -= 160.0f * axis;
+			break;
+		}
+	}
+}

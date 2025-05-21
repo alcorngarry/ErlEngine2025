@@ -57,6 +57,8 @@ namespace InputManager {
     void remove_key_and_mouse_binding(int key, int mouse);
     void set_gamepad_binding(std::vector<int> key, Command* command);
     void set_key_and_mouse_binding(int key, int mouse, Command* command, bool isDrag);
+    void set_yaw(float yawOffset);
+    void set_pitch(float pitchOffset);
 
     double get_xpos();
     double get_last_xpos();

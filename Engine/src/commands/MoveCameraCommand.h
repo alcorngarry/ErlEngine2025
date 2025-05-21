@@ -9,13 +9,16 @@ enum CameraMovement {
     MOUSE_DRAG,
     SCROLL,
     ORBIT,
-    LOOK_AROUND
+    LOOK_AROUND, 
+    LOOK_X,
+    LOOK_Y
 };
 
 class MoveCameraCommand : public Command {
 public:
     MoveCameraCommand(Camera* camera, CameraMovement movement);
     void execute(float deltaTime) override;
+    void execute(float deltaTime, float axis) override;
 
 private:
     Camera* camera;

@@ -116,11 +116,14 @@ void InputManager::update(float deltaTime) {
                     }
                 }
 
-                for (int axis = 0; axis < GLFW_GAMEPAD_AXIS_LAST; ++axis) {
+                // 4 for now, till using triggers
+                for (int axis = 0; axis < 4; ++axis) {
                     if (fabs(state.axes[axis]) > 0.2f) {
+                        gamepadBindings[{i, 100 - axis}]->execute(deltaTime, state.axes[axis]);
                     }
                 }
             }
+
         }
     }
 }
@@ -242,6 +245,17 @@ double InputManager::get_pitch()
 {
     return pitch;
 }
+
+void InputManager::set_yaw(float yawOffset)
+{
+    yaw += yawOffset;
+}
+
+void InputManager::set_pitch(float pitchOffset)
+{
+    pitch += pitchOffset;
+}
+
 
 bool InputManager::are_multiple_keys_pressed(int firstButton, int secondButton)
 {

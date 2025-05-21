@@ -7,13 +7,16 @@ enum PlayerMovement {
     FORWARD,
     BACK,
     LEFT,
-    RIGHT
+    RIGHT,
+    GAMEPAD_X,
+    GAMEPAD_Y
 };
 
 class MovePlayerCommand : public Command {
 public:
     MovePlayerCommand(Player* player, PlayerMovement movement);
     void execute(float deltaTime) override;
+    void execute(float deltaTime, float axis) override;
 private:
     Player* player;
     PlayerMovement movement;

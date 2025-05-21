@@ -15,13 +15,17 @@ void Player::update(float deltaTime)
 {
 	Position += Velocity * deltaTime;
 
-	camera->set_camera_pos(Position);
-	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));
+	/*camera->set_camera_pos(Position);
+	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));*/
 	set_model_matrix(Position, Rotation, Size);
 }
 
 void Player::update_movement(float deltaTime)
 {
+	camera->set_camera_pos(glm::vec3(10.0f, 200.0f, -500.0f));
+	camera->set_camera_up(glm::vec3(0.0f, camera->get_camera_pos().y, 0.0f));
+	camera->set_camera_front(Position - camera->get_camera_pos());
+
 	if (fmovePrev == fmove) fmove = 0.0f, fmovePrev = 0.0f;
 	if (smovePrev == smove) smove = 0.0f, smovePrev = 0.0f;
 	friction(deltaTime);
@@ -29,7 +33,7 @@ void Player::update_movement(float deltaTime)
 	wishSpeed = 0.0f;
 
 	wishVelocity = fmove * glm::normalize(glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z)) +
-		smove * glm::normalize(glm::cross(camera->get_camera_front(), camera->get_camera_up()));
+		smove * glm::normalize(glm::cross(camera->get_camera_front(), glm::vec3(0.0f, 1.0f, 0.0f)));
 
 	if (wishVelocity != glm::vec3(0.0f))
 	{
@@ -122,4 +126,9 @@ void Player::friction(float deltaTime)
 	if (newspeed < 0.0f) newspeed = 0.0f;
 	newspeed /= speed;
 	Velocity *= newspeed;
+}
+
+glm::vec3 Player::get_direction()
+{
+	return -glm::vec3(ModelMatrix[0][2], ModelMatrix[1][2], ModelMatrix[2][2]);
 }

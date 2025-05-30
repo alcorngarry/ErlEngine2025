@@ -107,9 +107,9 @@ void DebugMenu::draw_entity_hierarchy() {
 void DebugMenu::display_player_velocity()
 {
     ImGui::Text("Velocity:");
-    ImGui::Text("X: %.2f", m_map->player->Velocity.x);
-    ImGui::Text("Y: %.2f", m_map->player->Velocity.y);
-    ImGui::Text("Z: %.2f", m_map->player->Velocity.z);
+    ImGui::Text("X: %.2f", m_map->players[0]->Velocity.x);
+    ImGui::Text("Y: %.2f", m_map->players[0]->Velocity.y);
+    ImGui::Text("Z: %.2f", m_map->players[0]->Velocity.z);
 }
    
 void DebugMenu::draw_entity_properties(GameObject* entity) {

@@ -1,6 +1,6 @@
 #include"Map.h"
 
-Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT)
+Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT), renderState(PLAYER1)
 {
 	fileName = mapName;
 }

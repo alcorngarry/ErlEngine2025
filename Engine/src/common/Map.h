@@ -25,11 +25,17 @@ class Map
 			CHANGE_MAP
 		};
 
+		enum RenderState {
+			PLAYER1,
+			PLAYER2
+		};
+
 		LoadState loadState;
 		State state;
+		RenderState renderState;
 		std::map<uint16_t, GameObject*> entities, lights;
 		std::vector<SkinnedGameObject*> skinned_entities;
-		Player* player;
+		std::vector<Player*> players;
 		Camera* camera;
 
 		Map(std::string mapName);

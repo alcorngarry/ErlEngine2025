@@ -50,11 +50,11 @@ namespace ErlPhysics {
 	int check_collision(Ray* ray);
 	void check_aabb_collision(float deltaTime);
 	std::set<uint16_t> get_collided_objects();
-	float check_floor_collision();
+	float check_floor_collision(Player* player);
 	AABB calculate_minkowski_difference(glm::vec3 minA, glm::vec3 vec3, glm::vec3 minB, glm::vec3 maxB);
 	void add_ray(ErlPhysics::Ray* ray);
 	std::vector<ErlPhysics::Ray*> get_rays();
 	void remove_ray_object(int index);
-	void swept_aabb_collision(float deltaTime);
+	void swept_aabb_collision(Player* player, float deltaTime);
 };
 #endif // !ERL_PHYSICS_H

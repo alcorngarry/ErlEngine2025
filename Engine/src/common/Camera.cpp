@@ -75,7 +75,8 @@ void Camera::update_view_matrix()
     m_view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
 
-//void Camera::follow_player(Player* player)
-//{
-//    came
-//}
+void Camera::follow_position(glm::vec3 followPosition)
+{
+    set_camera_pos(followPosition + glm::vec3(0.0f, 100.0f, 200.0f));
+    m_view = glm::lookAt(get_camera_pos(), followPosition, glm::vec3(0.0f, 10.0f, 0.0f));
+}

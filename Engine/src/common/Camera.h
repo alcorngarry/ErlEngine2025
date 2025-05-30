@@ -17,8 +17,7 @@ class Camera {
 		void update_view_matrix(glm::mat4 view);
 		glm::mat4 get_projection_matrix() const;
 		void update_view_matrix();
-
-		void look_at(glm::vec3 lookAtPosition);
+		void follow_position(glm::vec3 followPosition);
 		
 		float m_windowHeight;
 		float m_windowWidth;
@@ -26,8 +25,8 @@ class Camera {
 		glm::vec3 cameraPos;
 		glm::vec3 cameraFront;
 		glm::vec3 cameraUp;
-		glm::mat4 m_view;
 		glm::mat4 m_projection;
+		glm::mat4 m_view;
 		
 		void setCameraToLookAtOrigin();
 };

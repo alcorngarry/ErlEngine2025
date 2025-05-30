@@ -22,10 +22,12 @@ void Player::update(float deltaTime)
 
 void Player::update_movement(float deltaTime)
 {
-	camera->set_camera_pos(glm::vec3(10.0f, 200.0f, -500.0f));
+	//static camera...
+	/*camera->set_camera_pos(glm::vec3(10.0f, 200.0f, -500.0f));
 	camera->set_camera_up(glm::vec3(0.0f, camera->get_camera_pos().y, 0.0f));
-	camera->set_camera_front(Position - camera->get_camera_pos());
+	camera->set_camera_front(Position - camera->get_camera_pos());*/
 
+	//dynamic follow camera move to camera class (pass in both players)
 	if (fmovePrev == fmove) fmove = 0.0f, fmovePrev = 0.0f;
 	if (smovePrev == smove) smove = 0.0f, smovePrev = 0.0f;
 	friction(deltaTime);

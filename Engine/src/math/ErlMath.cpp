@@ -13,3 +13,10 @@ void ErlMath::print_vector3(glm::vec3 vec)
 {
 	std::cout << vec.x << ", " << vec.y << ", " << vec.z << std::endl;
 }
+
+std::string ErlMath::vec3_to_string(glm::vec3 vec)
+{
+	return std::to_string(static_cast<int>(vec.x)) + ", " +
+		std::to_string(static_cast<int>(vec.y)) + ", " +
+		std::to_string(static_cast<int>(vec.z));
+}

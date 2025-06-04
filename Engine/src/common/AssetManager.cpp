@@ -82,6 +82,7 @@ void AssetManager::load()
 	assetMap[9] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_portal_map.obj");
 	assetMap[10] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/saucer.obj");
 	assetMap[11] = new Model((char*)"C:/Dev/assets/sonar/block.obj");
+	assetMap[12] = new Model((char*)"C:/Dev/assets/sonar/goldcoin.obj");
 
 	load_sky_box();
 
@@ -96,8 +97,7 @@ Model* AssetManager::get_model(uint8_t id)
 
 uint16_t AssetManager::get_num_loaded_assets()
 {
-	//update this with map
-	return 12;
+	return assetMap.size();
 }
 
 SkyBox* AssetManager::get_sky_box()

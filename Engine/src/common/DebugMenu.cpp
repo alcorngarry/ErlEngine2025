@@ -81,7 +81,7 @@ void DebugMenu::show_all_entities()
     if (ImGui::CollapsingHeader("Map entities")) {
         for (const auto& pair : m_map->entities)
         {
-            if (ImGui::Selectable(std::to_string(pair.first).c_str())) {
+            if (ImGui::Selectable((pair.second->GameModel->fileName + " " + ErlMath::vec3_to_string(pair.second->Position)).c_str())) {
                 Renderer::set_selected_index(pair.first);
             }
         }
@@ -96,9 +96,10 @@ void DebugMenu::display_fps(float deltaTime) {
 void DebugMenu::draw_entity_hierarchy() {
     if (ImGui::CollapsingHeader("Entity Hierarchy")) {
         for (uint16_t i = 0; i < AssetManager::get_num_loaded_assets(); i++) {
-            if (ImGui::Selectable(AssetManager::get_model(i)->directory.c_str())) {
-                GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f), true);
+            if (ImGui::Selectable(AssetManager::get_model(i)->fileName.c_str())) {
+                GameObject* entity = new GameObject(i, AssetManager::get_model(i), glm::vec3(0.0f), glm::vec3(100.0f), glm::vec3(0.0f), true);
                 Renderer::add_render_object(entity);
+                m_map->entities[entity->instanceId] = entity;
             }
         }
     }
@@ -106,10 +107,10 @@ void DebugMenu::draw_entity_hierarchy() {
 
 void DebugMenu::display_player_velocity()
 {
-    ImGui::Text("Velocity:");
+    /*ImGui::Text("Velocity:");
     ImGui::Text("X: %.2f", m_map->players[0]->Velocity.x);
     ImGui::Text("Y: %.2f", m_map->players[0]->Velocity.y);
-    ImGui::Text("Z: %.2f", m_map->players[0]->Velocity.z);
+    ImGui::Text("Z: %.2f", m_map->players[0]->Velocity.z);*/
 }
    
 void DebugMenu::draw_entity_properties(GameObject* entity) {
@@ -145,7 +146,10 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
     ImGui::InputFloat3("Tr", matrixTranslation);
     ImGui::InputFloat3("Rt", matrixRotation);
     ImGui::InputFloat3("Sc", matrixScale);
+    
     ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, glm::value_ptr(modelMatrix));
+
+    entity->ModelMatrix = modelMatrix;
 
     if (mCurrentGizmoOperation != ImGuizmo::SCALE)
     {
@@ -183,6 +187,11 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
         entity->Size = scale;
     }
 }
+
+//void DebugMenu::add_action()
+//{
+//
+//}
 
 void DebugMenu::draw_mouse_pos()
 {

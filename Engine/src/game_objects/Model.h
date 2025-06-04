@@ -19,6 +19,7 @@ class Model
 		std::vector<Texture> textures_loaded;
 		std::vector<Mesh> meshes;
 		std::string directory;
+		std::string fileName;
 		bool gammaCorrection;
 
 		Model() = default;

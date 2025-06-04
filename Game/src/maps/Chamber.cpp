@@ -4,6 +4,11 @@ Chamber::Chamber(std::string mapName) : Map(mapName)
 {
 }
 
+void rotate(GameObject* gameObject, float deltaTime)
+{
+	gameObject->ModelMatrix = glm::rotate(gameObject->ModelMatrix, deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
 void Chamber::update(float deltaTime)
 {
 	if (state == DEFAULT)
@@ -13,6 +18,20 @@ void Chamber::update(float deltaTime)
 			player->floorHeight = ErlPhysics::check_floor_collision(player);
 			player->update(deltaTime);
 		}
+	}
+
+	for (const auto& pair : entities)
+	{
+		if (pair.second->assetId == 12)
+		{
+			GameObject* a = pair.second;
+			pair.second->actions["rotate"] = [a, deltaTime]() { rotate(a, deltaTime); };
+		}
+	}
+
+	for (const auto& pair : entities)
+	{
+		pair.second->update(deltaTime);
 	}
 }
 
@@ -35,16 +54,19 @@ void Chamber::load_camera(float windowWidth, float windowHeight)
 
 void Chamber::draw(float deltaTime)
 {
-	if (renderState == PLAYER1)
+	//if (renderState == PLAYER1)
+	//{
+	if (state != DEBUG)
 	{
 		camera->follow_position(players[0]->Position);
-		renderState = PLAYER2;
 	}
+		//renderState = PLAYER2;
+	/*}
 	else if (renderState == PLAYER2)
 	{
 		camera->follow_position(players[1]->Position);
 		renderState = PLAYER1;
-	}
+	}*/
 
 	Renderer::render(camera);
 	UIManager::draw();

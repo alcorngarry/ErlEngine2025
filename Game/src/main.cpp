@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 	float window_height = 768;
     // Start the server in a separate thread
 	//std::thread serverThread(Server::start_server);
-	Engine::set_full_screen(true);
+	//Engine::set_full_screen(true);
 	GLFWwindow* window = Engine::start(window_width, window_height);
 	float lastFrame = 0.0f;
 	float deltaTime = 0.0f;
@@ -48,15 +48,15 @@ int main(int argc, char** argv)
 
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width / 2, height);
+		glViewport(0, 0, width, height);
 
 		game->render(deltaTime);
 
 		//render second screen
-		glfwGetFramebufferSize(window, &width, &height);
+		/*glfwGetFramebufferSize(window, &width, &height);
 		glViewport(width / 2, 0, width / 2, height);
 
-		game->render(deltaTime);
+		game->render(deltaTime);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

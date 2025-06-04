@@ -11,6 +11,10 @@ GameObject::GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 
 
 void GameObject::update(float deltaTime)
 {
+	for (const auto& pair : actions)
+	{
+		pair.second();
+	}
 }
 
 glm::vec3 GameObject::get_aabb_max() const

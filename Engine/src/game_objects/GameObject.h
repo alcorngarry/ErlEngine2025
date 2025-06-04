@@ -2,10 +2,12 @@
 #define GAME_OBJECT_H
 #include<glad/glad.h>
 #include<glm/glm.hpp>
+#include<functional>
 #include"Model.h"
 
 class GameObject {
 	public:
+		std::map<std::string, std::function<void()>> actions;
 		Model* GameModel;
 		glm::vec3 Position, Size, Rotation, Velocity, Acceleration;
 		glm::mat4 ModelMatrix;

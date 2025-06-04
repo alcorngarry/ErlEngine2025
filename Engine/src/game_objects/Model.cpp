@@ -1,15 +1,5 @@
 #include "Model.h"
 
-
-std::vector<Texture> textures_loaded;
-std::vector<Mesh> meshes;
-std::string directory;
-
-glm::vec3 size;
-glm::vec3 location;
-
-bool gammaCorrection;
-
 glm::mat4 Model::convert_mat4_to_glm(const aiMatrix4x4& from)
 {
 	glm::mat4 to;
@@ -46,6 +36,7 @@ void Model::loadModel(std::string path)
 	}
 
 	directory = path.substr(0, path.find_last_of('/'));
+	fileName = path.substr(path.find_last_of('/') + 1, path.size());
 		
 	std::cout << path << std::endl;
 
@@ -60,9 +51,6 @@ void Model::loadModel(std::string path)
 
 void Model::processNode(aiNode* node, const aiScene* scene)
 {
-	size = glm::vec3(0.0f);
-	location = glm::vec3(0.0f);
-
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];

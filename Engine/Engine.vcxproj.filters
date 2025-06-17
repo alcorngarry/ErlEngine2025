@@ -102,6 +102,9 @@
     <ClInclude Include="src\game_objects\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\commands\ToggleConsoleCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game_objects\animation\Animation.cpp">
@@ -185,14 +188,17 @@
     <ClCompile Include="src\game_objects\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\ToggleConsoleCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\renderer\shaders\cubemap.frag.glsl" />
     <None Include="src\renderer\shaders\cubemap.vert.glsl" />
     <None Include="src\renderer\shaders\default.frag.glsl" />
     <None Include="src\renderer\shaders\default.vert.glsl" />
-    <None Include="src\renderer\shaders\interface.frag.glsl" />
-    <None Include="src\renderer\shaders\interface.vert.glsl" />
+    <None Include="src\renderer\shaders\ui_image.frag.glsl" />
+    <None Include="src\renderer\shaders\ui_image.vert.glsl" />
     <None Include="src\renderer\shaders\light.frag.glsl" />
     <None Include="src\renderer\shaders\light.vert.glsl" />
     <None Include="src\renderer\shaders\picking.frag.glsl" />
@@ -209,5 +215,7 @@
     <None Include="src\renderer\shaders\line.frag.glsl" />
     <None Include="src\renderer\shaders\aabb.vert.glsl" />
     <None Include="src\renderer\shaders\aabb.frag.glsl" />
+    <None Include="src\renderer\shaders\egui.vert.glsl" />
+    <None Include="src\renderer\shaders\egui.frag.glsl" />
   </ItemGroup>
 </Project>

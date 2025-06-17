@@ -2,8 +2,11 @@
 #define INPUT_MANAGER_H
 #include<map>
 #include<vector>
+#include<string>
 #include<GLFW/glfw3.h>
 #include"Command.h"
+#include"commands/ToggleConsoleCommand.h"
+#include<functional>
 
 /*GLFW_GAMEPAD_BUTTON_A,
 GLFW_GAMEPAD_BUTTON_B,
@@ -47,18 +50,24 @@ namespace InputManager {
 
     void init(GLFWwindow* window);
     void update(float deltaTime);
+    void handle_gamepad_command();
     double get_scroll_value();
     bool is_mouse_button_pressed();
     void update_cursor();
-    void set_key_binding(int key, Command* command);
+    void update_text_input();
+    void set_key_binding(int key, std::function<void(float)>);
     void set_mouse_binding(int key, Command* command);
     void remove_mouse_binding(int key);
     void remove_key_binding(int key);
     void remove_key_and_mouse_binding(int key, int mouse);
+    void remove_all_bindings();
+    void remove_all_key_bindings();
     void set_gamepad_binding(std::vector<int> key, Command* command);
     void set_key_and_mouse_binding(int key, int mouse, Command* command, bool isDrag);
-    void set_yaw(float yawOffset);
     void set_pitch(float pitchOffset);
+    void set_text_input_control();
+    void set_yaw(float m_yaw);
+    void set_text_input(const char* text);
 
     double get_xpos();
     double get_last_xpos();
@@ -66,6 +75,10 @@ namespace InputManager {
     double get_last_ypos();
     double get_yaw();
     double get_pitch();
+    char* get_text_input();
+    void clear_text_input();
+    void clear_text_input_last_char();
+
     bool are_multiple_keys_pressed(int firstButton, int secondButton);
     bool is_key_pressed(int button);
     void show_cursor(bool show);

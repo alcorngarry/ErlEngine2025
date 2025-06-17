@@ -17,6 +17,7 @@ void Game::init()
 	Maps[level]->load(m_windowWidth, m_windowHeight);
 	Maps[level]->set_controls();
 	DebugMenu::load_map(Maps[level]);
+	UIManager::load_map(Maps[level]);
 }
 
 void Game::update_controls(GameState before, GameState after)

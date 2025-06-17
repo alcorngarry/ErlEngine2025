@@ -27,7 +27,7 @@ namespace DebugMenu
 		void init(GLFWwindow* glfwWindow);
 		void load_map(Map* map);
 		void create_menu(float deltaTime);
-		void display_board_tiles();
+		void show_scripts(GameObject* entity);
 		void show_all_entities();
 		void display_fps(float deltaTime);
 		void draw_entity_hierarchy();
@@ -35,7 +35,6 @@ namespace DebugMenu
 		void draw_entity_properties(GameObject* entity);
 		void draw_mouse_pos();
 		void draw_camera_position();
-		void create_new_map();
 		void shut_down();
 		void set_controls();
 		void clear_controls();

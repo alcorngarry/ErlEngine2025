@@ -23,6 +23,7 @@
     <ClInclude Include="src\commands\AddRemoveEntityCommand.h" />
     <ClInclude Include="src\commands\MoveCameraCommand.h" />
     <ClInclude Include="src\commands\SelectEntityCommand.h" />
+    <ClInclude Include="src\commands\ToggleConsoleCommand.h" />
     <ClInclude Include="src\common\DebugMenu.h" />
     <ClInclude Include="src\common\SkyBox.h" />
     <ClInclude Include="src\game_objects\animation\Animation.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="src\commands\AddRemoveEntityCommand.cpp" />
     <ClCompile Include="src\commands\MoveCameraCommand.cpp" />
     <ClCompile Include="src\commands\SelectEntityCommand.cpp" />
+    <ClCompile Include="src\commands\ToggleConsoleCommand.cpp" />
     <ClCompile Include="src\common\DebugMenu.cpp" />
     <ClCompile Include="src\common\Skybox.cpp" />
     <ClCompile Include="src\game_objects\animation\Animation.cpp" />
@@ -86,11 +88,13 @@
     <None Include="src\renderer\shaders\default.frag.glsl" />
     <None Include="src\renderer\shaders\default.gs.glsl" />
     <None Include="src\renderer\shaders\default.vert.glsl" />
+    <None Include="src\renderer\shaders\egui.frag.glsl" />
+    <None Include="src\renderer\shaders\egui.vert.glsl" />
     <None Include="src\renderer\shaders\grass.frag.glsl" />
     <None Include="src\renderer\shaders\grass.gs.glsl" />
     <None Include="src\renderer\shaders\grass.vert.glsl" />
-    <None Include="src\renderer\shaders\interface.frag.glsl" />
-    <None Include="src\renderer\shaders\interface.vert.glsl" />
+    <None Include="src\renderer\shaders\ui_image.frag.glsl" />
+    <None Include="src\renderer\shaders\ui_image.vert.glsl" />
     <None Include="src\renderer\shaders\light.frag.glsl" />
     <None Include="src\renderer\shaders\light.vert.glsl" />
     <None Include="src\renderer\shaders\line.frag.glsl" />

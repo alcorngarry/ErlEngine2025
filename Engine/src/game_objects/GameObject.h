@@ -7,7 +7,7 @@
 
 class GameObject {
 	public:
-		std::map<std::string, std::function<void()>> actions;
+		std::vector<std::function<void(GameObject*, float)>> actions;
 		Model* GameModel;
 		glm::vec3 Position, Size, Rotation, Velocity, Acceleration;
 		glm::mat4 ModelMatrix;

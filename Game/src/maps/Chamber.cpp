@@ -4,11 +4,6 @@ Chamber::Chamber(std::string mapName) : Map(mapName)
 {
 }
 
-void rotate(GameObject* gameObject, float deltaTime)
-{
-	gameObject->ModelMatrix = glm::rotate(gameObject->ModelMatrix, deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
 void Chamber::update(float deltaTime)
 {
 	if (state == DEFAULT)
@@ -17,15 +12,6 @@ void Chamber::update(float deltaTime)
 		{
 			player->floorHeight = ErlPhysics::check_floor_collision(player);
 			player->update(deltaTime);
-		}
-	}
-
-	for (const auto& pair : entities)
-	{
-		if (pair.second->assetId == 12)
-		{
-			GameObject* a = pair.second;
-			pair.second->actions["rotate"] = [a, deltaTime]() { rotate(a, deltaTime); };
 		}
 	}
 
@@ -74,6 +60,7 @@ void Chamber::draw(float deltaTime)
 
 void Chamber::set_controls()
 {
+	Map::set_controls();
 	if(glfwJoystickIsGamepad(GLFW_JOYSTICK_1))
 	{
 		//set arbitrary value for joystick
@@ -98,14 +85,4 @@ void Chamber::set_controls()
 		InputManager::set_key_binding(GLFW_KEY_SPACE, new JumpCommand(player));
 		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new FireCommand(camera));*/
 	}
-}
-
-void Chamber::clear_controls()
-{
-	InputManager::remove_mouse_binding(-2);
-	InputManager::remove_key_binding(GLFW_KEY_W);
-	InputManager::remove_key_binding(GLFW_KEY_A);
-	InputManager::remove_key_binding(GLFW_KEY_S);
-	InputManager::remove_key_binding(GLFW_KEY_D);
-	InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
 }

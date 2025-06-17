@@ -1,8 +1,40 @@
 #include"Map.h"
 
+std::map<std::string, std::function<void(GameObject*, float)>> actions;
+
+void Scripts::init()
+{
+	actions["rotate"] = Scripts::rotate;
+	actions["hide"] = Scripts::hide;
+	actions["show"] = Scripts::show;
+}
+
+void Scripts::rotate(GameObject* gameObject, float deltaTime)
+{
+	gameObject->ModelMatrix = glm::rotate(gameObject->ModelMatrix, deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Scripts::hide(GameObject* gameObject, float deltaTime)
+{
+	gameObject->isRendered = false;
+	Renderer::remove_render_object(gameObject->instanceId);
+}
+
+void Scripts::show(GameObject* gameObject, float deltaTime)
+{
+	gameObject->isRendered = true;
+	Renderer::add_render_object(gameObject);
+}
+
+std::function<void(GameObject*, float)> Scripts::get_script(std::string scriptName)
+{
+	return actions[scriptName];
+}
+
 Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT), renderState(PLAYER1)
 {
 	fileName = mapName;
+	Scripts::init();
 }
 
 void Map::save()
@@ -10,6 +42,7 @@ void Map::save()
 	writeMap = std::ofstream{ fileName + ".esf" };
 	write_models();
 	write_lights();
+	write_scripts();
 	writeMap.close();
 }
 
@@ -58,6 +91,37 @@ void Map::write_lights()
 	writeMap << "]";
 }
 
+void Map::write_scripts()
+{
+	writeMap << "scripts: [";
+	for (auto entity = entities.begin(); entity != entities.end(); ++entity)
+	{
+		if (entity->second->actions.size() != 0)
+		{
+			writeMap << "{";
+			writeMap << "objectId: " << entity->first << ", " << "scriptName: ";
+			
+			for(auto pair = entity->second->actions.begin(); pair != entity->second->actions.end(); ++pair)
+			{
+				if (pair == std::prev(entity->second->actions.end()))
+				{
+					//writeMap << pair->first;
+				} else {
+					//writeMap << pair->first << ", ";
+				}
+			}
+			if (entity == std::prev(entities.end()))
+			{
+				writeMap << "}";
+			}
+			else {
+				writeMap << "}," << std::endl;
+			}
+		}
+	}
+	writeMap << "]";
+}
+
 void Map::load(float windowWidth, float windowHeight)
 {
 	readMap.open(fileName + ".esf");
@@ -72,7 +136,9 @@ void Map::load(float windowWidth, float windowHeight)
 		} else if (line == "lights: ") {
 			read_lights();
 		}
-		
+		else if (line == "scripts: ") {
+			load_scripts();
+		}
 	} 
 	readMap.close();
 	load_skybox();
@@ -97,6 +163,7 @@ void Map::load_physics_objects()
 
 void Map::read_models()
 {
+	std::cout << "Reading models" << std::endl;
 	while (readMap.peek() != ']')
 	{
 		GameObject* entity = read_asset();
@@ -108,6 +175,7 @@ void Map::read_models()
 
 void Map::read_lights()
 {
+	std::cout << "Reading lights" << std::endl;
 	while (readMap.peek() != ']')
 	{
 		GameObject* light = read_asset();
@@ -166,6 +234,35 @@ GameObject* Map::read_asset()
 	return new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation, isRendered);
 }
 
+void Map::load_scripts()
+{
+	std::cout << "Reading scripts" << std::endl;
+	while (readMap.peek() != ']')
+	{
+		read_script();
+	}
+	getline(readMap, line, '\n');
+}
+
+void Map::read_script()
+{
+	std::string line;
+	std::string scriptName;
+	getline(readMap, line, ':');
+	int objectId;
+
+	getline(readMap, line, ',');
+	objectId = std::stof(line);
+
+	getline(readMap, line, ':');
+
+	getline(readMap, line, '}');
+	scriptName = line.substr(1, line.size());
+
+
+	entities[objectId]->actions.push_back(actions[scriptName]);
+}
+
 void Map::load_skybox()
 {
 	Renderer::add_sky_box(AssetManager::get_sky_box());
@@ -204,4 +301,15 @@ void Map::toggle_render(int index)
 		entities[index]->isRendered = true;
 		Renderer::add_render_object(entities[index]);
 	}
+}
+
+void Map::set_controls()
+{
+	ToggleConsoleCommand tc;
+	InputManager::set_key_binding(GLFW_KEY_GRAVE_ACCENT, [tc](float dt) mutable { tc.execute(dt); });
+}
+
+void Map::clear_controls()
+{
+	InputManager::remove_all_bindings();
 }

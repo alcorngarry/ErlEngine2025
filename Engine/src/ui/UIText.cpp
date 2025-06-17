@@ -11,7 +11,7 @@ void UIText::init()
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
     }
     FT_Face face;
-    if (FT_New_Face(ft, "C:/Dev/opengl_code/Erl/Erl/Game/res/font/Antonio-Bold.ttf", 0, &face)) {
+    if (FT_New_Face(ft, "C:/Dev/opengl_code/Erl/Erl/Game/res/font/Mx437_IBM_BIOS-2y.ttf", 0, &face)) {
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
     }
     else {
@@ -64,7 +64,7 @@ void UIText::init()
         //texture for each character is a bit much I believe...
     }
 
-    std::cout << "Loaded Font: Antonio-Bold.ttf" << std::endl;
+    std::cout << "Loaded Font: Mx437_IBM_BIOS-2y.ttf" << std::endl;
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
 }
@@ -87,8 +87,12 @@ int UIText::get_max_char_height()
     return maxHeight;
 }
 
-void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float x, float y)
+void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float x, float y, float scale, glm::vec3 color)
 {
+    shader->use();
+    shader->setMat4("projection", projection);
+    shader->setVec3("textColor", color);
+
     unsigned int VAO, VBO;
 
     glGenVertexArrays(1, &VAO);
@@ -101,14 +105,8 @@ void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    shader->use();
-    shader->setMat4("projection", projection);
-    shader->setVec3("textColor", glm::vec3(1.0f, 1.0f, 1.0f));
-
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
-
-    float scale = 1.0f;
 
     for (auto c = text.begin(); c != text.end(); c++) {
         Character ch = characters[*c];
@@ -142,4 +140,6 @@ void UIText::draw(Shader* shader, glm::mat4 projection, std::string text, float 
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
 }

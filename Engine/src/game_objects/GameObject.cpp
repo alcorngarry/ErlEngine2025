@@ -11,9 +11,9 @@ GameObject::GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 
 
 void GameObject::update(float deltaTime)
 {
-	for (const auto& pair : actions)
+	for (const auto& action : actions)
 	{
-		pair.second();
+		action(this, deltaTime);
 	}
 }
 

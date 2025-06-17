@@ -12,7 +12,6 @@ class Chamber : public Map {
 		std::vector<Player*> players;
 		Chamber(std::string mapName);
 		void set_controls() override;
-		void clear_controls() override;
 		void update(float deltaTime) override;
 	protected:
 		void load_player() override;

@@ -155,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font\Antonio-Bold.ttf" />
+    <Font Include="res\font\AcPlus_IBM_BIOS-2y.ttf" />
+    <Font Include="res\font\Mx437_IBM_BIOS-2y.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\maps\chamber_1.esf" />

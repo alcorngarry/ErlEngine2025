@@ -13,3 +13,8 @@ models: [{assetId: 11, position: -390,-70,216, scale: 20,160,20, rotation: 0,-0,
 {assetId: 12, position: 27,17,-417, scale: 10,10,10, rotation: 0,-0,0, isRendered: 1},
 {assetId: 12, position: -31,17,-417, scale: 10,10,10, rotation: 0,-0,0, isRendered: 1}]
 lights: []
+scripts: [{objectId: 11, scriptName: rotate},
+{objectId: 12, scriptName: rotate},
+{objectId: 13, scriptName: rotate},
+{objectId: 7, scriptName: rotate},
+{objectId: 9, scriptName: rotate}]

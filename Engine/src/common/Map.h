@@ -10,6 +10,16 @@
 #include"AssetManager.h"
 #include"input/InputManager.h"
 #include"game_objects/Player.h"
+#include"commands/ToggleConsoleCommand.h"
+
+struct Scripts
+{
+	static void init();
+	static void rotate(GameObject* gameObject, float deltaTime);
+	static void hide(GameObject* gameObject, float deltaTime);
+	static void show(GameObject* gameObject, float deltaTime);
+	static std::function<void(GameObject*, float)> get_script(std::string scriptName);
+};
 
 class Map 
 {
@@ -42,8 +52,8 @@ class Map
 		virtual void save();
 		virtual void load(float windowWidth, float windowHeight);
 		virtual void draw(float deltaTime);
-		virtual void set_controls() = 0;
-		virtual void clear_controls() = 0;
+		virtual void set_controls();
+		virtual void clear_controls();
 		virtual void update(float deltaTime) = 0;
 		
 		void read_models();
@@ -60,10 +70,13 @@ class Map
 		void load_physics_objects();
 		void write_models();
 		void write_lights();
+		void write_scripts();
 	private:
 		std::string line;
 		void load_skybox();
 		GameObject* read_asset();
+		void load_scripts();
+		void read_script();
 };
 
 #endif // !MAP_H

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -73,7 +73,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Font Include="res\font\AcPlus_IBM_BIOS-2y.ttf" />
     <Font Include="res\font\Antonio-Bold.ttf" />
+    <Font Include="res\font\Mx437_IBM_BIOS-2y.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\maps\chamber_1.esf" />

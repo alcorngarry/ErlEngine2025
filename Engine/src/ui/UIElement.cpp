@@ -1,7 +1,10 @@
 #include"UIElement.h"
 
 UIElement::UIElement(unsigned int textureID) 
-    : m_x(0.0f), m_y(0.0f), m_width(0.0f), m_height(0.0f), textureID(textureID) {}
+    : m_x(0.0f), m_y(0.0f), m_width(0.0f), m_height(0.0f), textureID(textureID), color(glm::vec4(0.0f)) {}
+
+UIElement::UIElement(glm::vec4 color)
+    : m_x(0.0f), m_y(0.0f), m_width(0.0f), m_height(0.0f), textureID(-1), color(color) {}
 
 void UIElement::set_size(float width, float height)
 {
@@ -29,13 +32,7 @@ void UIElement::draw(Shader* shader, glm::mat4 projection) {
     shader->use();
     shader->setMat4("projection", projection);
 
-    if (isSelected)
-    {
-        shader->setBool("selected", true);
-    }
-    else {
-        shader->setBool("selected", false);
-    }
+    if(textureID == -1) shader->setVec4("backgroundColor", color);
 
     float vertices[] = {
         m_x, m_y, 0.0f, 0.0f, 1.0f,
@@ -65,10 +62,13 @@ void UIElement::draw(Shader* shader, glm::mat4 projection) {
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    if (textureID > 0)
+    {
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(1);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+    }
+    
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);

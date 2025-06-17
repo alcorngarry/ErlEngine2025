@@ -6,7 +6,6 @@ static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 static bool useSnap(false);
 float snap[3] = { 1.f, 1.f, 1.f };
 		MENU_TYPE type = MENU_TYPE::PLAYER;
-
 Map* m_map;
 
 void DebugMenu::init(GLFWwindow* glfwWindow) {
@@ -40,40 +39,31 @@ void DebugMenu::create_menu(float deltaTime)
     display_player_velocity();
     show_all_entities();
     
-    //if (type == MENU_TYPE::EDITOR)
-    //{
-        draw_mouse_pos();
-        draw_entity_hierarchy();
-        int selectedIndex = Renderer::get_selected_index();
-        if (selectedIndex != -1) {
-            GameObject* entity = m_map->entities[selectedIndex];
-            draw_entity_properties(entity);
-        }
-    //}
+    draw_mouse_pos();
+    draw_entity_hierarchy();
+    int selectedIndex = Renderer::get_selected_index();
+    if (selectedIndex != -1) {
+        GameObject* entity = m_map->entities[selectedIndex];
+        draw_entity_properties(entity);
+    }
 
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    //awful fix later
 }
 
-void DebugMenu::display_board_tiles()
+void DebugMenu::show_scripts(GameObject* entity)
 {
-  /*  if (ImGui::CollapsingHeader("BoardSpace Specific Properties"))
+    bool a = entity->actions.size() > 0;
+    ImGui::Checkbox("Rotate", &a);
+
+    if (a)
     {
-        std::map<uint8_t, BoardSpace*> idToBoardSpaceMap;
-        for (size_t i = 0; i < d_entities.size(); ++i)
-        {
-            if (auto boardSpace = dynamic_cast<BoardSpace*>(d_entities[i])) {
-                idToBoardSpaceMap[boardSpace->assetId] = boardSpace;
-                boardSpace->nextSpace[0] = idToBoardSpaceMap[boardSpace->nextSpaceIds[0]];
-                ImGui::PushID(i);
-                std::string id = "BoardSpace: " + std::to_string((int)boardSpace->assetId);
-                ImGui::InputInt(id.c_str(), &boardSpace->nextSpaceIds[0], 1, 20);
-                ImGui::PopID();
-            }
-        }
-    }*/
+        entity->actions[0] = Scripts::rotate;
+    }
+    else {
+        entity->actions.clear();
+    }
 }
 
 void DebugMenu::show_all_entities()
@@ -107,10 +97,10 @@ void DebugMenu::draw_entity_hierarchy() {
 
 void DebugMenu::display_player_velocity()
 {
-    /*ImGui::Text("Velocity:");
+    ImGui::Text("Velocity:");
     ImGui::Text("X: %.2f", m_map->players[0]->Velocity.x);
     ImGui::Text("Y: %.2f", m_map->players[0]->Velocity.y);
-    ImGui::Text("Z: %.2f", m_map->players[0]->Velocity.z);*/
+    ImGui::Text("Z: %.2f", m_map->players[0]->Velocity.z);
 }
    
 void DebugMenu::draw_entity_properties(GameObject* entity) {
@@ -186,12 +176,9 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
         entity->Rotation = rotation;
         entity->Size = scale;
     }
-}
 
-//void DebugMenu::add_action()
-//{
-//
-//}
+    show_scripts(entity);
+}
 
 void DebugMenu::draw_mouse_pos()
 {
@@ -200,13 +187,6 @@ void DebugMenu::draw_mouse_pos()
     ImGui::Text("X: %.2f", mousePos.x);
     ImGui::Text("Y: %.2f", mousePos.y);
 }
-
-//void DebugMenu::draw_ray_cast()
-//{
-//    glm::vec3 ray = Renderer::get_ray_vector();
-//    ImGui::Text("Ray:");
-//    ImGui::Text("%.2f, %.2f, %.2f", ray.x, ray.y, ray.z);
-//}
 
 void DebugMenu::draw_camera_position() {
     ImGui::Text("Camera Position:");
@@ -225,10 +205,6 @@ void DebugMenu::draw_camera_position() {
     ImGui::Text("Z: %.2f", m_map->camera->get_camera_up().z);
 }
 
-void DebugMenu::create_new_map() 
-{
-}
-
 void DebugMenu::shut_down() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -242,16 +218,15 @@ void DebugMenu::set_controls()
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(false));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(true));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->camera, ORBIT));
-    InputManager::set_key_binding(GLFW_KEY_N, new AddRemoveEntityCommand(m_map, true));
-    InputManager::set_key_binding(GLFW_KEY_R, new AddRemoveEntityCommand(m_map, false));
+    
+    AddRemoveEntityCommand are(m_map, true);
+    AddRemoveEntityCommand are2(m_map, false);
+
+    InputManager::set_key_binding(GLFW_KEY_N, [are](float dt) mutable { are.execute(dt); });
+    InputManager::set_key_binding(GLFW_KEY_R, [are2](float dt) mutable { are2.execute(dt); });
 }
 
 void DebugMenu::clear_controls()
 {
-    InputManager::remove_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE);
-    InputManager::remove_mouse_binding(-1);
-    InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_LEFT);
-    InputManager::remove_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT);
-    InputManager::remove_key_binding(GLFW_KEY_N);
-    InputManager::remove_key_binding(GLFW_KEY_R);
+    InputManager::remove_all_bindings();
 }

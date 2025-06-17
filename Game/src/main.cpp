@@ -12,7 +12,7 @@
 int main(int argc, char** argv)
 {
 	float window_width = 1280;
-	float window_height = 768;
+	float window_height = 720;
     // Start the server in a separate thread
 	//std::thread serverThread(Server::start_server);
 	//Engine::set_full_screen(true);
@@ -23,10 +23,14 @@ int main(int argc, char** argv)
 	Game* game = new Game(window_width, window_height);
 	game->init();
 
+	SaveCommand sc(game->Maps[game->level]);
+	ToggleMenuCommand tm(game);
+	CloseWindowCommand cw(window);
+
 	//move these to the engine probably
-	InputManager::set_key_binding(GLFW_KEY_F9, new SaveCommand(game->Maps[game->level]));
-	InputManager::set_key_binding(GLFW_KEY_M, new ToggleMenuCommand(game));
-	InputManager::set_key_binding(GLFW_KEY_ESCAPE, new CloseWindowCommand(window));
+	InputManager::set_key_binding(GLFW_KEY_F9, [sc](float dt) mutable { sc.execute(dt); });
+	//InputManager::set_key_binding(GLFW_KEY_M, [tm](float dt) mutable { tm.execute(dt); });
+	InputManager::set_key_binding(GLFW_KEY_ESCAPE, [cw](float dt) mutable  { cw.execute(dt); });
 	//move
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);

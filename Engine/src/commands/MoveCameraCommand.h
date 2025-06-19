@@ -4,6 +4,7 @@
 #include"input/Command.h"
 #include"common/Camera.h"
 #include"input/InputManager.h"
+#include"math/physics/ErlPhysics.h"
 
 enum CameraMovement {
     MOUSE_DRAG,

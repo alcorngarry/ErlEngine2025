@@ -63,9 +63,9 @@ void UIManager::toggle_window(std::string windowName)
 
 void UIManager::load_elements()
 {
-    uiElements["crosshair"] = new UIElement(AssetManager::get_ui_element(0));
+   /* uiElements["crosshair"] = new UIElement(AssetManager::get_ui_element(0));
     center(uiElements["crosshair"]);
-    uiDrawList.insert("crosshair");
+    uiDrawList.insert("crosshair");*/
 
     windows["console"] = new Window(glm::vec2(0.0f, 0.0f), glm::vec2(screenWidth, screenHeight / 3), "hello");
 }
@@ -164,7 +164,7 @@ Window::Window(glm::vec2 pos, glm::vec2 size, std::string title) : m_pos(pos), m
                         ui_map->entities[number]->actions.clear();
                     }
                     else {
-                        ui_map->entities[number]->actions.push_back(Scripts::get_script(action));
+                        ui_map->entities[number]->actions[action] = Scripts::get_script(action);
                     }
                 }
             }

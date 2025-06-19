@@ -84,7 +84,7 @@ void Renderer::render(Camera* camera)
 		skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
 	}
 	else {
-		skinnedShaderProgram->setVec3("lightPos", glm::vec3(0.0f));
+		skinnedShaderProgram->setVec3("lightPos", glm::vec3(0.0f, 800.0f, 0.0f));
 	}
 	skinnedShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 	skinnedShaderProgram->setInt("skybox", 1);
@@ -100,17 +100,15 @@ void Renderer::render(Camera* camera)
 		shaderProgram->setVec3("lightPos", m_lights[0]->Position);
 	}
 	else {
-		shaderProgram->setVec3("lightPos", glm::vec3(0.0f));
+		shaderProgram->setVec3("lightPos", glm::vec3(0.0f, 800.0f, 0.0f));
 	}
 	shaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 
 	for (const auto& m_entity : m_entities)
 	{
-		if (m_entity.second->assetId != 99)
-		{
-			shaderProgram->setBool("selected", m_entity.first == Renderer::get_selected_index());
-			Renderer::draw_static(shaderProgram, m_entity.second->GameModel, m_entity.second->ModelMatrix);
-		}
+		//shaderProgram->setBool("selected", m_entity.first == Renderer::get_selected_index());
+		shaderProgram->setBool("selected", false);
+		Renderer::draw_static(shaderProgram, m_entity.second->GameModel, m_entity.second->ModelMatrix);
 	}
 
 	//render_grass(glm::vec3(0.0f), camera);
@@ -286,7 +284,6 @@ void Renderer::draw_rays()
 	}
 }
 
-// to be deprecated... probably, maybe not
 void Renderer::select_entity(float xpos, float ypos)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -296,7 +293,6 @@ void Renderer::select_entity(float xpos, float ypos)
 
 	pickingShaderProgram->setMat4("view", view);
 	pickingShaderProgram->setMat4("projection", projection);
-
 
 	for (const auto& pair : m_entities)
 	{

@@ -2,6 +2,8 @@
 
 int GameObject::idCounter = 0;
 
+// lets do this, goal make a script that if both players press button it opens a door.
+
 GameObject::GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered) : assetId(assetId), GameModel(model), Position(pos), Size(size), Rotation(rotation), isRendered(isRendered)
 {
 	instanceId = idCounter++;
@@ -13,7 +15,7 @@ void GameObject::update(float deltaTime)
 {
 	for (const auto& action : actions)
 	{
-		action(this, deltaTime);
+		action.second(this, deltaTime);
 	}
 }
 

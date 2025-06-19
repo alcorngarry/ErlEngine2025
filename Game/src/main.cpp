@@ -11,8 +11,8 @@
 
 int main(int argc, char** argv)
 {
-	float window_width = 1280;
-	float window_height = 720;
+	float window_width = 1920;
+	float window_height = 1080;
     // Start the server in a separate thread
 	//std::thread serverThread(Server::start_server);
 	//Engine::set_full_screen(true);
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
 	//move these to the engine probably
 	InputManager::set_key_binding(GLFW_KEY_F9, [sc](float dt) mutable { sc.execute(dt); });
-	//InputManager::set_key_binding(GLFW_KEY_M, [tm](float dt) mutable { tm.execute(dt); });
+	InputManager::set_key_binding(GLFW_KEY_M, [tm](float dt) mutable { tm.execute(dt); });
 	InputManager::set_key_binding(GLFW_KEY_ESCAPE, [cw](float dt) mutable  { cw.execute(dt); });
 	//move
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -17,6 +17,7 @@ void Player::update(float deltaTime)
 
 	/*camera->set_camera_pos(Position);
 	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));*/
+	
 	set_model_matrix(Position, Rotation, Size);
 }
 
@@ -41,7 +42,9 @@ void Player::update_movement(float deltaTime)
 	{
 		wishDir = glm::normalize(wishVelocity);
 		wishSpeed = glm::length(wishVelocity);
+		Rotation.y = glm::degrees(atan2(wishDir.x, wishDir.z));
 	}
+
 
 	if (wishSpeed > maxSpeed)
 	{

@@ -21,17 +21,6 @@ void Chamber::update(float deltaTime)
 	}
 }
 
-void Chamber::load_player()
-{
-	players.push_back(new Player(0, AssetManager::get_model(11), camera, glm::vec3(0.0f)));
-	Renderer::add_render_object(players[0]);
-	ErlPhysics::add_player_physics_object(players[0]);
-
-	players.push_back(new Player(1, AssetManager::get_model(11), camera, glm::vec3(0.0f)));
-	Renderer::add_render_object(players[1]);
-	ErlPhysics::add_player_physics_object(players[1]);
-}
-
 void Chamber::load_camera(float windowWidth, float windowHeight)
 {
 	camera = new Camera(windowWidth, windowHeight);

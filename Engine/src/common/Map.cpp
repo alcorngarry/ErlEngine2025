@@ -42,7 +42,7 @@ void Map::save()
 	writeMap = std::ofstream{ fileName + ".esf" };
 	write_models();
 	write_lights();
-	write_scripts();
+	write_player();
 	writeMap.close();
 }
 
@@ -56,7 +56,8 @@ void Map::write_models()
 		writeMap << "assetId: " << entity->second->assetId << ", " << "position: "
 			<< entity->second->Position.x << "," << entity->second->Position.y << "," << entity->second->Position.z << ", "
 			<< "scale: " << entity->second->Size.x << "," << entity->second->Size.y << "," << entity->second->Size.z << ", "
-			<< "rotation: " << entity->second->Rotation.x << "," << entity->second->Rotation.y << "," << entity->second->Rotation.z << ", " << "isRendered: " << (entity->second->isRendered == 1);
+			<< "rotation: " << entity->second->Rotation.x << "," << entity->second->Rotation.y << "," << entity->second->Rotation.z << ", " << "isRendered: " << (entity->second->isRendered == 1) << ", ";
+		write_scripts(entity->second);
 
 		if (entity == std::prev(entities.end()))
 		{
@@ -88,42 +89,50 @@ void Map::write_lights()
 			writeMap << "}," << std::endl;
 		}
 	}
-	writeMap << "]";
+	writeMap << "]" << std::endl;
 }
 
-void Map::write_scripts()
+void Map::write_scripts(GameObject* entity)
 {
 	writeMap << "scripts: [";
-	for (auto entity = entities.begin(); entity != entities.end(); ++entity)
+	if (entity->actions.size() != 0)
 	{
-		if (entity->second->actions.size() != 0)
+		writeMap << "{";
+		for(auto action = entity->actions.begin(); action != entity->actions.end(); ++action)
 		{
-			writeMap << "{";
-			writeMap << "objectId: " << entity->first << ", " << "scriptName: ";
-			
-			for(auto pair = entity->second->actions.begin(); pair != entity->second->actions.end(); ++pair)
+			if (action == std::prev(entity->actions.end()))
 			{
-				if (pair == std::prev(entity->second->actions.end()))
-				{
-					//writeMap << pair->first;
-				} else {
-					//writeMap << pair->first << ", ";
-				}
-			}
-			if (entity == std::prev(entities.end()))
-			{
-				writeMap << "}";
-			}
-			else {
-				writeMap << "}," << std::endl;
+				writeMap << action->first;
+			} else {
+				writeMap << action->first << ", ";
 			}
 		}
+		writeMap << "}";
 	}
 	writeMap << "]";
 }
 
+void Map::write_player()
+{
+	writeMap << "player: [";
+	for (int i = 0; i < playerStarts.size(); i++)
+	{
+		writeMap << "{";
+		writeMap << "position: " << playerStarts[i].x << "," << playerStarts[i].y << "," << playerStarts[i].z;
+		writeMap << "}";
+
+		if (!(i + 1 == playerStarts.size()))
+		{
+			writeMap << "," << std::endl;
+		}
+	}
+	writeMap << "]" << std::endl;
+}
+
 void Map::load(float windowWidth, float windowHeight)
 {
+	load_camera(windowWidth, windowHeight);
+
 	readMap.open(fileName + ".esf");
 	char peek = 'B';
 	std::cout << "Loading Map: " << fileName << std::endl;
@@ -135,16 +144,12 @@ void Map::load(float windowWidth, float windowHeight)
 			read_models();
 		} else if (line == "lights: ") {
 			read_lights();
-		}
-		else if (line == "scripts: ") {
-			load_scripts();
+		} else if (line == "player: ") {
+			read_player();
 		}
 	} 
 	readMap.close();
 	load_skybox();
-	// important order, think before changing
-	load_camera(windowWidth, windowHeight);
-	load_player();
 	load_physics_objects();
 }
 
@@ -184,6 +189,20 @@ void Map::read_lights()
 	}
 	getline(readMap, line, '\n');
 }
+
+void Map::read_player()
+{
+	std::cout << "Reading player(s)" << std::endl;
+	while (readMap.peek() != ']')
+	{
+		Player* player = read_player_asset();
+		players.push_back(player);
+		Renderer::add_render_object(player);
+		ErlPhysics::add_player_physics_object(player);
+	}
+	getline(readMap, line, '\n');
+}
+
 
 GameObject* Map::read_asset()
 {
@@ -228,39 +247,48 @@ GameObject* Map::read_asset()
 	rotation = { x, y, z };
 
 	getline(readMap, line, ':');
-	getline(readMap, line, '}');
+	getline(readMap, line, ',');
 	isRendered = std::stof(line) == 1;
-	
-	return new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation, isRendered);
+
+	GameObject* entity = new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation, isRendered);
+	read_script(entity);
+	return entity;
 }
 
-void Map::load_scripts()
-{
-	std::cout << "Reading scripts" << std::endl;
-	while (readMap.peek() != ']')
-	{
-		read_script();
-	}
-	getline(readMap, line, '\n');
-}
-
-void Map::read_script()
+void Map::read_script(GameObject* entity)
 {
 	std::string line;
 	std::string scriptName;
-	getline(readMap, line, ':');
-	int objectId;
 
-	getline(readMap, line, ',');
-	objectId = std::stof(line);
-
-	getline(readMap, line, ':');
-
+	getline(readMap, line, '[');
+	while (readMap.peek() != ']')
+	{
+		getline(readMap, line, ':');
+		scriptName = line.substr(1, line.size());
+		entity->actions[scriptName] = actions[scriptName];
+	}
 	getline(readMap, line, '}');
-	scriptName = line.substr(1, line.size());
+}
 
+Player* Map::read_player_asset()
+{
+	std::string line;
+	glm::vec3 position;
+	float x, y, z;
 
-	entities[objectId]->actions.push_back(actions[scriptName]);
+	getline(readMap, line, ':');
+	getline(readMap, line, ',');
+	x = std::stof(line);
+	getline(readMap, line, ',');
+	y = std::stof(line);
+	getline(readMap, line, '}');
+	z = std::stof(line);
+	position = { x, y, z };
+
+	// glm::vec3(95.0f, 60.0f, 1045.0f)
+	// glm::vec3(115.0f, 60.0f, 1045.0f)
+	playerStarts.push_back(position);
+	return new Player(players.size(), AssetManager::get_model(0), camera, position);
 }
 
 void Map::load_skybox()
@@ -278,9 +306,12 @@ void Map::duplicate_model(int selectedIndex)
 	GameObject* model = new GameObject(entities[selectedIndex]->assetId,
 		entities[selectedIndex]->GameModel, entities[selectedIndex]->Position, entities[selectedIndex]->Size,
 		entities[selectedIndex]->Rotation, entities[selectedIndex]->isRendered);
+	model->actions = entities[selectedIndex]->actions;
 
 	entities[model->instanceId] = model;
 	Renderer::add_render_object(model);
+	ErlPhysics::add_physics_object(model);
+	
 }
 
 void Map::remove_model(int selectedIndex)
@@ -311,5 +342,5 @@ void Map::set_controls()
 
 void Map::clear_controls()
 {
-	InputManager::remove_all_bindings();
+	InputManager::remove_key_binding(GLFW_KEY_GRAVE_ACCENT);
 }

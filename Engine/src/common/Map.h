@@ -47,6 +47,7 @@ class Map
 		std::vector<SkinnedGameObject*> skinned_entities;
 		std::vector<Player*> players;
 		Camera* camera;
+		std::vector<glm::vec3> playerStarts;
 
 		Map(std::string mapName);
 		virtual void save();
@@ -65,18 +66,21 @@ class Map
 		std::ofstream writeMap;
 		std::ifstream readMap;
 		std::string fileName;
-		virtual void load_player() = 0;
+
+		void load_player();
 		virtual void load_camera(float windowWidth, float windowHeight);
+		void read_player();
 		void load_physics_objects();
 		void write_models();
 		void write_lights();
-		void write_scripts();
+		void write_scripts(GameObject* entity);
+		void write_player();
 	private:
 		std::string line;
 		void load_skybox();
 		GameObject* read_asset();
-		void load_scripts();
-		void read_script();
+		void read_script(GameObject* entity);
+		Player* read_player_asset();
 };
 
 #endif // !MAP_H

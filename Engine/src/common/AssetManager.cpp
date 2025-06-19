@@ -72,7 +72,7 @@ void AssetManager::load()
 {
 	assetMap[0] = new Model((char*)"C:/Dev/assets/knight/knight_skinned_0/knight_impl1.dae");
 	assetMap[1] = new Model((char*)"C:/Dev/assets/cube/cube.glb");
-	assetMap[2] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/grass_plane.obj");
+	assetMap[2] = new Model((char*)"C:/Dev/assets/coop_platformer_full_asset_location/plane.obj");
 	assetMap[3] = new Model((char*)"C:/Dev/assets/die.obj");
 	assetMap[4] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/stone_platform.obj");
 	assetMap[5] = new Model((char*)"C:/Dev/assets/ball/ball.obj");
@@ -83,6 +83,7 @@ void AssetManager::load()
 	assetMap[10] = new Model((char*)"C:/Dev/assets/party_game/stone_portal/saucer.obj");
 	assetMap[11] = new Model((char*)"C:/Dev/assets/sonar/block.obj");
 	assetMap[12] = new Model((char*)"C:/Dev/assets/sonar/goldcoin.obj");
+	assetMap[13] = new Model((char*)"C:/Dev/assets/coop_platformer_full_asset_location/cylinder.obj");
 
 	load_sky_box();
 

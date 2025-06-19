@@ -314,7 +314,7 @@ void run_mouse_commands(float deltaTime)
                         glfwGetCursorPos(m_window, &dragXStart, &dragYStart);
                     }
                     command->execute(deltaTime);
-                    InputManager::MouseProcessed[mouseButton] = true;
+                    InputManager::MouseProcessed[mouseButton] = !command->isContinuous;
                 }
                 else if (glfwGetMouseButton(m_window, mouseButton) == GLFW_PRESS && InputManager::MouseProcessed[mouseButton]) {
                     if (mouseButton == GLFW_MOUSE_BUTTON_MIDDLE) {

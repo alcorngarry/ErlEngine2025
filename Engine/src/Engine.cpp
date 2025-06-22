@@ -1,8 +1,12 @@
 #include"Engine.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
+GLFWwindow* window;
+GLFWmonitor* monitor;
+const GLFWvidmode* mode;
 bool fullScreen = false;
+int windowedX, windowedY, windowedWidth, windowedHeight;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 {
@@ -10,17 +14,14 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	GLFWwindow* window;
+
+	monitor = glfwGetPrimaryMonitor();
+	mode = glfwGetVideoMode(monitor);
 	
 	if (fullScreen)
 	{
-		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		float WIN_WIDTH = mode->width;
-		float WIN_HEIGHT = mode->height;
-
-		window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "Sonar", glfwGetPrimaryMonitor(), NULL);
-	}
-	else {
+		window = glfwCreateWindow(mode->width, mode->height, "Sonar", glfwGetPrimaryMonitor(), NULL);
+	} else {
 		window = glfwCreateWindow(windowWidth, windowHeight, "Sonar", NULL, NULL);
 	}
 	
@@ -30,6 +31,8 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 		glfwTerminate();
 	}
 
+	glfwGetWindowPos(window, &windowedX, &windowedY);
+	glfwGetWindowSize(window, &windowedWidth, &windowedHeight);
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -51,9 +54,16 @@ GLFWwindow* Engine::start(float windowWidth, float windowHeight)
 	return window;
 }
 
-void Engine::set_full_screen(bool isFullScreen)
+void Engine::toggle_full_screen()
 {
-	fullScreen = isFullScreen;
+	fullScreen = !fullScreen;
+
+	if (fullScreen) {
+		glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+	else {
+		glfwSetWindowMonitor(window, NULL, windowedX, windowedY, windowedWidth, windowedHeight, 0);
+	}
 }
 
 void Engine::shut_down(GLFWwindow* window)

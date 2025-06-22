@@ -10,7 +10,7 @@
 namespace Engine {
 	GLFWwindow* start(float windowWidth, float windowHeight);
 	void shut_down(GLFWwindow* window);
-	void set_full_screen(bool isFullScreen);
+	void toggle_full_screen();
 };
 
 #endif // !ENGINE_H

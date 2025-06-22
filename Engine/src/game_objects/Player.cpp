@@ -14,20 +14,11 @@ void Player::move_player()
 void Player::update(float deltaTime)
 {
 	Position += Velocity * deltaTime;
-
-	/*camera->set_camera_pos(Position);
-	camera->set_camera_up(glm::vec3(0.0f, Position.y, 0.0f));*/
-	
 	set_model_matrix(Position, Rotation, Size);
 }
 
 void Player::update_movement(float deltaTime)
 {
-	//static camera...
-	/*camera->set_camera_pos(glm::vec3(10.0f, 200.0f, -500.0f));
-	camera->set_camera_up(glm::vec3(0.0f, camera->get_camera_pos().y, 0.0f));
-	camera->set_camera_front(Position - camera->get_camera_pos());*/
-
 	//dynamic follow camera move to camera class (pass in both players)
 	if (fmovePrev == fmove) fmove = 0.0f, fmovePrev = 0.0f;
 	if (smovePrev == smove) smove = 0.0f, smovePrev = 0.0f;
@@ -35,8 +26,12 @@ void Player::update_movement(float deltaTime)
 
 	wishSpeed = 0.0f;
 
-	wishVelocity = fmove * glm::normalize(glm::vec3(camera->get_camera_front().x, 0.0f, camera->get_camera_front().z)) +
-		smove * glm::normalize(glm::cross(camera->get_camera_front(), glm::vec3(0.0f, 1.0f, 0.0f)));
+	glm::vec3 camPos = camera->get_camera_pos();
+	glm::vec3 camTarget = camera->get_target_pos();
+	glm::vec3 camForward = glm::normalize(glm::vec3(camTarget.x - camPos.x, 0.0f, camTarget.z - camPos.z));
+	glm::vec3 camRight = glm::normalize(glm::cross(camForward, glm::vec3(0.0f, 1.0f, 0.0f)));
+	wishVelocity = fmove * camForward + smove * camRight;
+
 
 	if (wishVelocity != glm::vec3(0.0f))
 	{
@@ -44,7 +39,6 @@ void Player::update_movement(float deltaTime)
 		wishSpeed = glm::length(wishVelocity);
 		Rotation.y = glm::degrees(atan2(wishDir.x, wishDir.z));
 	}
-
 
 	if (wishSpeed > maxSpeed)
 	{
@@ -62,8 +56,6 @@ void Player::update_movement(float deltaTime)
 	}
 	else {
 		air_accelerate(deltaTime);
-
-		//Velocity.y += -90.0f * deltaTime;
 		Velocity.y -= 1.0f * 800.0f * deltaTime;
 
 		if (Position.y < floorHeight + playerHeight)

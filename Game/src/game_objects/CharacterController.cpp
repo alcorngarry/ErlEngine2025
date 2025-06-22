@@ -4,6 +4,7 @@ CharacterController::CharacterController()
 {
 }
 
+// this isn't even used......
 void CharacterController::proccessInput(GLFWwindow* window, Camera& camera, glm::vec3& objectPos, float deltaTime, float& rotationY, float& rotationX)
 {
 	if (glfwJoystickPresent(GLFW_JOYSTICK_1))

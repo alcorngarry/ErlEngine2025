@@ -267,7 +267,7 @@ void run_gamepad_commands(float deltaTime)
                 }
 
                 // 4 for now, till using triggers
-                for (int axis = 0; axis < 2; ++axis) {
+                for (int axis = 0; axis < 4; ++axis) {
                     if (fabs(state.axes[axis]) > 0.2f) {
                         gamepadBindings[{i, 100 - axis}]->execute(deltaTime, state.axes[axis]);
                     }

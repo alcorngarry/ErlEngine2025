@@ -5,6 +5,9 @@ Camera::Camera(float windowWidth, float windowHeight)
     m_windowHeight = windowHeight;
     m_windowWidth = windowWidth;
     m_projection = glm::perspective(glm::radians(45.0f), m_windowWidth / m_windowHeight, 0.1f, 10000.0f);
+    followRadius = 200.0f;
+    azimuth = 0.0f;
+    elevation = 1.0f;
     setCameraToLookAtOrigin();
 }
 
@@ -54,6 +57,11 @@ glm::mat4 Camera::get_view_matrix() const
     return m_view;
 }
 
+glm::vec3 Camera::get_target_pos()
+{
+    return m_target;
+}
+
 void Camera::update_view_matrix(glm::mat4 view)
 {
     m_view = view;
@@ -77,6 +85,16 @@ void Camera::update_view_matrix()
 
 void Camera::follow_position(glm::vec3 followPosition)
 {
-    set_camera_pos(followPosition + glm::vec3(0.0f, 100.0f, 200.0f));
-    m_view = glm::lookAt(get_camera_pos(), followPosition, glm::vec3(0.0f, 10.0f, 0.0f));
+    m_target = followPosition;
+    update_follow_position();
+    m_view = glm::lookAt(get_camera_pos(), followPosition, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Camera::update_follow_position()
+{
+    set_camera_pos(m_target + 
+        glm::vec3(followRadius * glm::sin(elevation) * glm::cos(azimuth),
+            followRadius * glm::cos(elevation), 
+            followRadius * glm::sin(elevation) * glm::sin(azimuth))
+    );
 }

@@ -261,11 +261,24 @@ void Map::read_script(GameObject* entity)
 	std::string scriptName;
 
 	getline(readMap, line, '[');
-	while (readMap.peek() != ']')
+	if(readMap.peek() != ']')
 	{
-		getline(readMap, line, ':');
-		scriptName = line.substr(1, line.size());
-		entity->actions[scriptName] = actions[scriptName];
+		getline(readMap, line, ']');
+		line = line.substr(1, line.size() - 2);
+
+		if (line.find(',') == std::string::npos)
+		{
+			scriptName = line;
+			entity->actions[scriptName] = actions[scriptName];
+		}
+		else {
+			std::stringstream ss(line);
+			while (std::getline(ss, scriptName, ','))
+			{
+				if (scriptName.at(0) == ' ') scriptName = scriptName.substr(1, scriptName.size());
+				entity->actions[scriptName] = actions[scriptName];
+			}
+		}
 	}
 	getline(readMap, line, '}');
 }
@@ -311,7 +324,21 @@ void Map::duplicate_model(int selectedIndex)
 	entities[model->instanceId] = model;
 	Renderer::add_render_object(model);
 	ErlPhysics::add_physics_object(model);
-	
+}
+
+GameObject* Map::get_entity_by_instance_id(uint16_t id)
+{
+	for (const auto& entity : entities)
+	{
+		if (entity.first == id) return entity.second;
+	}
+
+	for (Player* player : players)
+	{
+		if (player->instanceId == id) return player;
+	}
+
+	return nullptr;
 }
 
 void Map::remove_model(int selectedIndex)

@@ -44,7 +44,7 @@ void DebugMenu::create_menu(float deltaTime)
 
     int selectedIndex = Renderer::get_selected_index();
     if (selectedIndex != -1) {
-        GameObject* entity = selectedIndex < m_map->entities.size() ? m_map->entities[selectedIndex] : m_map->players[selectedIndex - m_map->entities.size()];
+        GameObject* entity = m_map->get_entity_by_instance_id(selectedIndex);
         draw_entity_properties(entity);
     }
 
@@ -172,10 +172,8 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
     if (ImGuizmo::IsUsing()) {
         entity->ModelMatrix = modelMatrix;
         ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(modelMatrix), glm::value_ptr(position), glm::value_ptr(rotation), glm::value_ptr(scale));
-        if (entity->instanceId >= m_map->entities.size())
-        {
-            m_map->playerStarts[entity->instanceId - m_map->entities.size()] = position;
-        }
+
+        if (Player* d_ptr = dynamic_cast<Player*>(entity)) m_map->playerStarts[entity->instanceId - m_map->entities.size()] = position;
         entity->Position = position;
         entity->Rotation = rotation;
         entity->Size = scale;

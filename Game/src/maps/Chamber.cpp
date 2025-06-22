@@ -53,11 +53,12 @@ void Chamber::set_controls()
 	if(glfwJoystickIsGamepad(GLFW_JOYSTICK_1))
 	{
 		//set arbitrary value for joystick
-		/*InputManager::set_gamepad_binding({ 0, 100 - GLFW_GAMEPAD_AXIS_RIGHT_X }, new MoveCameraCommand(camera, CameraMovement::LOOK_X));
-		InputManager::set_gamepad_binding({ 0, 100 - GLFW_GAMEPAD_AXIS_RIGHT_Y }, new MoveCameraCommand(camera, CameraMovement::LOOK_Y));*/
+	
 		int i = 0;
 		for (Player* player : players)
 		{
+			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_RIGHT_X }, new MoveCameraCommand(camera, CameraMovement::LOOK_X));
+			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_RIGHT_Y }, new MoveCameraCommand(camera, CameraMovement::LOOK_Y));
 			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_LEFT_X }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_X));
 			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_LEFT_Y }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_Y));
 			InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_A }, new JumpCommand(player));

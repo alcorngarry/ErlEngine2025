@@ -7,7 +7,7 @@ MoveCameraCommand::MoveCameraCommand(Camera* camera, CameraMovement movement) : 
 
 void MoveCameraCommand::execute(float deltaTime)
 {
-	float cameraSpeed = static_cast<float>(200.0f * deltaTime);
+	float cameraSpeed = static_cast<float>(500.0f * deltaTime);
 	switch (movement)
 	{
 		case MOUSE_DRAG: {
@@ -27,7 +27,7 @@ void MoveCameraCommand::execute(float deltaTime)
 			break;
 		}
 		case SCROLL: {
-			camera->set_camera_pos(camera->get_camera_pos() + (float)InputManager::get_scroll_value() * 30.0f * camera->get_camera_front());
+			camera->set_camera_pos(camera->get_camera_pos() + (float)InputManager::get_scroll_value() * 100.0f * camera->get_camera_front());
 			break;
 		}
 		case ORBIT: {
@@ -36,8 +36,8 @@ void MoveCameraCommand::execute(float deltaTime)
 			deltaX *= 0.1f * cameraSpeed;
 			deltaY *= 0.1f * cameraSpeed;
 
-			static float azimuth = 0.0f;
-			static float elevation = 0.0f;
+			float azimuth = 0.0f;
+			float elevation = 0.0f;
 
 			azimuth += glm::radians(deltaX);
 			elevation += glm::radians(deltaY);
@@ -73,26 +73,21 @@ void MoveCameraCommand::execute(float deltaTime)
 
 void MoveCameraCommand::execute(float deltaTime, float axis)
 {
-	float cameraSpeed = static_cast<float>(20.0f * deltaTime);
+	float sensitivity = 1.5f;
+
 	switch (movement)
 	{
-		case LOOK_X: {
-			InputManager::set_yaw(axis);
-			glm::vec3 direction;
-			direction.x = cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
-			direction.y = sin(glm::radians(InputManager::get_pitch()));
-			direction.z = sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
-			camera->set_camera_front(glm::normalize(direction));
+		case LOOK_Y: {
+			camera->elevation += axis * deltaTime * sensitivity;
+			camera->elevation = glm::clamp(camera->elevation, -glm::half_pi<float>() + 0.01f, glm::half_pi<float>() - 0.01f);
+			camera->update_follow_position();
 			break;
 		}
-		case LOOK_Y: {
-			InputManager::set_pitch(-axis);
-			glm::vec3 direction;
-			direction.x = cos(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
-			direction.y = sin(glm::radians(InputManager::get_pitch()));
-			direction.z = sin(glm::radians(InputManager::get_yaw())) * cos(glm::radians(InputManager::get_pitch()));
-			camera->set_camera_front(glm::normalize(direction));
+		case LOOK_X: {
+			camera->azimuth += axis * deltaTime * sensitivity;
+			camera->update_follow_position();
 			break;
 		}
 	}
 }
+

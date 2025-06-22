@@ -60,6 +60,7 @@ class Map
 		void read_models();
 		void read_lights();
 		void duplicate_model(int selectedIndex);
+		GameObject* get_entity_by_instance_id(uint16_t id);
 		void remove_model(int selectedIndex);
 		void toggle_render(int index);
 	protected:

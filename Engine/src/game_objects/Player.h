@@ -21,21 +21,19 @@ class Player : public GameObject {
 
 		float fmove = 0.0f;
 		float smove = 0.0f;
-		//float maxSpeed = 320.0f;
 		float maxSpeed = 160.0f;
-
-
 		float fmovePrev = 0.0f;
 		float smovePrev = 0.0f;
-		float playerHeight = 5.0f;
 
+		float playerHeight = 5.0f;
 		float jumpForce = 270.0f;
 		float fric = 4.0f;
 		float floorHeight = 0.0f;
+
+		int coinCount = 0;
 		bool onGround = true;
 
 		Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos);
-		void move_player();
 		void update(float deltaTime);
 		void update_movement(float deltaTime);
 	private:

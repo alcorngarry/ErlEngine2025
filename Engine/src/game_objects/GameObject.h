@@ -8,9 +8,12 @@
 class GameObject {
 	public:
 		std::map<std::string, std::function<void(GameObject*, float)>> actions;
+		std::map<uint16_t, std::function<void(GameObject*, float)>> onCollisionActions;
+
 		Model* GameModel;
 		glm::vec3 Position, Size, Rotation, Velocity, Acceleration;
 		glm::mat4 ModelMatrix;
+		glm::mat4 AABBMatrix;
 		static int idCounter;
 		uint16_t assetId;
 		uint16_t instanceId;
@@ -18,12 +21,13 @@ class GameObject {
 		
 		GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered);
 		virtual void update(float deltaTime);
-		glm::vec3 get_aabb_min() const;
-		glm::vec3 get_aabb_max() const;
+		void on_collision(GameObject* object, float deltaTime);
+		glm::vec3 get_aabb_min();
+		glm::vec3 get_aabb_max();
 	protected:
 		void set_model_matrix(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 	private:
-		glm::vec3 local_to_world(const glm::vec3& localPos) const;
+		glm::vec3 local_to_world(const glm::vec3& localPos);
 };
 
 #endif // !GAME_OBJECT_H

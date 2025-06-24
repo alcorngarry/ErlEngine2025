@@ -28,9 +28,9 @@ class Mesh
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
         void draw(Shader& shader);
     private:
-        std::vector<Vertex>       vertices;
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        std::vector<Texture>      textures;
+        std::vector<Texture> textures;
         unsigned int VAO;
         unsigned int VBO, EBO;
         void setupMesh();

@@ -11,8 +11,8 @@
 
 int main(int argc, char** argv)
 {
-	float window_width = 1920;
-	float window_height = 1080;
+	float window_width = 1024;
+	float window_height = 768;
 
     // Start the server in a separate thread
 	//std::thread serverThread(Server::start_server);

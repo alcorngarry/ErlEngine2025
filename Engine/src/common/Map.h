@@ -12,15 +12,6 @@
 #include"game_objects/Player.h"
 #include"commands/ToggleConsoleCommand.h"
 
-struct Scripts
-{
-	static void init();
-	static void rotate(GameObject* gameObject, float deltaTime);
-	static void hide(GameObject* gameObject, float deltaTime);
-	static void show(GameObject* gameObject, float deltaTime);
-	static std::function<void(GameObject*, float)> get_script(std::string scriptName);
-};
-
 class Map 
 {
 	public:
@@ -82,6 +73,16 @@ class Map
 		GameObject* read_asset();
 		void read_script(GameObject* entity);
 		Player* read_player_asset();
+};
+
+struct Scripts
+{
+	static void init();
+	static void rotate(GameObject* gameObject, float deltaTime);
+	static void hide(GameObject* gameObject, float deltaTime);
+	static void show(GameObject* gameObject, float deltaTime);
+	static void addPoint(GameObject* player, float deltaTime);
+	static std::function<void(GameObject*, float)> get_script(std::string scriptName);
 };
 
 #endif // !MAP_H

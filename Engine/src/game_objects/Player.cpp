@@ -5,10 +5,8 @@ Player::Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos) : Gam
 	Position = pos + glm::vec3(0.0f, playerHeight + 3, 0.0f);
 	camera = cam;
 	camera->set_camera_pos(Position);
-}
 
-void Player::move_player()
-{		
+	
 }
 
 void Player::update(float deltaTime)

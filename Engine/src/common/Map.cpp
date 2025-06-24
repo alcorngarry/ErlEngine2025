@@ -2,35 +2,6 @@
 
 std::map<std::string, std::function<void(GameObject*, float)>> actions;
 
-void Scripts::init()
-{
-	actions["rotate"] = Scripts::rotate;
-	actions["hide"] = Scripts::hide;
-	actions["show"] = Scripts::show;
-}
-
-void Scripts::rotate(GameObject* gameObject, float deltaTime)
-{
-	gameObject->ModelMatrix = glm::rotate(gameObject->ModelMatrix, deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void Scripts::hide(GameObject* gameObject, float deltaTime)
-{
-	gameObject->isRendered = false;
-	Renderer::remove_render_object(gameObject->instanceId);
-}
-
-void Scripts::show(GameObject* gameObject, float deltaTime)
-{
-	gameObject->isRendered = true;
-	Renderer::add_render_object(gameObject);
-}
-
-std::function<void(GameObject*, float)> Scripts::get_script(std::string scriptName)
-{
-	return actions[scriptName];
-}
-
 Map::Map(std::string mapName) : loadState(KEEP_MAP), state(DEFAULT), renderState(PLAYER1)
 {
 	fileName = mapName;
@@ -252,6 +223,7 @@ GameObject* Map::read_asset()
 
 	GameObject* entity = new GameObject(assetId, AssetManager::get_model(assetId), position, scale, rotation, isRendered);
 	read_script(entity);
+
 	return entity;
 }
 
@@ -298,10 +270,17 @@ Player* Map::read_player_asset()
 	z = std::stof(line);
 	position = { x, y, z };
 
-	// glm::vec3(95.0f, 60.0f, 1045.0f)
-	// glm::vec3(115.0f, 60.0f, 1045.0f)
 	playerStarts.push_back(position);
-	return new Player(players.size(), AssetManager::get_model(0), camera, position);
+
+	Player* player = new Player(players.size(), AssetManager::get_model(0), camera, position);
+	player->onCollisionActions[12] = [player] (GameObject* coin, float deltaTime) {
+		player->coinCount++;
+		std::cout << player->coinCount << std::endl;
+		coin->isRendered = false;
+		Renderer::remove_render_object(coin->instanceId);
+	};
+
+	return player;
 }
 
 void Map::load_skybox()
@@ -370,4 +349,38 @@ void Map::set_controls()
 void Map::clear_controls()
 {
 	InputManager::remove_key_binding(GLFW_KEY_GRAVE_ACCENT);
+}
+
+void Scripts::init()
+{
+	actions["rotate"] = Scripts::rotate;
+	actions["hide"] = Scripts::hide;
+	actions["show"] = Scripts::show;
+}
+
+void Scripts::rotate(GameObject* gameObject, float deltaTime)
+{
+	gameObject->ModelMatrix = glm::rotate(gameObject->ModelMatrix, deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Scripts::hide(GameObject* gameObject, float deltaTime)
+{
+	gameObject->isRendered = false;
+	Renderer::remove_render_object(gameObject->instanceId);
+}
+
+void Scripts::show(GameObject* gameObject, float deltaTime)
+{
+	gameObject->isRendered = true;
+	Renderer::add_render_object(gameObject);
+}
+
+void Scripts::addPoint(GameObject* object, float deltaTime)
+{
+	std::cout << "REACHED" << std::endl;
+}
+
+std::function<void(GameObject*, float)> Scripts::get_script(std::string scriptName)
+{
+	return actions[scriptName];
 }

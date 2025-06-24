@@ -20,7 +20,7 @@ void Model::draw(Shader& shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
-		meshes[i].draw(shader);
+		meshes[i]->draw(shader);
 	}
 }
 
@@ -65,7 +65,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -136,7 +136,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	extract_bone_weight_for_vertices(vertices, mesh, scene);
 
-	return Mesh(vertices, indices, textures);
+	return new Mesh(vertices, indices, textures);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)

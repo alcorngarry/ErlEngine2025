@@ -32,16 +32,12 @@ ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, flo
 
 void ErlPhysics::add_physics_object(GameObject* object)
 {
-    physObjects[object->instanceId] = new ErlPhysics::PhysicsObject{ new AABB { 
-        playerPhysObjects.at(0)->player->get_aabb_max() + object->get_aabb_max(), 
-        playerPhysObjects.at(0)->player->get_aabb_min() + object->get_aabb_min()},
-        object 
-    };
+    physObjects[object->instanceId] = new ErlPhysics::PhysicsObject{ object };
 }
 
 void ErlPhysics::add_player_physics_object(Player* object)
 {
-    playerPhysObjects.push_back(new ErlPhysics::PlayerPhysicsObject{ nullptr, object});
+    playerPhysObjects.push_back(new ErlPhysics::PlayerPhysicsObject{ object});
 }
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_screen(Camera* camera)
@@ -77,7 +73,7 @@ int ErlPhysics::check_collision(Ray* ray)
         if (tmin > tmax) {
             continue;
         }
-        //std::max(maxHeight, physObject.second->object->get_aabb_max().y);
+
         if (physObject.second->object->get_aabb_max().y > maxHeight)
         {
             maxHeight = physObject.second->object->get_aabb_max().y;
@@ -87,62 +83,52 @@ int ErlPhysics::check_collision(Ray* ray)
     return index;
 }
 
-void ErlPhysics::check_aabb_collision(float deltaTime)
-{
-    for (const auto& object : physObjects)
-    {
-        AABB mink = calculate_minkowski_difference(playerPhysObjects.at(0)->player->get_aabb_min(), playerPhysObjects.at(0)->player->get_aabb_max(), object.second->object->get_aabb_min(), object.second->object->get_aabb_max());
-        
-        if(mink.min.x <= 0 && mink.max.x >= 0 &&
-            mink.min.y <= 0 && mink.max.y >= 0 &&
-            mink.min.z <= 0 && mink.max.z >= 0)
-        {
-            object.second->hit = true;
-            //resolve_collision(mink, deltaTime);
-        }
-        else {
-            object.second->hit = false;
-        }
-    }
-}
-
 // ignoring Y values
 void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
 {
     std::vector<SweptCollisionResult> results;
+
+    glm::vec3 playerAABBMin = player->get_aabb_min();
+    glm::vec3 playerAABBMax = player->get_aabb_max();
+
+  
+
     for (const auto& object : physObjects)
     {
         float xInvEntry, yInvEntry, zInvEntry;
         float xInvExit, yInvExit, zInvExit;
 
+        glm::vec3 objectAABBMin = object.second->object->get_aabb_min();
+        glm::vec3 objectAABBMax = object.second->object->get_aabb_max();
+
         if (player->Velocity.x > 0.0f)
         {
-            xInvEntry = object.second->object->get_aabb_min().x - player->get_aabb_max().x;
-            xInvExit = object.second->object->get_aabb_max().x - player->get_aabb_min().x;
+            xInvEntry = objectAABBMin.x - playerAABBMax.x;
+            xInvExit = objectAABBMax.x - playerAABBMin.x;
         }
         else {
-            xInvEntry = object.second->object->get_aabb_max().x - player->get_aabb_min().x;
-            xInvExit = object.second->object->get_aabb_min().x - player->get_aabb_max().x;
+            xInvEntry = objectAABBMax.x - playerAABBMin.x;
+            xInvExit = objectAABBMin.x - playerAABBMax.x;
         }
 
         if (player->Velocity.y > 0.0f)
         {
-            yInvEntry = object.second->object->get_aabb_min().y - player->get_aabb_max().y;
-            yInvExit = object.second->object->get_aabb_max().y - player->get_aabb_min().y;
+            yInvEntry = objectAABBMin.y - playerAABBMax.y;
+            yInvExit = objectAABBMax.y - playerAABBMin.y;
         }
         else {
-            yInvEntry = object.second->object->get_aabb_max().y - player->get_aabb_min().y;
-            yInvExit = object.second->object->get_aabb_min().y - player->get_aabb_max().y;
+            yInvEntry = objectAABBMax.y - playerAABBMin.y;
+            yInvExit = objectAABBMin.y - playerAABBMax.y;
         }
 
         if (player->Velocity.z > 0.0f)
         {
-            zInvEntry = object.second->object->get_aabb_min().z - player->get_aabb_max().z;
-            zInvExit = object.second->object->get_aabb_max().z - player->get_aabb_min().z;
+            zInvEntry = objectAABBMin.z - playerAABBMax.z;
+            zInvExit = objectAABBMax.z - playerAABBMin.z;
         }
         else {
-            zInvEntry = object.second->object->get_aabb_max().z - player->get_aabb_min().z;
-            zInvExit = object.second->object->get_aabb_min().z - player->get_aabb_max().z;
+            zInvEntry = objectAABBMax.z - playerAABBMin.z;
+            zInvExit = objectAABBMin.z - playerAABBMax.z;
         }
 
         float xEntry, yEntry, zEntry;
@@ -151,8 +137,8 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
         if (player->Velocity.x == 0.0f)
         {
             //should probably be double
-            if (player->get_aabb_max().x < object.second->object->get_aabb_min().x ||
-                player->get_aabb_min().x > object.second->object->get_aabb_max().x) {
+            if (playerAABBMax.x < objectAABBMin.x ||
+                playerAABBMin.x > objectAABBMax.x) {
                 object.second->hit = false;
                 continue;
             }
@@ -168,8 +154,8 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
 
         if (player->Velocity.y == 0.0f)
         {
-            if (player->get_aabb_max().y < object.second->object->get_aabb_min().y || 
-                player->get_aabb_min().y > object.second->object->get_aabb_max().y) {
+            if (playerAABBMax.y < objectAABBMin.y ||
+                playerAABBMin.y > objectAABBMax.y) {
                 object.second->hit = false;
                 continue;
             }
@@ -185,8 +171,8 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
 
         if (player->Velocity.z == 0.0f)
         {
-            if (player->get_aabb_max().z < object.second->object->get_aabb_min().z ||
-                player->get_aabb_min().z > object.second->object->get_aabb_max().z) {
+            if (playerAABBMax.z < objectAABBMin.z ||
+                playerAABBMin.z > objectAABBMax.z) {
                 object.second->hit = false;
                 continue;
             }
@@ -203,12 +189,8 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
         float entryTime = std::max({xEntry, yEntry, zEntry});
         float exitTime = std::min({xExit, yExit, zExit});
 
-        //float entryTime = std::max({ xEntry, zEntry });
-        //float exitTime = std::min({ xExit, zExit });
-
         glm::vec3 normal = glm::vec3(0.0f);
 
-        //no collision
         if (entryTime > exitTime || entryTime < 0.0f || entryTime > deltaTime)
         {
             object.second->hit = false;
@@ -228,14 +210,14 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
             }
             else if (yEntry > xEntry && yEntry > zEntry)
             {
-                /*if (yInvEntry < 0.0f)
+                if (yInvEntry < 0.0f)
                 {
                     normal += glm::vec3(0.0f, 1.0f, 0.0f);
                 }
                 else
                 {
                     normal += glm::vec3(0.0f, -1.0f, 0.0f);
-                }*/
+                }
             }
             else if (zEntry > xEntry) {
                 if (zInvEntry < 0.0f)
@@ -247,6 +229,10 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
                     normal += glm::vec3(0.0f, 0.0f, -1.0f);
                 }
             }
+            ErlMath::print_vector3(playerAABBMin);
+            ErlMath::print_vector3(playerAABBMax);
+
+            handle_collision(player, object.second->object, deltaTime);
             results.push_back(SweptCollisionResult{ entryTime, normal });
         }
     }
@@ -303,11 +289,6 @@ float ErlPhysics::check_floor_collision(Player* player)
     }
 }
 
-ErlPhysics::AABB ErlPhysics::calculate_minkowski_difference(glm::vec3 minA, glm::vec3 maxA, glm::vec3 minB, glm::vec3 maxB)
-{
-    return AABB{ minA - maxB, maxA - minB };
-}
-
 void ErlPhysics::add_ray(ErlPhysics::Ray* ray)
 {
     rays.push_back(ray);
@@ -321,4 +302,10 @@ std::vector<ErlPhysics::Ray*> ErlPhysics::get_rays()
 void ErlPhysics::remove_ray_object(int index)
 {
     rays.erase(rays.begin() + index);
+}
+
+void ErlPhysics::handle_collision(GameObject* a, GameObject* b, float deltaTime)
+{
+    a->on_collision(b, deltaTime);
+    b->on_collision(a, deltaTime);
 }

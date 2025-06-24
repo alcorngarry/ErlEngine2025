@@ -134,9 +134,10 @@ void Renderer::render(Camera* camera)
 		else {
 			aabbShaderProgram->setVec3("color", glm::vec3(0.0f, 0.0f, 1.0f));
 		}
-		draw_aabb(m_entity.second->GameModel->getMinAABB(), m_entity.second->GameModel->getMaxAABB(), m_entity.second->ModelMatrix);
+		draw_aabb(m_entity.second->GameModel->getMinAABB(), m_entity.second->GameModel->getMaxAABB(), m_entity.second->AABBMatrix);
 	}
 }
+
 
 void Renderer::render_grass(glm::vec3 pos, Camera* camera)
 {

@@ -17,7 +17,7 @@ class Model
 {
 	public:
 		std::vector<Texture> textures_loaded;
-		std::vector<Mesh> meshes;
+		std::vector<Mesh*> meshes;
 		std::string directory;
 		std::string fileName;
 		bool gammaCorrection;
@@ -39,7 +39,7 @@ class Model
 
 		void loadModel(std::string path);
 		void processNode(aiNode* node, const aiScene* scene);
-		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+		Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
 		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 		unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
 		void extract_bone_weight_for_vertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);

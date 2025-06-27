@@ -15,9 +15,17 @@
 
 class Model
 {
+	struct Material {
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		float shininess;
+	};
+
 	public:
 		std::vector<Texture> textures_loaded;
 		std::vector<Mesh*> meshes;
+		Material mat;
 		std::string directory;
 		std::string fileName;
 		bool gammaCorrection;

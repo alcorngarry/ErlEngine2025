@@ -2,11 +2,9 @@
 
 Player::Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos) : GameObject(99, model, pos, glm::vec3(5.0f), glm::vec3(0.0f), true)
 { 
-	Position = pos + glm::vec3(0.0f, playerHeight + 3, 0.0f);
+	Position = pos;
 	camera = cam;
 	camera->set_camera_pos(Position);
-
-	
 }
 
 void Player::update(float deltaTime)
@@ -56,10 +54,10 @@ void Player::update_movement(float deltaTime)
 		air_accelerate(deltaTime);
 		Velocity.y -= 1.0f * 800.0f * deltaTime;
 
-		if (Position.y < floorHeight + playerHeight)
+		if (Position.y < floorHeight)
 		{
 			Velocity.y = 0.0f;
-			Position = glm::vec3(Position.x, floorHeight + playerHeight, Position.z);
+			Position = glm::vec3(Position.x, floorHeight, Position.z);
 			onGround = true;
 		}
 	}

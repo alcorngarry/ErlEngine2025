@@ -35,6 +35,12 @@ void ErlPhysics::add_physics_object(GameObject* object)
     physObjects[object->instanceId] = new ErlPhysics::PhysicsObject{ object };
 }
 
+
+void ErlPhysics::remove_physics_object(uint16_t id)
+{
+    physObjects.erase(id);
+}
+
 void ErlPhysics::add_player_physics_object(Player* object)
 {
     playerPhysObjects.push_back(new ErlPhysics::PlayerPhysicsObject{ object});
@@ -90,8 +96,6 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
 
     glm::vec3 playerAABBMin = player->get_aabb_min();
     glm::vec3 playerAABBMax = player->get_aabb_max();
-
-  
 
     for (const auto& object : physObjects)
     {
@@ -229,15 +233,11 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
                     normal += glm::vec3(0.0f, 0.0f, -1.0f);
                 }
             }
-            ErlMath::print_vector3(playerAABBMin);
-            ErlMath::print_vector3(playerAABBMax);
-
-            handle_collision(player, object.second->object, deltaTime);
-            results.push_back(SweptCollisionResult{ entryTime, normal });
+            
+            results.push_back(SweptCollisionResult{ entryTime, normal , object.first});
         }
     }
 
-    
     if (!results.empty())
     {
         std::sort(results.begin(), results.end(), [](const SweptCollisionResult& a, const SweptCollisionResult& b) {
@@ -256,6 +256,8 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
             glm::vec3 slideVelocity = remainingVelocity - intoSurface * collision.normal;
 
             player->Velocity = slideVelocity;
+
+            handle_collision(player, physObjects[collision.objId]->object, deltaTime);
         }
     }
 }
@@ -282,7 +284,7 @@ float ErlPhysics::check_floor_collision(Player* player)
     int index = check_collision(ray);
     if (index != -1)
     {
-        if (player->Position.y > physObjects[index]->object->get_aabb_max().y + player->playerHeight) player->onGround = false;
+        if (player->Position.y > physObjects[index]->object->get_aabb_max().y) player->onGround = false;
         return physObjects[index]->object->get_aabb_max().y;
     } else {
         return player->floorHeight;

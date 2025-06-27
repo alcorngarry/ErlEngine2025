@@ -25,7 +25,6 @@ class Player : public GameObject {
 		float fmovePrev = 0.0f;
 		float smovePrev = 0.0f;
 
-		float playerHeight = 5.0f;
 		float jumpForce = 270.0f;
 		float fric = 4.0f;
 		float floorHeight = 0.0f;

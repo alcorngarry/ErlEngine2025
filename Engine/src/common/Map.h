@@ -38,7 +38,7 @@ class Map
 		std::vector<SkinnedGameObject*> skinned_entities;
 		std::vector<Player*> players;
 		Camera* camera;
-		std::vector<glm::vec3> playerStarts;
+		std::map<uint16_t, glm::vec3> playerStarts;
 
 		Map(std::string mapName);
 		virtual void save();

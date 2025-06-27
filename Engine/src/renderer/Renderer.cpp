@@ -14,6 +14,7 @@ Shader* lineShaderProgram;
 Shader* aabbShaderProgram;
 
 SkyBox* m_skybox;
+Camera* m_render_camera;
 
 glm::mat4 view, projection;
 glm::vec3 delta(0.0f);
@@ -70,6 +71,7 @@ void Renderer::render(Camera* camera)
 {
 	view = camera->get_view_matrix();
 	projection = camera->get_projection_matrix();
+	m_render_camera = camera;
 
 	//draw first for environment mapping
 	cubemapShaderProgram->use();
@@ -81,9 +83,11 @@ void Renderer::render(Camera* camera)
 	skinnedShaderProgram->use();
 	if (!m_lights.empty())
 	{
-		skinnedShaderProgram->setVec3("lightPos", m_lights[0]->Position);
+		//fix this
+		skinnedShaderProgram->setVec3("lightPos", m_lights[22]->Position);
 	}
 	else {
+		std::cout << "NO LIGHTS FOUND" << std::endl;
 		skinnedShaderProgram->setVec3("lightPos", glm::vec3(0.0f, 800.0f, 0.0f));
 	}
 	skinnedShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
@@ -97,9 +101,10 @@ void Renderer::render(Camera* camera)
 	shaderProgram->use();
 	if (!m_lights.empty())
 	{
-		shaderProgram->setVec3("lightPos", m_lights[0]->Position);
+		shaderProgram->setVec3("lightPos", m_lights[22]->Position);
 	}
 	else {
+		std::cout << "NO LIGHTS FOUND" << std::endl;
 		shaderProgram->setVec3("lightPos", glm::vec3(0.0f, 800.0f, 0.0f));
 	}
 	shaderProgram->setVec3("lightColor", glm::vec3(1.0f));
@@ -115,9 +120,9 @@ void Renderer::render(Camera* camera)
 	draw_rays();
 
 	lightShaderProgram->use();
-	lightShaderProgram->setVec3("lightColor", glm::vec3(0.98f, 0.80f, 0.70f));
 	for (const auto& light : m_lights)
 	{
+		lightShaderProgram->setVec3("lightColor", glm::vec3(1.0f));
 		Renderer::draw_static(lightShaderProgram, light.second->GameModel, light.second->ModelMatrix);
 	}
 
@@ -138,12 +143,11 @@ void Renderer::render(Camera* camera)
 	}
 }
 
-
-void Renderer::render_grass(glm::vec3 pos, Camera* camera)
+void Renderer::render_grass(glm::vec3 pos)
 {
 	grassShaderProgram->use();
-	grassShaderProgram->setMat4("VP", camera->get_projection_matrix() * camera->get_view_matrix());
-	grassShaderProgram->setVec3("cameraPos", camera->get_camera_pos());
+	grassShaderProgram->setMat4("VP", m_render_camera->get_projection_matrix() * m_render_camera->get_view_matrix());
+	grassShaderProgram->setVec3("cameraPos", m_render_camera->get_camera_pos());
 
 	glm::vec3 points[10000];
 	int k = 0;
@@ -195,6 +199,7 @@ void Renderer::draw_skinned(Model* model, glm::mat4 modelMatrix, std::vector<glm
 
 void Renderer::draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix)
 {
+	shader->setVec3("viewPos", m_render_camera->get_camera_pos());
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
 	shader->setMat4("model", modelMatrix);
@@ -296,6 +301,17 @@ void Renderer::select_entity(float xpos, float ypos)
 	pickingShaderProgram->setMat4("projection", projection);
 
 	for (const auto& pair : m_entities)
+	{
+		int r = (pair.first & 0x000000FF) >> 0;
+		int g = (pair.first & 0x0000FF00) >> 8;
+		int b = (pair.first & 0x00FF0000) >> 16;
+
+		pickingShaderProgram->setVec4("PickingColor", glm::vec4((float)r / 255.0, (float)g / 255.0, (float)b / 255.0, 1.0f));
+		Renderer::draw_static(pickingShaderProgram, pair.second->GameModel, pair.second->ModelMatrix);
+		glGetError();
+	}
+
+	for (const auto& pair : m_lights)
 	{
 		int r = (pair.first & 0x000000FF) >> 0;
 		int g = (pair.first & 0x0000FF00) >> 8;

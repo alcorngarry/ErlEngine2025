@@ -86,13 +86,14 @@ void Map::write_scripts(GameObject* entity)
 void Map::write_player()
 {
 	writeMap << "player: [";
-	for (int i = 0; i < playerStarts.size(); i++)
+
+	for (auto playerStart = playerStarts.begin(); playerStart != playerStarts.end(); ++playerStart)
 	{
 		writeMap << "{";
-		writeMap << "position: " << playerStarts[i].x << "," << playerStarts[i].y << "," << playerStarts[i].z;
+		writeMap << "position: " << playerStart->second.x << "," << playerStart->second.y << "," << playerStart->second.z;
 		writeMap << "}";
 
-		if (!(i + 1 == playerStarts.size()))
+		if (playerStart != std::prev(playerStarts.end()))
 		{
 			writeMap << "," << std::endl;
 		}
@@ -270,14 +271,16 @@ Player* Map::read_player_asset()
 	z = std::stof(line);
 	position = { x, y, z };
 
-	playerStarts.push_back(position);
-
 	Player* player = new Player(players.size(), AssetManager::get_model(0), camera, position);
+	playerStarts[player->instanceId] = position;
+
 	player->onCollisionActions[12] = [player] (GameObject* coin, float deltaTime) {
 		player->coinCount++;
 		std::cout << player->coinCount << std::endl;
-		coin->isRendered = false;
+		//this data has to be stored in a game save file.
+		//coin->isRendered = false;
 		Renderer::remove_render_object(coin->instanceId);
+		ErlPhysics::remove_physics_object(coin->instanceId);
 	};
 
 	return player;
@@ -315,6 +318,11 @@ GameObject* Map::get_entity_by_instance_id(uint16_t id)
 	for (Player* player : players)
 	{
 		if (player->instanceId == id) return player;
+	}
+
+	for (const auto& light : lights)
+	{
+		if (light.first == id) return light.second;
 	}
 
 	return nullptr;

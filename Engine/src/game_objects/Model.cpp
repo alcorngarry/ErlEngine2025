@@ -18,6 +18,17 @@ Model::Model(char* path)
 
 void Model::draw(Shader& shader)
 {
+	/*shader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+	shader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+	shader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+	shader.setFloat("material.shininess", 32.0f);*/
+
+	shader.setVec3("material.ambient", mat.ambient);
+	shader.setVec3("material.diffuse", mat.diffuse);
+	shader.setVec3("material.specular", mat.specular);
+	shader.setFloat("material.shininess", mat.shininess);
+
+
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->draw(shader);
@@ -121,6 +132,47 @@ Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+	std::cout << "Material: " << material->GetName().C_Str() << std::endl;
+	for (unsigned int i = 0; i < material->mNumProperties; ++i) {
+		aiMaterialProperty* prop = material->mProperties[i];
+		std::cout << "Key: " << prop->mKey.C_Str()
+			<< ", Semantic: " << prop->mSemantic
+			<< ", Index: " << prop->mIndex
+			<< ", Type: " << prop->mType << std::endl;
+	}
+
+
+	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &mat.shininess)) {
+	}
+	else {
+		mat.shininess = 20.0f;
+		std::cout << "ERROR READING SHININESS " << material->GetName().C_Str() <<std::endl;
+	}
+
+	aiColor3D ambient;
+	aiColor3D specular;
+	aiColor3D diffuse;
+
+	if (material->Get("$clr.ambient", 0, 0, ambient) == AI_SUCCESS) {
+		mat.ambient = glm::vec3(ambient.r, ambient.g, ambient.b);
+	}else {
+		std::cout << "ERROR READING AMBIENT " << material->GetName().C_Str() << std::endl;
+
+	}
+	if (material->Get("$clr.specular", 0, 0, specular) == AI_SUCCESS) {
+		mat.specular = glm::vec3(specular.r, specular.g, specular.b);
+	}
+	else {
+		std::cout << "ERROR READING SPECULAR " << material->GetName().C_Str() << std::endl;
+
+	}
+	if (material->Get("$clr.diffuse", 0, 0, diffuse) == AI_SUCCESS) {
+		mat.diffuse = glm::vec3(diffuse.r, diffuse.g, diffuse.b);
+	}
+	else {
+		std::cout << "ERROR READING DIFFUSE " << material->GetName().C_Str() << std::endl;
+	}
 
 	std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());

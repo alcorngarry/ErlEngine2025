@@ -67,7 +67,7 @@ void Camera::update_view_matrix(glm::mat4 view)
     m_view = view;
 
     glm::mat3 rotationMatrix = glm::mat3(view);
-    cameraFront = -glm::vec3(rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2]);
+    setCameraFront(m_view);
     cameraUp = glm::vec3(rotationMatrix[0][1], rotationMatrix[1][1], rotationMatrix[2][1]);
     glm::mat4 inverseView = glm::inverse(view);
     cameraPos = glm::vec3(inverseView[3][0], inverseView[3][1], inverseView[3][2]);
@@ -81,6 +81,8 @@ glm::mat4 Camera::get_projection_matrix() const
 void Camera::update_view_matrix()
 {
     m_view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    //something odd is going on with the camera front being rotated and out of whack with position.
+    setCameraFront(m_view);
 }
 
 void Camera::follow_position(glm::vec3 followPosition)
@@ -88,6 +90,7 @@ void Camera::follow_position(glm::vec3 followPosition)
     m_target = followPosition;
     update_follow_position();
     m_view = glm::lookAt(get_camera_pos(), followPosition, glm::vec3(0.0f, 1.0f, 0.0f));
+    setCameraFront(m_view);
 }
 
 void Camera::update_follow_position()
@@ -97,4 +100,9 @@ void Camera::update_follow_position()
             followRadius * glm::cos(elevation), 
             followRadius * glm::sin(elevation) * glm::sin(azimuth))
     );
+}
+
+void Camera::setCameraFront(const glm::mat4& viewMatrix) {
+    glm::mat3 rotationMatrix = glm::mat3(viewMatrix);
+    cameraFront = -glm::vec3(rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2]);
 }

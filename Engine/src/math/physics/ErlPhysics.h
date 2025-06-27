@@ -28,11 +28,13 @@ namespace ErlPhysics {
 	struct SweptCollisionResult {
 		float collisionTime;
 		glm::vec3 normal;
+		uint16_t objId;
 	};
 
 	void update(float deltaTime);
 	ErlPhysics::Ray* cast_ray_from_mouse(Camera* camera, float xpos, float ypos);
 	void add_physics_object(GameObject* object);
+	void remove_physics_object(uint16_t id);
 	void add_player_physics_object(Player* player);
 	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
 	ErlPhysics::Ray* cast_ray_from_player(Player* player);

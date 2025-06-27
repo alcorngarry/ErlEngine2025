@@ -33,6 +33,7 @@ void Chamber::draw(float deltaTime)
 	//{
 	if (state != DEBUG)
 	{
+		camera->followRadius = 200.0f;
 		camera->follow_position(players[0]->Position);
 	}
 		//renderState = PLAYER2;

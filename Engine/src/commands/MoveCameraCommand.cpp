@@ -33,31 +33,14 @@ void MoveCameraCommand::execute(float deltaTime)
 		case ORBIT: {
 			float deltaX = InputManager::get_xpos() - InputManager::get_last_xpos();
 			float deltaY = InputManager::get_ypos() - InputManager::get_last_ypos();
-			deltaX *= 0.1f * cameraSpeed;
-			deltaY *= 0.1f * cameraSpeed;
+			float sensitivity = 0.005f;
 
-			float azimuth = 0.0f;
-			float elevation = 0.0f;
+			camera->azimuth += deltaX * sensitivity;
+			camera->elevation += deltaY * sensitivity;
 
-			azimuth += glm::radians(deltaX);
-			elevation += glm::radians(deltaY);
-
-			elevation = glm::clamp(elevation, -glm::half_pi<float>() + 0.01f, glm::half_pi<float>() - 0.01f);
-
-			//cast ray
-			ErlPhysics::Ray* orbitRay = ErlPhysics::cast_ray_from_mouse(camera, InputManager::get_ypos(), InputManager::get_last_xpos());
-
-			glm::vec3 target = orbitRay->direction;
-			float radius = glm::distance(camera->get_camera_pos(), target);
-			float x = radius * cos(elevation) * sin(azimuth);
-			float y = radius * sin(elevation);
-			float z = radius * cos(elevation) * cos(azimuth);
-
-			glm::vec3 cameraPos = glm::vec3(x, y, z);
-			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-			glm::mat4 view = glm::lookAt(cameraPos, target, up);
-
-			camera->update_view_matrix(view);
+			glm::vec3 target = glm::vec3(0.0f);
+			camera->followRadius = glm::distance(camera->get_camera_pos(), target);
+			camera->follow_position(target);
 			break;
 		}
 		case LOOK_AROUND: {

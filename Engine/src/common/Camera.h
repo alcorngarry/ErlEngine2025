@@ -20,6 +20,8 @@ class Camera {
 		void update_view_matrix();
 		void follow_position(glm::vec3 followPosition);
 		void update_follow_position();
+
+		void setCameraFront(const glm::mat4& viewMatrix);
 		
 		float m_windowHeight, m_windowWidth;
 		float followRadius, azimuth, elevation;

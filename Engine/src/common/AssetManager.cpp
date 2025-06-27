@@ -10,12 +10,18 @@ void load_sky_box()
 {
 	std::vector<std::string> faces
 	{
-		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/right.jpg",
+		/*"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/right.jpg",
 		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/left.jpg",
 		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/top.jpg",
 		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/bottom.jpg",
 		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/front.jpg",
-		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/back.jpg",
+		"C:/Users/alcor/Downloads/LearnOpenGL-master/LearnOpenGL-master/resources/textures/skybox/back.jpg",*/
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/right.png",
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/left.png",
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/top.png",
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/bottom.png",
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/front.png",
+		"C:/Dev/assets/coop_platformer_full_asset_location/skybox/back.png"
 	};
 	skyBox = new SkyBox(faces);
 }

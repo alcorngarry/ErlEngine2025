@@ -13,14 +13,9 @@
 #include"math/physics/ErlPhysics.h"
 
 namespace Renderer {
-	//not implemented check if wanted
-	struct Erl3DRenderItem {
-		Model* model;
-		glm::mat4 transform;
-	};
-
 	void init_render(GLFWwindow* window);
 	void render(Camera* camera);
+	void render_grass(glm::vec3 pos);
 
 	void add_sky_box(SkyBox* skybox);
 	void add_render_object(GameObject* gameObject);
@@ -37,9 +32,8 @@ namespace Renderer {
 
 	void draw_aabb(const glm::vec3& minAABB, const glm::vec3& maxAABB, const glm::mat4& model);
 	void draw_rays();
-	void draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix);
 	void draw_skinned(Model* model, glm::mat4 modelMatrix, std::vector<glm::mat4>* transform);
-	void render_grass(glm::vec3 pos, Camera* camera);
+	void draw_static(Shader* shader, Model* model, glm::mat4 modelMatrix);
 };
 
 #endif // !RENDERER_H

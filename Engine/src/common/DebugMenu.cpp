@@ -75,6 +75,13 @@ void DebugMenu::show_all_entities()
                 Renderer::set_selected_index(pair.first);
             }
         }
+
+        for (const auto& pair : m_map->lights)
+        {
+            if (ImGui::Selectable((pair.second->GameModel->fileName + " " + ErlMath::vec3_to_string(pair.second->Position)).c_str())) {
+                Renderer::set_selected_index(pair.first);
+            }
+        }
     }
 }
 
@@ -173,7 +180,12 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
         entity->ModelMatrix = modelMatrix;
         ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(modelMatrix), glm::value_ptr(position), glm::value_ptr(rotation), glm::value_ptr(scale));
 
-        if (Player* d_ptr = dynamic_cast<Player*>(entity)) m_map->playerStarts[entity->instanceId - m_map->entities.size()] = position;
+        //the entities size can be larger than the instanceId odd, causes fatal error. look into this.
+        if (entity->assetId == 99)
+        {
+            m_map->playerStarts[entity->instanceId] = position;
+        }
+
         entity->Position = position;
         entity->Rotation = rotation;
         entity->Size = scale;

@@ -95,11 +95,9 @@ void Camera::follow_position(glm::vec3 followPosition)
 
 void Camera::update_follow_position()
 {
-    set_camera_pos(m_target + 
-        glm::vec3(followRadius * glm::sin(elevation) * glm::cos(azimuth),
-            followRadius * glm::cos(elevation), 
-            followRadius * glm::sin(elevation) * glm::sin(azimuth))
-    );
+    set_camera_pos(m_target + (followRadius *
+        glm::vec3(glm::sin(elevation) * glm::cos(azimuth), glm::cos(elevation), glm::sin(elevation) * glm::sin(azimuth))
+    ));
 }
 
 void Camera::setCameraFront(const glm::mat4& viewMatrix) {

@@ -77,6 +77,11 @@ void UIManager::draw()
         if(window.second->active) window.second->draw();
     }
 
+    for (TextElement* text : textElements)
+    {
+        UIText::draw(textShader, m_projection, text->text, text->position.x, text->position.y, text->scale, glm::vec3(1.0f));
+    }
+
     for (std::string element : uiDrawList)
     {
         uiElements[element]->draw(imageShader, m_projection);
@@ -91,7 +96,7 @@ void UIManager::center(UIElement* element)
 
 int UIManager::add_text_element(std::string text)
 {
-    textElements.push_back(new TextElement{ text, glm::vec2(0, 0) });
+    textElements.push_back(new TextElement{ text, glm::vec2(0, 0), 1.0f });
     return textElements.size() - 1;
 }
 

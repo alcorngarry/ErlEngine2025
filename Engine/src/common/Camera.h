@@ -25,11 +25,11 @@ class Camera {
 		
 		float m_windowHeight, m_windowWidth;
 		float followRadius, azimuth, elevation;
+		glm::vec3 m_target;
 	private:
 		glm::vec3 cameraPos;
 		glm::vec3 cameraFront;
 		glm::vec3 cameraUp;
-		glm::vec3 m_target;
 		glm::mat4 m_projection;
 		glm::mat4 m_view;
 		

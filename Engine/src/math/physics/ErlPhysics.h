@@ -31,14 +31,20 @@ namespace ErlPhysics {
 		uint16_t objId;
 	};
 
+	struct RayCollisionResult {
+		int index;
+		glm::vec3 collisionPos;
+	};
+
 	void update(float deltaTime);
 	ErlPhysics::Ray* cast_ray_from_mouse(Camera* camera, float xpos, float ypos);
 	void add_physics_object(GameObject* object);
+	void add_physics_camera(Camera* camera);
 	void remove_physics_object(uint16_t id);
 	void add_player_physics_object(Player* player);
-	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera);
-	ErlPhysics::Ray* cast_ray_from_player(Player* player);
-	int check_collision(Ray* ray);
+	ErlPhysics::Ray* cast_ray_from_screen(Camera* camera, float distance);
+	ErlPhysics::Ray* cast_ray_from_player(Player* player, float distance);
+	RayCollisionResult* check_collision(Ray* ray);
 	std::set<uint16_t> get_collided_objects();
 	float check_floor_collision(Player* player);
 	void add_ray(ErlPhysics::Ray* ray);
@@ -46,5 +52,6 @@ namespace ErlPhysics {
 	void remove_ray_object(int index);
 	void handle_collision(GameObject* a, GameObject* b, float deltaTime);
 	void swept_aabb_collision(Player* player, float deltaTime);
+	void camera_collision(Camera* camera, float deltaTime);
 };
 #endif // !ERL_PHYSICS_H

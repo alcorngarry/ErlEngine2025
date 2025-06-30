@@ -1,5 +1,7 @@
 #include"Chamber.h"
 
+float radius = 0.0f;
+
 Chamber::Chamber(std::string mapName) : Map(mapName)
 {
 }
@@ -12,6 +14,7 @@ void Chamber::update(float deltaTime)
 		{
 			player->floorHeight = ErlPhysics::check_floor_collision(player);
 			player->update(deltaTime);
+			
 		}
 	}
 
@@ -24,6 +27,7 @@ void Chamber::update(float deltaTime)
 void Chamber::load_camera(float windowWidth, float windowHeight)
 {
 	camera = new Camera(windowWidth, windowHeight);
+	ErlPhysics::add_physics_camera(camera);
 	UIManager::load_elements();
 }
 
@@ -33,8 +37,15 @@ void Chamber::draw(float deltaTime)
 	//{
 	if (state != DEBUG)
 	{
+		if (radius != camera->followRadius)
+		{
+			radius = camera->followRadius;
+			std::cout << "RADIUS: " << camera->followRadius << std::endl;
+		}
+		//resets the camera after editing
 		camera->followRadius = 200.0f;
 		camera->follow_position(players[0]->Position);
+		UIManager::get_text_element(textId)->text = "W: " + ErlMath::vec3_to_string(players[0]->wishVelocity) + " V: " + ErlMath::vec3_to_string(players[0]->Velocity);
 	}
 		//renderState = PLAYER2;
 	/*}

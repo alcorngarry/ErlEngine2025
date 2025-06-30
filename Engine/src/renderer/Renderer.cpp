@@ -259,6 +259,7 @@ void Renderer::draw_rays()
 	lineShaderProgram->use();
 	lineShaderProgram->setMat4("view", view);
 	lineShaderProgram->setMat4("projection", projection);
+	lineShaderProgram->setVec3("color", glm::vec3(0.0f, 1.0f, 0.0f));
 
 	for (ErlPhysics::Ray* ray : ErlPhysics::get_rays())
 	{

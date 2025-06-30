@@ -8,10 +8,10 @@ void FireCommand::execute(float deltaTime)
 {
 	if (m_camera)
 	{
-		ErlPhysics::add_ray(ErlPhysics::cast_ray_from_screen(m_camera));
+		ErlPhysics::add_ray(ErlPhysics::cast_ray_from_screen(m_camera, 1000.0f));
 	}
 	else if (m_player)
 	{
-		ErlPhysics::add_ray(ErlPhysics::cast_ray_from_player(m_player));
+		ErlPhysics::add_ray(ErlPhysics::cast_ray_from_player(m_player, 1000.0f));
 	}
 }

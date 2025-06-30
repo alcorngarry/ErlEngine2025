@@ -3,6 +3,7 @@
 std::map<uint16_t, ErlPhysics::PhysicsObject*> physObjects;
 std::vector<ErlPhysics::PlayerPhysicsObject*> playerPhysObjects;
 std::vector<ErlPhysics::Ray*> rays;
+std::vector<Camera*> physicsCameras;
 
 void ErlPhysics::update(float deltaTime)
 {
@@ -11,10 +12,16 @@ void ErlPhysics::update(float deltaTime)
         playerPhysObject->player->update_movement(deltaTime);
         swept_aabb_collision(playerPhysObject->player, deltaTime);
     }
+
+    //camera collision
+    /*for (Camera* camera : physicsCameras)
+    {
+        camera_collision(camera, deltaTime);
+    }*/
 }
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, float ypos)
-{
+{ 
 	float NDC_X = ((int)xpos * (2.0f / camera->m_windowWidth)) - 1;
 	float NDC_Y = -((int)ypos * (2.0f / camera->m_windowHeight)) + 1;
 	float near_plane_height = glm::tan(45 / 2.0f) * 0.1f;
@@ -35,6 +42,11 @@ void ErlPhysics::add_physics_object(GameObject* object)
     physObjects[object->instanceId] = new ErlPhysics::PhysicsObject{ object };
 }
 
+//add camera collision
+void ErlPhysics::add_physics_camera(Camera* camera)
+{
+    physicsCameras.push_back(camera);
+}
 
 void ErlPhysics::remove_physics_object(uint16_t id)
 {
@@ -46,47 +58,55 @@ void ErlPhysics::add_player_physics_object(Player* object)
     playerPhysObjects.push_back(new ErlPhysics::PlayerPhysicsObject{ object});
 }
 
-ErlPhysics::Ray* ErlPhysics::cast_ray_from_screen(Camera* camera)
+ErlPhysics::Ray* ErlPhysics::cast_ray_from_screen(Camera* camera, float distance)
 {
-    return new ErlPhysics::Ray{ camera->get_camera_pos(), camera->get_camera_front(), 1000.0f };
+    return new ErlPhysics::Ray{ camera->get_camera_pos(), camera->get_camera_front(), distance };
 }
 
-ErlPhysics::Ray* ErlPhysics::cast_ray_from_player(Player* player)
+ErlPhysics::Ray* ErlPhysics::cast_ray_from_player(Player* player, float distance)
 {
-    return new ErlPhysics::Ray{ player->Position, player->wishDir, 1000.0f };
+    return new ErlPhysics::Ray{ player->Position - glm::vec3(0.0f, (player->get_aabb_min().y - player->get_aabb_max().y) / 2.0f, 0.0f), player->wishDir, distance };
 }
 
-int ErlPhysics::check_collision(Ray* ray)
+ErlPhysics::RayCollisionResult* ErlPhysics::check_collision(Ray* ray)
 {
-    float maxHeight = -1000.0f; //fix this later
     int index = -1;
+    float closestTmin = std::numeric_limits<float>::max();
+    glm::vec3 closestPoint;
+
     for (const auto& physObject : physObjects)
     {
-        float t1 = (physObject.second->object->get_aabb_min().x - ray->origin.x) / ray->direction.x;
-        float t2 = (physObject.second->object->get_aabb_max().x - ray->origin.x) / ray->direction.x;
-        float t3 = (physObject.second->object->get_aabb_min().y - ray->origin.y) / ray->direction.y;
-        float t4 = (physObject.second->object->get_aabb_max().y - ray->origin.y) / ray->direction.y;
-        float t5 = (physObject.second->object->get_aabb_min().z - ray->origin.z) / ray->direction.z;
-        float t6 = (physObject.second->object->get_aabb_max().z - ray->origin.z) / ray->direction.z;
+        const auto& aabbMin = physObject.second->object->get_aabb_min();
+        const auto& aabbMax = physObject.second->object->get_aabb_max();
+
+        float t1 = (aabbMin.x - ray->origin.x) / ray->direction.x;
+        float t2 = (aabbMax.x - ray->origin.x) / ray->direction.x;
+        float t3 = (aabbMin.y - ray->origin.y) / ray->direction.y;
+        float t4 = (aabbMax.y - ray->origin.y) / ray->direction.y;
+        float t5 = (aabbMin.z - ray->origin.z) / ray->direction.z;
+        float t6 = (aabbMax.z - ray->origin.z) / ray->direction.z;
 
         float tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
         float tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
 
-        if (tmax < 0.0f) {
+        if (tmax < 0.0f || tmin > tmax || tmin > ray->length)
             continue;
-        }
 
-        if (tmin > tmax) {
-            continue;
-        }
-
-        if (physObject.second->object->get_aabb_max().y > maxHeight)
+        if (tmin < closestTmin)
         {
-            maxHeight = physObject.second->object->get_aabb_max().y;
+            closestTmin = tmin;
+            closestPoint = ray->origin + tmin * ray->direction;
             index = physObject.first;
         }
     }
-    return index;
+
+    if (index != -1)
+    {
+        return new RayCollisionResult{ index,  closestPoint };
+    }
+    else {
+        return nullptr;
+    }
 }
 
 // ignoring Y values
@@ -262,6 +282,35 @@ void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
     }
 }
 
+void ErlPhysics::camera_collision(Camera* camera, float deltaTime)
+{
+    glm::vec3 position = camera->get_camera_pos();
+    Ray* ray = new Ray { position, camera->m_target - position, 1.0f };
+    RayCollisionResult* result = check_collision(ray);
+  
+    if (result)
+    {
+        float distance = glm::distance(camera->m_target, result->collisionPos);
+
+        if (distance > 10.0f)
+        {
+            add_ray(ray);
+            std::cout << "COLLISION POS: " << std::endl;
+            ErlMath::print_vector3(result->collisionPos);
+            std::cout << "CAMERA COLLISION: " << distance << std::endl;
+            camera->followRadius = distance / 2;
+            camera->update_follow_position();
+
+            //call this method again
+            //camera_collision(camera, false, deltaTime);
+        }
+    }
+    else {
+        camera->followRadius = 200.0f;
+        camera->update_follow_position();
+    }
+}
+
 std::set<uint16_t> ErlPhysics::get_collided_objects()
 {
     std::set<uint16_t> collidedIds;
@@ -279,13 +328,12 @@ std::set<uint16_t> ErlPhysics::get_collided_objects()
 float ErlPhysics::check_floor_collision(Player* player)
 {
     float objectY = player->Position.y;
-    Ray* ray = new Ray{ player->Position, glm::vec3(0.0f, -1.0f, 0.0f), 100.0f };
-
-    int index = check_collision(ray);
-    if (index != -1)
+    Ray* ray = new Ray{ player->Position, glm::vec3(0.0f, -1.0f, 0.0f), 1000.0f };
+    RayCollisionResult* result = check_collision(ray);
+    if (result)
     {
-        if (player->Position.y > physObjects[index]->object->get_aabb_max().y) player->onGround = false;
-        return physObjects[index]->object->get_aabb_max().y;
+        if (player->Position.y > physObjects[result->index]->object->get_aabb_max().y) player->onGround = false;
+        return physObjects[result->index]->object->get_aabb_max().y;
     } else {
         return player->floorHeight;
     }

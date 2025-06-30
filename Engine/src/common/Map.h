@@ -58,8 +58,8 @@ class Map
 		std::ofstream writeMap;
 		std::ifstream readMap;
 		std::string fileName;
+		int textId;
 
-		void load_player();
 		virtual void load_camera(float windowWidth, float windowHeight);
 		void read_player();
 		void load_physics_objects();

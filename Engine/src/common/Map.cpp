@@ -123,6 +123,10 @@ void Map::load(float windowWidth, float windowHeight)
 	readMap.close();
 	load_skybox();
 	load_physics_objects();
+
+	textId = UIManager::add_text_element(ErlMath::vec3_to_string(players[0]->wishVelocity));
+	UIManager::set_text_element_bottom(textId);
+	//UIManager::get_text_element(textId)->position = glm::vec2(windowWidth * 2, windowHeight / 2);
 }
 
 void Map::load_camera(float windowWidth, float windowHeight)

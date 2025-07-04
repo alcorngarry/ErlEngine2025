@@ -28,11 +28,13 @@ class Player : public GameObject {
 		float jumpForce = 270.0f;
 		float fric = 10.0f;
 		float floorHeight = 0.0f;
+		float health = 100.0f;
 
 		int coinCount = 0;
+		uint8_t playerId;
 		bool onGround = true;
 
-		Player(uint8_t playerId, Model* model, Camera* cam, glm::vec3 pos);
+		Player(uint8_t id, Model* model, Camera* cam, glm::vec3 pos);
 		void update(float deltaTime);
 		void update_movement(float deltaTime);
 	private:

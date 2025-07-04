@@ -1,6 +1,6 @@
 #include"Game.h"
 
-Game::Game(float windowWidth, float windowHeight) : State(GAME_ACTIVE), m_windowWidth(windowWidth), m_windowHeight(windowHeight)
+Game::Game(GLFWwindow* window) : State(GAME_ACTIVE), m_window(window)
 {
 }
 
@@ -14,8 +14,7 @@ void Game::init()
 	Maps.push_back(new Chamber("C:/Dev/opengl_code/Erl/Erl/Game/res/maps/chamber_1"));
 
 	level = 0;
-	Maps[level]->load(m_windowWidth, m_windowHeight);
-	Maps[level]->set_controls();
+	Maps[level]->load(m_window);
 	DebugMenu::load_map(Maps[level]);
 	UIManager::load_map(Maps[level]);
 }
@@ -31,7 +30,10 @@ void Game::update_controls(GameState before, GameState after)
 	if (after == MAP_UPDATE)
 	{
 		DebugMenu::clear_controls();
-		Maps[level]->set_controls();
+		for (Player* player : Maps[level]->players)
+		{
+			Maps[level]->set_controls(player);
+		}
 		State = GAME_ACTIVE;
 	}
 }

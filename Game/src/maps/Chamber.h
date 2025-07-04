@@ -10,10 +10,9 @@
 class Chamber : public Map {
 	public:
 		Chamber(std::string mapName);
-		void set_controls() override;
+		void set_controls(Player* player) override;
 		void update(float deltaTime) override;
 	protected:
-		void load_camera(float windowWidth, float windowHeight) override;
 		void draw(float deltaTime) override;
 };
 #endif // !CHAMBER_H

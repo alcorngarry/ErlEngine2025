@@ -8,7 +8,9 @@
 class GameObject {
 	public:
 		std::map<std::string, std::function<void(GameObject*, float)>> actions;
+		// the id is the id of the object
 		std::map<uint16_t, std::function<void(GameObject*, float)>> onCollisionActions;
+		std::map<uint16_t, std::function<void(GameObject*, float)>> onRayCollisionActions;
 
 		Model* GameModel;
 		glm::vec3 Position, Size, Rotation, Velocity, Acceleration;
@@ -22,6 +24,7 @@ class GameObject {
 		GameObject(uint16_t assetId, Model* model, glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, bool isRendered);
 		virtual void update(float deltaTime);
 		void on_collision(GameObject* object, float deltaTime);
+		void on_ray_collision(GameObject* object, float deltaTime);
 		glm::vec3 get_aabb_min();
 		glm::vec3 get_aabb_max();
 	protected:

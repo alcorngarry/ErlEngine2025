@@ -250,7 +250,7 @@ void InputManager::clear_text_input_last_char()
 
 void run_gamepad_commands(float deltaTime)
 {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         if (glfwJoystickIsGamepad(i)) {
             GLFWgamepadstate state;
             if (glfwGetGamepadState(i, &state)) {
@@ -269,7 +269,7 @@ void run_gamepad_commands(float deltaTime)
                 // 4 for now, till using triggers
                 for (int axis = 0; axis < 4; ++axis) {
                     if (fabs(state.axes[axis]) > 0.2f) {
-                        gamepadBindings[{i, 100 - axis}]->execute(deltaTime, state.axes[axis]);
+                        if (gamepadBindings[{i, 100 - axis}]) gamepadBindings[{i, 100 - axis}]->execute(deltaTime, state.axes[axis]);
                     }
                 }
             }

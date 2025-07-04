@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	float deltaTime = 0.0f;
 
-	Game* game = new Game(window_width, window_height);
+	Game* game = new Game(window);
 	game->init();
 
 	SaveCommand sc(game->Maps[game->level]);
@@ -49,21 +49,10 @@ int main(int argc, char** argv)
 		ErlPhysics::update(deltaTime);
 		game->update(deltaTime);
 
-		//do you need this?
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		int width, height;
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
-
 		game->render(deltaTime);
-
-		//render second screen
-		/*glfwGetFramebufferSize(window, &width, &height);
-		glViewport(width / 2, 0, width / 2, height);
-
-		game->render(deltaTime);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

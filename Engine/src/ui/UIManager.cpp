@@ -79,7 +79,7 @@ void UIManager::draw()
 
     for (TextElement* text : textElements)
     {
-        UIText::draw(textShader, m_projection, text->text, text->position.x, text->position.y, text->scale, glm::vec3(1.0f));
+        UIText::draw(textShader, m_projection, text->text, text->position.x, text->position.y, text->scale, text->color);
     }
 
     for (std::string element : uiDrawList)

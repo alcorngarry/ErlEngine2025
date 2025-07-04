@@ -16,7 +16,7 @@ struct TextElement {
     std::string text;
     glm::vec2 position;
     float scale;
-    glm::vec3 color;
+    glm::vec3 color = glm::vec3(1.0f);
 };
 
 class Window {

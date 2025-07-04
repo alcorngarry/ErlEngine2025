@@ -30,7 +30,7 @@ void DebugMenu::create_menu(float deltaTime)
     ImGuizmo::BeginFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(m_map->camera->m_windowHeight / 3, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(m_map->cameras[0]->get_window_height() / 3, 0), ImGuiCond_Always);
 
     ImGui::Begin("Debug Menu");
     
@@ -119,8 +119,8 @@ void DebugMenu::draw_entity_properties(GameObject* entity) {
     ImGui::Text("Entity %zu", Renderer::get_selected_index());
 
     glm::mat4 modelMatrix = entity->ModelMatrix;
-    glm::mat4 view = m_map->camera->get_view_matrix();
-    glm::mat4 projection = m_map->camera->get_projection_matrix();
+    glm::mat4 view = m_map->cameras[0]->get_view_matrix();
+    glm::mat4 projection = m_map->cameras[0]->get_projection_matrix();
     glm::vec3 position, scale, rotation;
 
     if (ImGui::IsKeyPressed(ImGuiKey_1))
@@ -204,19 +204,19 @@ void DebugMenu::draw_mouse_pos()
 
 void DebugMenu::draw_camera_position() {
     ImGui::Text("Camera Position:");
-    ImGui::Text("X: %.2f", m_map->camera->get_camera_pos().x);
-    ImGui::Text("Y: %.2f", m_map->camera->get_camera_pos().y);
-    ImGui::Text("Z: %.2f", m_map->camera->get_camera_pos().z);
+    ImGui::Text("X: %.2f", m_map->cameras[0]->get_camera_pos().x);
+    ImGui::Text("Y: %.2f", m_map->cameras[0]->get_camera_pos().y);
+    ImGui::Text("Z: %.2f", m_map->cameras[0]->get_camera_pos().z);
 
     ImGui::Text("Camera Front:");
-    ImGui::Text("X: %.2f", m_map->camera->get_camera_front().x);
-    ImGui::Text("Y: %.2f", m_map->camera->get_camera_front().y);
-    ImGui::Text("Z: %.2f", m_map->camera->get_camera_front().z);
+    ImGui::Text("X: %.2f", m_map->cameras[0]->get_camera_front().x);
+    ImGui::Text("Y: %.2f", m_map->cameras[0]->get_camera_front().y);
+    ImGui::Text("Z: %.2f", m_map->cameras[0]->get_camera_front().z);
 
     ImGui::Text("Camera Up:");
-    ImGui::Text("X: %.2f", m_map->camera->get_camera_up().x);
-    ImGui::Text("Y: %.2f", m_map->camera->get_camera_up().y);
-    ImGui::Text("Z: %.2f", m_map->camera->get_camera_up().z);
+    ImGui::Text("X: %.2f", m_map->cameras[0]->get_camera_up().x);
+    ImGui::Text("Y: %.2f", m_map->cameras[0]->get_camera_up().y);
+    ImGui::Text("Z: %.2f", m_map->cameras[0]->get_camera_up().z);
 }
 
 void DebugMenu::shut_down() {
@@ -227,11 +227,11 @@ void DebugMenu::shut_down() {
 
 void DebugMenu::set_controls()
 {
-    InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->camera, MOUSE_DRAG), true);
-    InputManager::set_mouse_binding(-1, new MoveCameraCommand(m_map->camera, SCROLL));
+    InputManager::set_key_and_mouse_binding(GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->cameras[0], MOUSE_DRAG), true);
+    InputManager::set_mouse_binding(-1, new MoveCameraCommand(m_map->cameras[0], SCROLL));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new SelectEntityCommand(false));
     InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_RIGHT, new SelectEntityCommand(true));
-    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->camera, ORBIT));
+    InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_MIDDLE, new MoveCameraCommand(m_map->cameras[0], ORBIT));
     
     AddRemoveEntityCommand are(m_map, true);
     AddRemoveEntityCommand are2(m_map, false);

@@ -17,7 +17,7 @@ class Game {
 		GameState State;
 		short level;
 
-		Game(float windowWidth, float windowHeight);
+		Game(GLFWwindow* window);
 		~Game();
 
 		void init();
@@ -25,7 +25,7 @@ class Game {
 		void update(float deltaTime);
 		void render(float deltaTime);
 	private: 
-		float m_windowWidth, m_windowHeight;
+		GLFWwindow* m_window;
 };	
 
 #endif // !GAME_H

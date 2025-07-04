@@ -14,7 +14,7 @@ void Chamber::update(float deltaTime)
 		{
 			player->floorHeight = ErlPhysics::check_floor_collision(player);
 			player->update(deltaTime);
-			
+			if (!InputManager::GamePadConnected[player->playerId] && glfwJoystickIsGamepad(player->playerId)) set_controls(player);
 		}
 	}
 
@@ -22,69 +22,63 @@ void Chamber::update(float deltaTime)
 	{
 		pair.second->update(deltaTime);
 	}
-}
 
-void Chamber::load_camera(float windowWidth, float windowHeight)
-{
-	camera = new Camera(windowWidth, windowHeight);
-	ErlPhysics::add_physics_camera(camera);
-	UIManager::load_elements();
+	for (const auto& pair : npcs)
+	{
+		pair.second->floorHeight = ErlPhysics::check_floor_collision(pair.second);
+		pair.second->update(deltaTime);
+	}
 }
 
 void Chamber::draw(float deltaTime)
 {
-	//if (renderState == PLAYER1)
-	//{
-	if (state != DEBUG)
+	int i = 0;
+	for (Player* player: players)
 	{
-		if (radius != camera->followRadius)
-		{
-			radius = camera->followRadius;
-			std::cout << "RADIUS: " << camera->followRadius << std::endl;
+		if (i == 0)
+		{ 
+			glViewport(0, 0, cameras[0]->get_window_width() / 2, cameras[0]->get_window_height());
 		}
-		//resets the camera after editing
-		camera->followRadius = 200.0f;
-		camera->follow_position(players[0]->Position);
-		UIManager::get_text_element(textId)->text = "W: " + ErlMath::vec3_to_string(players[0]->wishVelocity) + " V: " + ErlMath::vec3_to_string(players[0]->Velocity);
-	}
-		//renderState = PLAYER2;
-	/*}
-	else if (renderState == PLAYER2)
-	{
-		camera->follow_position(players[1]->Position);
-		renderState = PLAYER1;
-	}*/
+		else {
+			glViewport(cameras[1]->get_window_width() / 2, 0, cameras[1]->get_window_width() / 2, cameras[1]->get_window_height());
+		}
 
-	Renderer::render(camera);
-	UIManager::draw();
+		if (state != DEBUG)
+		{
+			
+			if (radius != players[0]->camera->followRadius)
+			{
+				radius = players[0]->camera->followRadius;
+				std::cout << "RADIUS: " << player->camera->followRadius << std::endl;
+			}
+			//resets the camera after editing
+			player->camera->followRadius = 200.0f;
+			player->camera->follow_position(player->Position);
+			UIManager::get_text_element(textId)->text = "W: " + ErlMath::vec3_to_string(player->wishVelocity) + " V: " + ErlMath::vec3_to_string(player->Velocity);
+			UIManager::get_text_element(textId2)->text = "Coins: " + std::to_string(player->coinCount);
+			
+			if (player->health <= 0.0f)
+			{
+				UIManager::get_text_element(textId3)->color = glm::vec3(1.0f, 0.0f, 0.0f);
+			}
+
+			UIManager::get_text_element(textId3)->text = "Health: " + std::to_string(player->health);
+			UIManager::get_text_element(textId4)->text = "FPS: " + std::to_string(1.0f / deltaTime);
+		}
+
+		Renderer::render(player->camera);
+		UIManager::draw();
+		i++;
+	}
 }
 
-void Chamber::set_controls()
+void Chamber::set_controls(Player* player)
 {
-	Map::set_controls();
-	if(glfwJoystickIsGamepad(GLFW_JOYSTICK_1))
-	{
-		//set arbitrary value for joystick
-	
-		int i = 0;
-		for (Player* player : players)
-		{
-			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_RIGHT_X }, new MoveCameraCommand(camera, CameraMovement::LOOK_X));
-			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_RIGHT_Y }, new MoveCameraCommand(camera, CameraMovement::LOOK_Y));
-			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_LEFT_X }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_X));
-			InputManager::set_gamepad_binding({ i, 100 - GLFW_GAMEPAD_AXIS_LEFT_Y }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_Y));
-			InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_A }, new JumpCommand(player));
-			InputManager::set_gamepad_binding({ i, GLFW_GAMEPAD_BUTTON_X }, new FireCommand(player));
-			i++;
-		}
-	}
-	else {
-	/*	InputManager::set_mouse_binding(-2, new MoveCameraCommand(camera, CameraMovement::LOOK_AROUND));
-		InputManager::set_key_binding(GLFW_KEY_W, new MovePlayerCommand(player, PlayerMovement::FORWARD));
-		InputManager::set_key_binding(GLFW_KEY_A, new MovePlayerCommand(player, PlayerMovement::LEFT));
-		InputManager::set_key_binding(GLFW_KEY_S, new MovePlayerCommand(player, PlayerMovement::BACK));
-		InputManager::set_key_binding(GLFW_KEY_D, new MovePlayerCommand(player, PlayerMovement::RIGHT));
-		InputManager::set_key_binding(GLFW_KEY_SPACE, new JumpCommand(player));
-		InputManager::set_mouse_binding(GLFW_MOUSE_BUTTON_LEFT, new FireCommand(camera));*/
-	}
+	Map::set_controls(player);
+	InputManager::set_gamepad_binding({ player->playerId, 100 - GLFW_GAMEPAD_AXIS_RIGHT_X }, new MoveCameraCommand(player->camera, CameraMovement::LOOK_X));
+	InputManager::set_gamepad_binding({ player->playerId, 100 - GLFW_GAMEPAD_AXIS_RIGHT_Y }, new MoveCameraCommand(player->camera, CameraMovement::LOOK_Y));
+	InputManager::set_gamepad_binding({ player->playerId, 100 - GLFW_GAMEPAD_AXIS_LEFT_X }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_X));
+	InputManager::set_gamepad_binding({ player->playerId, 100 - GLFW_GAMEPAD_AXIS_LEFT_Y }, new MovePlayerCommand(player, PlayerMovement::GAMEPAD_Y));
+	InputManager::set_gamepad_binding({ player->playerId, GLFW_GAMEPAD_BUTTON_A }, new JumpCommand(player));
+	InputManager::set_gamepad_binding({ player->playerId, GLFW_GAMEPAD_BUTTON_X }, new FireCommand(player));
 }

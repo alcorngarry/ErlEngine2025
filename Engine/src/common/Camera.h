@@ -10,8 +10,10 @@ class Camera {
 		void set_camera_up(glm::vec3 cameraUp);
 		glm::vec3 get_camera_front() const;
 		void set_camera_front(glm::vec3 cameraFront);
-		Camera(float windowWidth, float windowHeight);
+		Camera(GLFWwindow* window);
 		glm::vec3 get_camera_pos() const;
+		float get_window_width() const;
+		float get_window_height() const;
 		void set_camera_pos(glm::vec3 cameraPos);
 		glm::mat4 get_view_matrix() const;
 		glm::vec3 get_target_pos();
@@ -23,16 +25,15 @@ class Camera {
 
 		void setCameraFront(const glm::mat4& viewMatrix);
 		
-		float m_windowHeight, m_windowWidth;
 		float followRadius, azimuth, elevation;
 		glm::vec3 m_target;
 	private:
 		glm::vec3 cameraPos;
 		glm::vec3 cameraFront;
 		glm::vec3 cameraUp;
-		glm::mat4 m_projection;
 		glm::mat4 m_view;
-		
+		GLFWwindow* m_window;
+
 		void setCameraToLookAtOrigin();
 };
 #endif // !CAMERA_H

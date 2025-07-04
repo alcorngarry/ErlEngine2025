@@ -11,6 +11,7 @@
 #include"input/InputManager.h"
 #include"game_objects/Player.h"
 #include"commands/ToggleConsoleCommand.h"
+#include"game_objects/NPC.h"
 
 class Map 
 {
@@ -35,16 +36,17 @@ class Map
 		State state;
 		RenderState renderState;
 		std::map<uint16_t, GameObject*> entities, lights;
+		std::map<uint16_t, NPC*> npcs;
 		std::vector<SkinnedGameObject*> skinned_entities;
 		std::vector<Player*> players;
-		Camera* camera;
+		std::vector<Camera*> cameras;
 		std::map<uint16_t, glm::vec3> playerStarts;
 
 		Map(std::string mapName);
 		virtual void save();
-		virtual void load(float windowWidth, float windowHeight);
+		virtual void load(GLFWwindow* window);
 		virtual void draw(float deltaTime);
-		virtual void set_controls();
+		virtual void set_controls(Player* player);
 		virtual void clear_controls();
 		virtual void update(float deltaTime) = 0;
 		
@@ -58,9 +60,8 @@ class Map
 		std::ofstream writeMap;
 		std::ifstream readMap;
 		std::string fileName;
-		int textId;
+		int textId, textId2, textId3, textId4;
 
-		virtual void load_camera(float windowWidth, float windowHeight);
 		void read_player();
 		void load_physics_objects();
 		void write_models();
@@ -68,6 +69,8 @@ class Map
 		void write_scripts(GameObject* entity);
 		void write_player();
 	private:
+		GLFWwindow* m_window;
+		int m_windowWidth, m_windowHeight;
 		std::string line;
 		void load_skybox();
 		GameObject* read_asset();

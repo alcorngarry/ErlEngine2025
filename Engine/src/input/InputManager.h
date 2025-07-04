@@ -47,6 +47,7 @@ namespace InputManager {
     static bool MouseProcessed[7] = { false };
     static bool GamepadButtonsProcessed[15] = { false };
     static GamepadState gamepadStates[4] = { false };
+    static bool GamePadConnected[2] = { false };
 
     void init(GLFWwindow* window);
     void update(float deltaTime);

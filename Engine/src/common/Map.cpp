@@ -101,9 +101,10 @@ void Map::write_player()
 	writeMap << "]" << std::endl;
 }
 
-void Map::load(float windowWidth, float windowHeight)
+void Map::load(GLFWwindow* window)
 {
-	load_camera(windowWidth, windowHeight);
+	m_window = window;
+	UIManager::load_elements();
 
 	readMap.open(fileName + ".esf");
 	char peek = 'B';
@@ -126,12 +127,34 @@ void Map::load(float windowWidth, float windowHeight)
 
 	textId = UIManager::add_text_element(ErlMath::vec3_to_string(players[0]->wishVelocity));
 	UIManager::set_text_element_bottom(textId);
-	//UIManager::get_text_element(textId)->position = glm::vec2(windowWidth * 2, windowHeight / 2);
-}
 
-void Map::load_camera(float windowWidth, float windowHeight)
-{
-	camera = new Camera(windowWidth, windowHeight);
+	textId2 = UIManager::add_text_element("0");
+	UIManager::set_text_element_top(textId2);
+
+	textId3 = UIManager::add_text_element("Health: 100");
+	UIManager::set_text_element_top(textId3);
+	UIManager::set_text_element_right(textId3);
+
+	textId4 = UIManager::add_text_element("FPS: 100");
+	UIManager::set_text_element_bottom(textId4);
+	UIManager::set_text_element_right(textId4);
+
+	NPC* testNPC = new NPC(199, AssetManager::get_model(0), glm::vec3(0.0f));
+	testNPC->players = players;
+	// test load npc
+	npcs[testNPC->idCounter] = testNPC;
+	Renderer::add_render_object(testNPC);
+	ErlPhysics::add_physics_object(testNPC);
+	//UIManager::get_text_element(textId)->position = glm::vec2(windowWidth * 2, windowHeight / 2);
+	
+	for (Player* player : players)
+	{
+		if (glfwJoystickIsGamepad(player->playerId) && !InputManager::GamePadConnected[player->playerId])
+		{
+			InputManager::GamePadConnected[player->playerId] = true;
+			set_controls(player);
+		}
+	}
 }
 
 void Map::load_physics_objects()
@@ -275,6 +298,12 @@ Player* Map::read_player_asset()
 	z = std::stof(line);
 	position = { x, y, z };
 
+	Camera* camera = new Camera(m_window);
+	cameras.push_back(camera);
+
+	ErlPhysics::add_physics_camera(camera);
+	
+
 	Player* player = new Player(players.size(), AssetManager::get_model(0), camera, position);
 	playerStarts[player->instanceId] = position;
 
@@ -297,7 +326,18 @@ void Map::load_skybox()
 
 void Map::draw(float deltaTime)
 {
-	Renderer::render(camera);
+	//render second screen
+	//for (Camera* camera : cameras)
+	//{
+		
+		// x, y, width, height
+		//glViewport(camera->m_windowHeight / cameras.size(), 0, camera->m_windowWidth / cameras.size(), camera->m_windowHeight);
+		glViewport(0, 0, cameras[0]->get_window_width(), cameras[0]->get_window_height());
+		Renderer::render(cameras[0]);
+
+		glViewport(cameras[1]->get_window_height() / 2, 0, cameras[1]->get_window_width() / 2, cameras[1]->get_window_height());
+		Renderer::render(cameras[1]);
+	//}
 }
 
 void Map::duplicate_model(int selectedIndex)
@@ -352,7 +392,7 @@ void Map::toggle_render(int index)
 	}
 }
 
-void Map::set_controls()
+void Map::set_controls(Player* player)
 {
 	ToggleConsoleCommand tc;
 	InputManager::set_key_binding(GLFW_KEY_GRAVE_ACCENT, [tc](float dt) mutable { tc.execute(dt); });

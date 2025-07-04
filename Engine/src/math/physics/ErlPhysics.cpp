@@ -13,6 +13,15 @@ void ErlPhysics::update(float deltaTime)
         swept_aabb_collision(playerPhysObject->player, deltaTime);
     }
 
+    
+    for (const auto& npc : physObjects)
+    {
+        if (npc.second->object->assetId == 199)
+        {
+            swept_aabb_collision(npc.second->object, deltaTime);
+        }
+    }
+
     //camera collision
     /*for (Camera* camera : physicsCameras)
     {
@@ -22,10 +31,10 @@ void ErlPhysics::update(float deltaTime)
 
 ErlPhysics::Ray* ErlPhysics::cast_ray_from_mouse(Camera* camera, float xpos, float ypos)
 { 
-	float NDC_X = ((int)xpos * (2.0f / camera->m_windowWidth)) - 1;
-	float NDC_Y = -((int)ypos * (2.0f / camera->m_windowHeight)) + 1;
+	float NDC_X = ((int)xpos * (2.0f / camera->get_window_width())) - 1;
+	float NDC_Y = -((int)ypos * (2.0f / camera->get_window_height())) + 1;
 	float near_plane_height = glm::tan(45 / 2.0f) * 0.1f;
-	float aspect_ratio = camera->m_windowWidth / camera->m_windowHeight;
+	float aspect_ratio = camera->get_window_width() / camera->get_window_height();
 
 	float X_3D = NDC_X * near_plane_height * aspect_ratio;
 	float Y_3D = NDC_Y * near_plane_height;
@@ -110,7 +119,7 @@ ErlPhysics::RayCollisionResult* ErlPhysics::check_collision(Ray* ray)
 }
 
 // ignoring Y values
-void ErlPhysics::swept_aabb_collision(Player* player, float deltaTime)
+void ErlPhysics::swept_aabb_collision(GameObject* player, float deltaTime)
 {
     std::vector<SweptCollisionResult> results;
 
@@ -336,6 +345,22 @@ float ErlPhysics::check_floor_collision(Player* player)
         return physObjects[result->index]->object->get_aabb_max().y;
     } else {
         return player->floorHeight;
+    }
+}
+
+//fix this REMOVE!
+float ErlPhysics::check_floor_collision(NPC* npc)
+{
+    float objectY = npc->Position.y;
+    Ray* ray = new Ray{ npc->Position, glm::vec3(0.0f, -1.0f, 0.0f), 1000.0f };
+    RayCollisionResult* result = check_collision(ray);
+    if (result)
+    {
+        if (npc->Position.y > physObjects[result->index]->object->get_aabb_max().y) npc->onGround = false;
+        return physObjects[result->index]->object->get_aabb_max().y;
+    }
+    else {
+        return npc->floorHeight;
     }
 }
 

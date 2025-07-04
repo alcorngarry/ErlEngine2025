@@ -1,10 +1,8 @@
 #include "Camera.h"
 
-Camera::Camera(float windowWidth, float windowHeight)
+Camera::Camera(GLFWwindow* window)
 {
-    m_windowHeight = windowHeight;
-    m_windowWidth = windowWidth;
-    m_projection = glm::perspective(glm::radians(45.0f), m_windowWidth / m_windowHeight, 0.1f, 10000.0f);
+    m_window = window;
     followRadius = 200.0f;
     azimuth = 0.0f;
     elevation = 1.0f;
@@ -14,6 +12,22 @@ Camera::Camera(float windowWidth, float windowHeight)
 glm::vec3 Camera::get_camera_pos() const
 {
     return cameraPos;
+}
+
+float Camera::get_window_width() const
+{
+    int m_windowWidth, m_windowHeight;
+    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
+
+    return m_windowWidth;
+}
+
+float Camera::get_window_height() const
+{
+    int m_windowWidth, m_windowHeight;
+    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
+
+    return m_windowHeight;
 }
 
 void Camera::set_camera_pos(glm::vec3 pos)
@@ -75,7 +89,9 @@ void Camera::update_view_matrix(glm::mat4 view)
 
 glm::mat4 Camera::get_projection_matrix() const
 {
-    return m_projection;
+    int m_windowWidth, m_windowHeight;
+    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
+    return glm::perspective(glm::radians(45.0f), (float) m_windowWidth / (float) m_windowHeight, 0.1f, 10000.0f);
 }
 
 void Camera::update_view_matrix()

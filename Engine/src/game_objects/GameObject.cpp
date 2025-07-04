@@ -29,6 +29,17 @@ void GameObject::on_collision(GameObject* object, float deltaTime)
 	}
 }
 
+void GameObject::on_ray_collision(GameObject* object, float deltaTime)
+{
+	auto it = onRayCollisionActions.find(object->assetId);
+	if (it != onRayCollisionActions.end()) {
+		it->second(object, deltaTime);
+	}
+	else {
+		//std::cerr << "No collision handler for assetId: " << object->assetId << "\n";
+	}
+}
+
 glm::vec3 GameObject::get_aabb_max()
 {
 	return local_to_world(GameModel->getMaxAABB());
